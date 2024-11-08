@@ -4,7 +4,7 @@ import './App.css';
 function App() {
   return (
     <div className="text-center">
-      <header className="bg-green-600">
+      <header className="bg-green-600 text">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
