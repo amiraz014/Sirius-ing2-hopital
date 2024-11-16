@@ -7,7 +7,7 @@ export default function HomePage(){
       <header className="text-center">
         <img src={logo} alt="logo" className="w-40 h-40 flex items-center ml-24 animate-pulse" />
         <p className="ml-8 text-lg italic">
-          Bienvenue dans notre application Epital!
+          Welcome to our application Epital!
         </p>
       </header>
     </div>

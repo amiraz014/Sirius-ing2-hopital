@@ -1,10 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Formular(){
 
 
 
-  const HandleSubmit = (event) => {
+  const HandleSubmit = async(event) => {
     event.preventDefault();
     console.log("Submitted!");
 
@@ -12,7 +12,25 @@ export default function Formular(){
     const data = Object.fromEntries(fn.entries());
     console.log(data);
     
+    try{
+        const res = await fetch('http://localhost:8089/epital-api/add',{
+          method: 'POST',
+          mode:'cors',
+          headers: {'Content-Type':'application/json'},
+          credentials: 'same-origin',
+          body : JSON.stringify(data)
+        });
+        const resData = await res.json();
+        console.log('Response : ', resData);
+
+
+    } catch (error){
+      console.log('Your error is :', error);
+
+    }
+  
   };
+  
   
   
 
@@ -30,7 +48,7 @@ export default function Formular(){
       type="text" 
       className="border border-gray-300 text-black rounded-md shadow-sm focus:ring-2 focus:ring-indigo-400 px-3 py-2 w-full md:w-2/4" 
       placeholder="ADJAZ"
-      name="family-name"
+      name="familyname"
       />
       
 
