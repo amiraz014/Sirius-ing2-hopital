@@ -42,5 +42,16 @@ pipeline {
                 }
             }
         }
+        stage("Archive artifact") {
+            agent {
+                docker {
+                    image 'ecotracer/front-agent'
+                    args '--user root'
+                }
+            }
+            steps {
+                archiveArtifacts artifacts: "dist,Dockerfile", allowEmptyArchive: false
+            }
+        }
     }
 }
