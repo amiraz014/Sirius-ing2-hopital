@@ -9,7 +9,7 @@ pipeline {
             agent {
                 docker {
                      image 'ecotracer/front-agent'
-                    args '--user root'
+                    args '--user root --entrypoint=""'
                 }
             }
             steps {
