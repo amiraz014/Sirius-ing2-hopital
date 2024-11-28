@@ -1,8 +1,7 @@
 import {createBrowserRouter, RouterProvider } from 'react-router-dom';
-import RootLayout from './Pages/RootLayout/RootLayout'; 
+import RootLayout from './Pages/RootLayout/RootLayout';
 import HomePage from './Pages/Home/HomePage';
 import FormPage from './Pages/Form/FormPage';
-import React , {useState} from 'react';
 import UserPage from './Pages/User/UserPage';
 function App() {
 
