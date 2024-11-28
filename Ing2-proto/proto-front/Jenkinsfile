@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment{
-        REOMTE_URL : "https://github.com/amiraz014/Sirius-ing2-hopital.git"
+        REOMTE_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
 
     }
 
