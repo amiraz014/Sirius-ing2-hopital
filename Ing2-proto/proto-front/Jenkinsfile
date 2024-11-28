@@ -27,7 +27,7 @@ pipeline {
         stage('build'){
             steps{
                 sh '''
-                        cd Inge2-proto/proto-front
+                        cd Ing2-proto/proto-front
                         npm start
                 '''
             }
