@@ -15,11 +15,12 @@ pipeline {
             steps{
                 sh '''
                         cd Ing2-proto/proto-front
-                        rm -rf node_modules package-lock.json
-                        npm cache clean --force
-                        npm cache verify
-                        npm install --no-optional
-                        npm install rollup --save-dev
+                        //rm -rf node_modules package-lock.json
+                        //npm cache clean --force
+                        //npm cache verify
+                        // npm install --no-optional
+                        // npm install rollup --save-dev
+                            npm install
                         node --version
                         npm --version
                 '''
