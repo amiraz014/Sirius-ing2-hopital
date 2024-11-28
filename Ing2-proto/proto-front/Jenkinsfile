@@ -1,34 +1,20 @@
 pipeline {
-    agent none
-    environment {
-        REPO_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
-        REMOTE_USER = "eco"
+    agent any
+    environment{
+        REOMTE_URL : "https://github.com/amiraz014/Sirius-ing2-hopital.git"
+
     }
-    stages {
-        stage('Cloning the repository') {
-            agent {
-                docker {
-                     image 'ecotracer/front-agent'
-                    args '--user root --entrypoint=""'
-                }
-            }
+
+    stages{
+        stage('clone'){
             steps {
-                git branch: "main", url: "${env.REPO_URL}"
+            git branch: "main", url:"${env.REOMTE_URL}"
             }
         }
-
-        stage("Build") {
-            agent {
-                docker {
-                    image 'ecotracer/front-agent'
-                    args '--user root'
-                }
-            }
-            steps {
-                script {
-                    sh '''
-                        ls -la
-                         cd Ing2-proto/proto-front
+        stage('install'){
+            steps{
+                sh '''
+                        cd Ing2-proto/proto-front
                         rm -rf node_modules package-lock.json
                         npm cache clean --force
                         npm cache verify
@@ -36,23 +22,22 @@ pipeline {
                         npm install rollup --save-dev
                         node --version
                         npm --version
+                '''
+            }
+        }
+        stage('build'){
+            steps{
+                sh '''
                         npm run build
-                        ls -la
-                    '''
-                }
+                '''
             }
         }
-        stage("Archive artifact") {
-            agent {
-                docker {
-                    image 'ecotracer/front-agent'
-                    args '--user root'
-                }
-            }
+        stage ('deploy'){
             steps {
-                archiveArtifacts artifacts: "Ing2-proto/proto-front/build,Dockerfile", allowEmptyArchive: false
+                sh '''
+
+                '''
             }
         }
-
     }
 }
