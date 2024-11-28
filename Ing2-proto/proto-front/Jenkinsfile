@@ -50,8 +50,9 @@ pipeline {
                 }
             }
             steps {
-                archiveArtifacts artifacts: "build,Dockerfile", allowEmptyArchive: false
+                archiveArtifacts artifacts: "Ing2-proto/proto-front/build,Dockerfile", allowEmptyArchive: false
             }
         }
+
     }
 }
