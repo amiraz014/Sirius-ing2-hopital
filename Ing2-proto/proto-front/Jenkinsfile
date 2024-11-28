@@ -1,43 +1,47 @@
 pipeline {
-    agent { label 'Back-agent' }
-    tools {
-        maven 'maven'
-        jdk 'jdk21'
-    }
+    agent none
     environment {
-        JAVA_HOME = '/usr/lib/jvm/openjdk-21'
+        REPO_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
+        REMOTE_USER = "eco"
     }
     stages {
-        stage('Checkout') {
+        stage('Cloning the repository') {
+            agent {
+                docker {
+                     image 'ecotracer/front-agent'
+                    args '--user root --entrypoint=""'
+                }
+            }
             steps {
-                git branch: 'main', url: 'https://github.com/amiraz014/Sirius-ing2-hopital.git'
+                git branch: "main", url: "${env.REPO_URL}"
             }
         }
-        stage('Install') {
-            steps {
-                sh 'mvn clean install'
+
+        stage("Build") {
+            agent {
+                docker {
+                    image 'ecotracer/front-agent'
+                    args '--user root'
+                }
             }
-        }
-        stage('Build') {
-            steps {
-                sh 'pwd && mvn package'
-            }
-        }
-        stage('Deploy to Prod') {
-            steps {
-                sh 'echo m6 | sudo -S systemctl restart runBack.service'
-            }
-        }
-       stage('Deploy to Server') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'ssh-credentials-id', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
-                        sh '''
-                        sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no $USER@172.31.253.227 "$COMMAND_TO_RUN"
-                        '''
-                    }
+                    sh '''
+                        ls -la
+
+                        rm -rf node_modules package-lock.json
+                        npm cache clean --force
+                        npm cache verify
+                        cd Ing2-proto/proto-front
+                        npm install --no-optional
+                        npm install rollup --save-dev
+                        node --version
+                        npm --version
+                        npm run build
+                        ls-
+                    '''
+                }
+            }
         }
-    }
-    }
     }
 }
