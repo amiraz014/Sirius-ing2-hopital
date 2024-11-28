@@ -5,22 +5,15 @@ pipeline {
         REMOTE_USER = "eco"
     }
     stages {
-        stage('Prepare Workspace') {
+        stage('Cloning the repository') {
             agent {
                 docker {
                      image 'ecotracer/front-agent'
-                     args '--user root --entrypoint=""'
+                    args '--user root --entrypoint=""'
                 }
             }
             steps {
-                script {
-                    sh '''
-                        echo "Cleaning workspace..."
-                        rm -rf node_modules package-lock.json
-                        echo "Verifying repository content..."
-                        ls -la
-                    '''
-                }
+                git branch: "main", url: "${env.REPO_URL}"
             }
         }
 
@@ -34,12 +27,15 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        echo "Installing dependencies..."
+                        ls -la
+                        rm -rf node_modules package-lock.json
                         npm cache clean --force
                         npm install --no-optional
                         npm install rollup --save-dev
-                        echo "Building project..."
+                        node --version
+                        npm --version
                         npm run build
+                        ls -la
                     '''
                 }
             }
