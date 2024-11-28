@@ -1,46 +1,43 @@
 pipeline {
-    agent none
+    agent { label 'Back-agent' }
+    tools {
+        maven 'maven'
+        jdk 'jdk21'
+    }
     environment {
-        REPO_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
-        REMOTE_USER = "eco"
+        JAVA_HOME = '/usr/lib/jvm/openjdk-21'
     }
     stages {
-        stage('Cloning the repository') {
-            agent {
-                docker {
-                     image 'ecotracer/front-agent'
-                    args '--user root --entrypoint=""'
-                }
-            }
+        stage('Checkout') {
             steps {
-                git branch: "main", url: "${env.REPO_URL}"
+                git branch: 'main', url: 'https://github.com/amiraz014/Sirius-ing2-hopital.git'
             }
         }
-
-        stage("Build") {
-            agent {
-                docker {
-                    image 'ecotracer/front-agent'
-                    args '--user root'
-                }
+        stage('Install') {
+            steps {
+                sh 'mvn clean install'
             }
+        }
+        stage('Build') {
+            steps {
+                sh 'pwd && mvn package'
+            }
+        }
+        stage('Deploy to Prod') {
+            steps {
+                sh 'echo m6 | sudo -S systemctl restart runBack.service'
+            }
+        }
+       stage('Deploy to Server') {
             steps {
                 script {
-                    sh '''
-                        ls -la
-                         cd Ing2-proto
-                        rm -rf node_modules package-lock.json
-                        npm cache clean --force
-                        npm cache verify
-                        npm install --no-optional
-                        npm install rollup --save-dev
-                        node --version
-                        npm --version
-                        npm run build
-                        ls-
-                    '''
-                }
-            }
+                    withCredentials([usernamePassword(credentialsId: 'ssh-credentials-id', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                        sh '''
+                        sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no $USER@172.31.253.227 "$COMMAND_TO_RUN"
+                        '''
+                    }
         }
+    }
+    }
     }
 }
