@@ -50,7 +50,7 @@ pipeline {
                 }
             }
             steps {
-                archiveArtifacts artifacts: "dist,Dockerfile", allowEmptyArchive: false
+                archiveArtifacts artifacts: "build,Dockerfile", allowEmptyArchive: false
             }
         }
     }
