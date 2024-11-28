@@ -8,7 +8,7 @@ pipeline {
         stage('Cloning the repository') {
             agent {
                 docker {
-                    image 'cicd/jendock'
+                     image 'ecotracer/front-agent'
                     args '--user root'
                 }
             }
@@ -20,7 +20,7 @@ pipeline {
         stage("Build") {
             agent {
                 docker {
-                    image 'cicd/jendock'
+                    image 'ecotracer/front-agent'
                     args '--user root'
                 }
             }
