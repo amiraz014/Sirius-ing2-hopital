@@ -28,11 +28,10 @@ pipeline {
                 script {
                     sh '''
                         ls -la
-
+                         cd Ing2-proto/proto-front
                         rm -rf node_modules package-lock.json
                         npm cache clean --force
                         npm cache verify
-                        cd Ing2-proto/proto-front
                         npm install --no-optional
                         npm install rollup --save-dev
                         node --version
