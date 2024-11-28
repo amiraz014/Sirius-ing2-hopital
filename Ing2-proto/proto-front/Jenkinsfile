@@ -9,11 +9,20 @@ pipeline {
             agent {
                 docker {
                      image 'ecotracer/front-agent'
-                    args '--user root --entrypoint=""'
+                     args '--user root --entrypoint=""'
                 }
             }
             steps {
-                git branch: "main", url: "${env.REPO_URL}"
+                script {
+                    sh '''
+                        echo "Cleaning up workspace..."
+                        rm -rf *
+                        echo "Cloning repository..."
+                        git clone --branch main ${REPO_URL} .
+                        echo "Listing files..."
+                        ls -la
+                    '''
+                }
             }
         }
 
@@ -27,10 +36,20 @@ pipeline {
             steps {
                 script {
                     sh '''
+                        echo "Validating workspace before build..."
+                        ls -la
+                        if [ ! -f package.json ]; then
+                            echo "Error: package.json not found!"
+                            exit 1
+                        fi
+
+                        echo "Cleaning and installing dependencies..."
                         rm -rf node_modules package-lock.json
                         npm cache clean --force
                         npm install --no-optional
                         npm install rollup --save-dev
+
+                        echo "Running build..."
                         npm run build
                     '''
                 }
