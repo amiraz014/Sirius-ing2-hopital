@@ -14,7 +14,9 @@ pipeline {
         stage('install'){
             steps{
                 sh '''
-                        cd Ing2-proto/proto-front
+                        cd ~/Sirius-ing2-hopital/Ing2-proto/proto-front
+                        pwd
+                        ls
                         npm install
                         node --version
                         npm --version
