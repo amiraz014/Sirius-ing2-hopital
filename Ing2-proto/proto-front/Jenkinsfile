@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent {label 'dev-front'}
     environment{
         REOMTE_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
 
