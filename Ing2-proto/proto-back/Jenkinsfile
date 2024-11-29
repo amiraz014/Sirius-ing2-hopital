@@ -22,7 +22,6 @@ pipeline {
     stage ('build') {
       steps {
         sh '''
-            cd Ing2-proto/proto-back
             mvn clean package
         '''
       }
