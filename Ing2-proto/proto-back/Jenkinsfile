@@ -1,56 +1,40 @@
 pipeline {
   agent {label 'dev-back'}
 
-  // Remove tools block if not configured in Jenkins global tools configuration
-  // Instead, use environment to specify tool paths
-  environment {
-    REMOTE_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
-    JAVA_HOME = tool 'jdk21'
-    MAVEN_HOME = tool 'maven'
-    PATH = "${MAVEN_HOME}/bin:${JAVA_HOME}/bin:${PATH}"
+  environment{
+    REOMTE_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
+     JAVA_HOME = '/usr/lib/jvm/openjdk-21'
   }
-
   stages {
-    stage('Clone') {
+    stage('clone'){
       steps {
-        git branch: "main", url: "${env.REMOTE_URL}"
+        git branch: "main", url:"${env.REOMTE_URL}"
       }
     }
-
-    stage('Install Dependencies') {
+    stage('install'){
       steps {
         sh '''
-          cd Ing2-proto/proto-back
-          ${MAVEN_HOME}/bin/mvn clean install -V
+             cd Ing2-proto/proto-back
+             mvn install
+             mvn --version
+
         '''
       }
     }
-
-    stage('Build') {
+    stage ('build') {
       steps {
         sh '''
-          cd Ing2-proto/proto-back
-          ${MAVEN_HOME}/bin/mvn clean package
+            mvn clean package
         '''
       }
     }
-
-    stage('Deploy') {
+    stage ('deploy') {
       steps {
-        // Add deployment steps if needed
         sh '''
-          echo "Deployment steps to be configured"
-        '''
+
+         '''
       }
     }
-  }
 
-  post {
-    success {
-      echo 'Build successful!'
-    }
-    failure {
-      echo 'Build failed. Please check the logs.'
-    }
   }
 }
