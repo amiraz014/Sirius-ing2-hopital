@@ -1,43 +1,56 @@
 pipeline {
   agent {label 'dev-back'}
-  tools {
-        maven 'maven'
-        jdk 'jdk21'
-    }
-  environment{
-    REOMTE_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
-     JAVA_HOME = '/usr/lib/jvm/openjdk-21'
+
+  // Remove tools block if not configured in Jenkins global tools configuration
+  // Instead, use environment to specify tool paths
+  environment {
+    REMOTE_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
+    JAVA_HOME = tool 'JDK21'
+    MAVEN_HOME = tool 'Maven3'
+    PATH = "${MAVEN_HOME}/bin:${JAVA_HOME}/bin:${PATH}"
   }
+
   stages {
-    stage('clone'){
+    stage('Clone') {
       steps {
-        git branch: "main", url:"${env.REOMTE_URL}"
+        git branch: "main", url: "${env.REMOTE_URL}"
       }
     }
-    stage('install'){
+
+    stage('Install Dependencies') {
       steps {
         sh '''
-             cd Ing2-proto/proto-back
-             mvn install
-             mvn --version
-
+          cd Ing2-proto/proto-back
+          ${MAVEN_HOME}/bin/mvn clean install -V
         '''
       }
     }
-    stage ('build') {
+
+    stage('Build') {
       steps {
         sh '''
-            mvn clean package
+          cd Ing2-proto/proto-back
+          ${MAVEN_HOME}/bin/mvn clean package
         '''
       }
     }
-    stage ('deploy') {
-      steps {
-        sh '''
 
-         '''
+    stage('Deploy') {
+      steps {
+        // Add deployment steps if needed
+        sh '''
+          echo "Deployment steps to be configured"
+        '''
       }
     }
+  }
 
+  post {
+    success {
+      echo 'Build successful!'
+    }
+    failure {
+      echo 'Build failed. Please check the logs.'
+    }
   }
 }
