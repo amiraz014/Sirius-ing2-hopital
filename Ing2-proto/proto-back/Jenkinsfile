@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     REMOTE_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
-    JAVA_HOME = "/usr/lib/jvm/java-21-openjdk-amd64"
+    JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
   }
 
   stages {
