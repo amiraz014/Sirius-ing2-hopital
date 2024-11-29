@@ -5,8 +5,8 @@ pipeline {
   // Instead, use environment to specify tool paths
   environment {
     REMOTE_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
-    JAVA_HOME = tool 'JDK21'
-    MAVEN_HOME = tool 'Maven'
+    JAVA_HOME = tool 'jdk21'
+    MAVEN_HOME = tool 'maven'
     PATH = "${MAVEN_HOME}/bin:${JAVA_HOME}/bin:${PATH}"
   }
 
