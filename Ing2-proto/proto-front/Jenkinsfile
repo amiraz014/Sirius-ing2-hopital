@@ -35,7 +35,7 @@ pipeline {
         stage ('deploy'){
             steps {
                 sh '''
-
+                   bash /home/devfont/rundevfont.sh
                 '''
             }
         }
