@@ -1,40 +1,41 @@
 pipeline {
-  agent { label 'dev-back' }
+  agent {label 'dev-back'}
 
-  environment {
-    REMOTE_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
-    JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
+  environment{
+    REOMTE_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
+
   }
-
   stages {
-    stage('Clone') {
+    stage('clone'){
       steps {
-        git branch: 'main', url: "${env.REMOTE_URL}"
+        git branch: "main", url:"${env.REOMTE_URL}"
       }
     }
-    stage('Install') {
+    stage('install'){
       steps {
         sh '''
-          cd Ing2-proto/proto-back
-          mvn install
-          mvn --version
+             cd Ing2-proto/proto-back
+             mvn install
+             mvn --version
+
         '''
       }
     }
-    stage('Build') {
+    stage ('build') {
       steps {
         sh '''
-          mvn clean package
+            mvn clean package
         '''
       }
     }
-    stage('Deploy') {
+    stage ('deploy') {
       steps {
         sh '''
           cd /home/devback/workspace/dev-back/Ing2-proto/proto-back/
-          mvn spring-boot:run
-        '''
+          mvn springboot:run
+         '''
       }
     }
+
   }
 }
