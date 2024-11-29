@@ -1,40 +1,38 @@
 pipeline {
-  agent {label 'dev-back'}
+    agent { label 'dev-back' }
 
-  environment{
-    REOMTE_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
-     JAVA_HOME = '/usr/lib/jvm/openjdk-21'
-  }
-  stages {
-    stage('clone'){
-      steps {
-        git branch: "main", url:"${env.REOMTE_URL}"
-      }
-    }
-    stage('install'){
-      steps {
-        sh '''
-             cd Ing2-proto/proto-back
-             mvn install
-             mvn --version
-
-        '''
-      }
-    }
-    stage ('build') {
-      steps {
-        sh '''
-            mvn clean package
-        '''
-      }
-    }
-    stage ('deploy') {
-      steps {
-        sh '''
-
-         '''
-      }
+    environment {
+        REOMTE_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
+        JAVA_HOME = '/usr/lib/jvm/java-21-openjdk' // Correct JDK path
+        PATH = "${JAVA_HOME}/bin:${env.PATH}" // Add JDK to PATH
     }
 
-  }
+    stages {
+        stage('clone') {
+            steps {
+                git branch: 'main', url: "${env.REOMTE_URL}"
+            }
+        }
+        stage('install') {
+            steps {
+                sh '''
+                    cd Ing2-proto/proto-back
+                    mvn install
+                    mvn --version
+                '''
+            }
+        }
+        stage('build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('deploy') {
+            steps {
+                sh '''
+                # Deployment commands go here
+                '''
+            }
+        }
+    }
 }

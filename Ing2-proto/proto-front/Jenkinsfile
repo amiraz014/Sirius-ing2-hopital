@@ -35,7 +35,8 @@ pipeline {
         stage ('deploy'){
             steps {
                 sh '''
-                   bash /home/devfont/rundevfont.sh
+                   cd /home/devfont/workspace/dev-front/Ing2-proto/proto-front
+                   nohup npm start &
                 '''
             }
         }
