@@ -3,7 +3,7 @@ pipeline {
 
   environment{
     REOMTE_URL = "https://github.com/amiraz014/Sirius-ing2-hopital.git"
-     JAVA_HOME='usr/lib/jvm/openjdk-21'
+     JAVA_HOME='usr/lib/jvm/openjdk-21-amd64'
 
   }
   stages {
