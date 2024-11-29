@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/epital-api")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://172.31.253.209:3000")
 public class UserController {
     @Autowired
     private UserService service;

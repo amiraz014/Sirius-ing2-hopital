@@ -34,6 +34,7 @@ pipeline {
         sh '''
           cd /home/devback/workspace/dev-back/Ing2-proto/proto-back/
           mvn spring-boot:run
+
          '''
       }
     }
