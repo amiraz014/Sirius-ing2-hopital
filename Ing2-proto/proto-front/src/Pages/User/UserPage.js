@@ -6,7 +6,7 @@ export default function UserPage() {
 
     useEffect(()=>{
         const FetchUsers = async() => {
-            const res = await fetch('http://localhost:8089/epital-api/users');
+            const res = await fetch('http://172.31.253.194:8089/epital-api/users');
             const resData = await res.json();
             setUserList(resData);
         };
