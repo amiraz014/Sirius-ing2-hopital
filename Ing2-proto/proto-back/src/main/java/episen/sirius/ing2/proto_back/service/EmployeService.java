@@ -85,6 +85,7 @@ public class EmployeService {
             String nom = NOM_PROFESSION[random.nextInt(NOM_PROFESSION.length)];
             Profession profession = new Profession();
             profession.setNom(nom);
+            professions.add(profession);
         }
         return professions;
 
@@ -100,6 +101,7 @@ public class EmployeService {
             employe.setNom(nom);
             employe.setAge(random.nextInt(80-25 + 1)+25);
             employe.setProfession(profession);
+            employes.add(employe);
         }    
         return employes;
     }
