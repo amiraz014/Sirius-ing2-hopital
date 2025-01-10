@@ -1,14 +1,14 @@
 package episen.sirius.ing2.proto_back.model;
 
-import org.hibernate.annotations.AnyKeyJdbcType;
-import org.hibernate.annotations.ManyToAny;
-import org.springframework.stereotype.Component;
+
+
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +24,6 @@ public class Employe {
     private Long idE ;
     private String nom;
     private Integer age;
-    @ManyToAny
+    @ManyToOne
     private Profession profession;
 }
