@@ -10,7 +10,7 @@ import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Component
+
 @Data
 @NoArgsConstructor
 @Entity
