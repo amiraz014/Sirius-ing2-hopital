@@ -1,6 +1,7 @@
 package episen.sirius.ing2.proto_back.model;
 
 import org.hibernate.annotations.AnyKeyJdbcType;
+import org.hibernate.annotations.ManyToAny;
 import org.springframework.stereotype.Component;
 
 import jakarta.persistence.Entity;
@@ -23,6 +24,6 @@ public class Employe {
     private Long idE ;
     private String nom;
     private Integer age;
-    @OneToOne
+    @ManyToAny
     private Profession profession;
 }
