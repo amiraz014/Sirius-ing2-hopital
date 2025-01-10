@@ -1,5 +1,6 @@
 package episen.sirius.ing2.proto_back.model;
 
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.AnyKeyJdbcType;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import lombok.Data;
 @Component
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class Employe {
     @Id
@@ -21,4 +23,6 @@ public class Employe {
     private String nom;
     private String age;
     private Long idP ;
+
+
 }
