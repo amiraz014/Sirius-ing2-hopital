@@ -45,27 +45,23 @@ public class GardeService {
                 for (String secteur : secteurs) {
                     Employe employe = choisirEmploye(employes);
 
-                    boolean existe = Grepo.existsByEmployeAndDateAndType(employe, dateCourante, type);
-                    if (existe) {
-                        continue; 
+                    if (!Grepo.existsByEmployeAndDateAndType(employe, dateCourante, type)) {
+                        Garde garde = new Garde();
+                        garde.setDate(dateCourante);
+                        garde.setType(type);
+                        garde.setHeure(getHeurePourType(type));
+                        garde.setEmploye(employe);
+                    
+                        Grepo.save(garde);
+                    
+                        Lieu lieu = new Lieu();
+                        lieu.setSecteur(secteur);
+                        lieu.setGarde(garde);
+                    
+                        Lrepo.save(lieu);
+                    } else {
+                        System.out.println("Garde déjà existante pour cet employé : " + employe.getIdE());
                     }
-
-                    Garde garde = new Garde();
-                    garde.setDate(dateCourante);
-                    garde.setType(type);
-                    garde.setHeure(getHeurePourType(type));
-                    garde.setEmploye(employe);
-                    try {
-                    Grepo.save(garde); 
-                    } catch(DataIntegrityViolationException e){
-                        System.err.println("Garde déjà existante pour cet employé : " + employe.getIdE());
-                    }
-
-                    Lieu lieu = new Lieu();
-                    lieu.setSecteur(secteur);
-                    lieu.setGarde(garde);
-
-                    Lrepo.save(lieu);
                 }
             }
             dateCourante = dateCourante.plusDays(1);
@@ -83,9 +79,9 @@ public class GardeService {
 
     private LocalTime getHeurePourType(String type) {
         if (type.equals("MATIN")) {
-            return LocalTime.of(8, 0); // 08:00:00
+            return LocalTime.of(8, 0); 
         } else {
-            return LocalTime.of(18, 0); // 18:00:00
+            return LocalTime.of(20, 0); 
         }
     }
 
