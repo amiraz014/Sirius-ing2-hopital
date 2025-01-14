@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import episen.sirius.ing2.proto_back.model.Employe;
 import episen.sirius.ing2.proto_back.model.Garde;
@@ -28,7 +29,7 @@ public class GardeService {
     private LieuRepo Lrepo;
 
 
-
+      @Transactional
       public void planifierGardes(LocalDate debut, LocalDate fin) {
         List<Employe> employes = Erepo.findAll();
         if (employes.isEmpty()) {
