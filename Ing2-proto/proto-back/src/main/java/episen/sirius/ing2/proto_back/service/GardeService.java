@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import episen.sirius.ing2.proto_back.model.Employe;
@@ -44,13 +45,21 @@ public class GardeService {
                 for (String secteur : secteurs) {
                     Employe employe = choisirEmploye(employes);
 
+                    boolean existe = Grepo.existsByEmployeAndDateAndType(employe, dateCourante, type);
+                    if (existe) {
+                        continue; 
+                    }
+
                     Garde garde = new Garde();
                     garde.setDate(dateCourante);
                     garde.setType(type);
                     garde.setHeure(getHeurePourType(type));
                     garde.setEmploye(employe);
-
-                    Grepo.save(garde);
+                    try {
+                    Grepo.save(garde); 
+                    } catch(DataIntegrityViolationException e){
+                        System.err.println("Garde déjà existante pour cet employé : " + employe.getIdE());
+                    }
 
                     Lieu lieu = new Lieu();
                     lieu.setSecteur(secteur);
