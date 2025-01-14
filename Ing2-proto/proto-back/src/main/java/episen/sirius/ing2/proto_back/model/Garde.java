@@ -3,6 +3,8 @@ package episen.sirius.ing2.proto_back.model;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Component;
@@ -25,9 +27,9 @@ public class Garde {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idG;
-    private Date date;
+    private LocalDate date;
     private String type;
-    private Time heure;
+    private LocalTime heure;
     @OneToOne
     private Employe employe;
 
