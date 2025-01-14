@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import episen.sirius.ing2.proto_back.model.Employe;
 import episen.sirius.ing2.proto_back.model.Garde;
@@ -16,7 +17,7 @@ import episen.sirius.ing2.proto_back.model.Lieu;
 import episen.sirius.ing2.proto_back.repository.EmployeRepo;
 import episen.sirius.ing2.proto_back.repository.GardeRepo;
 import episen.sirius.ing2.proto_back.repository.LieuRepo;
-
+@Service
 public class GardeService {
     @Autowired
     private EmployeRepo Erepo;
