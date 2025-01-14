@@ -13,5 +13,9 @@ public interface GardeRepo extends JpaRepository<Garde,Long> {
 
     boolean existsByEmployeAndDateAndType(Employe employe, LocalDate date, String type);
 
+    boolean existsByEmployeAndDate(Employe employe, LocalDate date);
+
+    int countByEmployeAndDateBetween(Employe employe, LocalDate debutSemaine, LocalDate finSemaine);
+
     
 }
