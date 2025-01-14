@@ -46,7 +46,7 @@ public class GardeService {
                 for (String secteur : secteurs) {
                     Employe employe = choisirEmploye(employes);
 
-                    if (!Grepo.existsByEmployeAndDateAndType(employe, dateCourante, type)) {
+                    
                         Garde garde = new Garde();
                         garde.setDate(dateCourante);
                         garde.setType(type);
@@ -60,9 +60,7 @@ public class GardeService {
                         lieu.setGarde(garde);
                     
                         Lrepo.save(lieu);
-                    } else {
-                        System.out.println("Garde déjà existante pour cet employé : " + employe.getIdE());
-                    }
+                    
                 }
             }
             dateCourante = dateCourante.plusDays(1);
