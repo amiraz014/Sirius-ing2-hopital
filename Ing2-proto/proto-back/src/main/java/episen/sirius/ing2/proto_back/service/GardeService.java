@@ -9,9 +9,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import episen.sirius.ing2.proto_back.model.Employe;
 import episen.sirius.ing2.proto_back.model.Garde;
@@ -29,7 +27,7 @@ public class GardeService {
     private LieuRepo Lrepo;
 
 
-      @Transactional
+
       public void planifierGardes(LocalDate debut, LocalDate fin) {
         List<Employe> employes = Erepo.findAll();
         if (employes.isEmpty()) {
@@ -45,22 +43,21 @@ public class GardeService {
             for (String type : typesDeGarde) {
                 for (String secteur : secteurs) {
                     Employe employe = choisirEmploye(employes);
+                    
 
-                    
-                        Garde garde = new Garde();
-                        garde.setDate(dateCourante);
-                        garde.setType(type);
-                        garde.setHeure(getHeurePourType(type));
-                        garde.setEmploye(employe);
-                    
-                        Grepo.save(garde);
-                    
-                        Lieu lieu = new Lieu();
-                        lieu.setSecteur(secteur);
-                        lieu.setGarde(garde);
-                    
-                        Lrepo.save(lieu);
-                    
+                    Garde garde = new Garde();
+                    garde.setDate(dateCourante);
+                    garde.setType(type);
+                    garde.setHeure(getHeurePourType(type));
+                    garde.setEmploye(employe);
+
+                    Grepo.save(garde);
+
+                    Lieu lieu = new Lieu();
+                    lieu.setSecteur(secteur);
+                    lieu.setGarde(garde);
+
+                    Lrepo.save(lieu);
                 }
             }
             dateCourante = dateCourante.plusDays(1);
@@ -78,9 +75,9 @@ public class GardeService {
 
     private LocalTime getHeurePourType(String type) {
         if (type.equals("MATIN")) {
-            return LocalTime.of(8, 0); 
+            return LocalTime.of(8, 0); // 08:00:00
         } else {
-            return LocalTime.of(20, 0); 
+            return LocalTime.of(18, 0); // 18:00:00
         }
     }
 
