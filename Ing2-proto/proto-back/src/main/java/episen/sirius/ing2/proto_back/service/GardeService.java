@@ -1,10 +1,11 @@
 package episen.sirius.ing2.proto_back.service;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import episen.sirius.ing2.proto_back.model.Lieu;
 import episen.sirius.ing2.proto_back.repository.EmployeRepo;
 import episen.sirius.ing2.proto_back.repository.GardeRepo;
 import episen.sirius.ing2.proto_back.repository.LieuRepo;
-
 @Service
 public class GardeService {
     @Autowired
@@ -26,7 +26,9 @@ public class GardeService {
     @Autowired
     private LieuRepo Lrepo;
 
-    public void planifierGardes(LocalDate debut, LocalDate fin) {
+
+
+      public void planifierGardes(LocalDate debut, LocalDate fin) {
         List<Employe> employes = Erepo.findAll();
         if (employes.isEmpty()) {
             throw new IllegalArgumentException("Aucun employé trouvé pour planifier les gardes.");
@@ -34,56 +36,41 @@ public class GardeService {
 
         List<String> typesDeGarde = Arrays.asList("MATIN", "SOIR");
         List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C");
+
         LocalDate dateCourante = debut;
 
         while (!dateCourante.isAfter(fin)) {
             for (String type : typesDeGarde) {
                 for (String secteur : secteurs) {
-                    List<Employe> employesDisponibles = getEmployesDisponibles(employes, dateCourante);
+                    Employe employe = choisirEmploye(employes);
+                    
 
-                    if (employesDisponibles.isEmpty()) {
-                        throw new IllegalArgumentException("Pas d'employés disponibles pour la date : " + dateCourante);
-                    }
+                    Garde garde = new Garde();
+                    garde.setDate(dateCourante);
+                    garde.setType(type);
+                    garde.setHeure(getHeurePourType(type));
+                    garde.setEmploye(employe);
 
-                    for (Employe employe : employesDisponibles) {
-                        if (getNbGardesSemaine(employe, dateCourante) >= 2) {
-                            continue;
-                        }
+                    Grepo.save(garde);
 
-                        Garde garde = new Garde();
-                        garde.setDate(dateCourante);
-                        garde.setType(type);
-                        garde.setHeure(getHeurePourType(type));
-                        garde.setEmploye(employe);
+                    Lieu lieu = new Lieu();
+                    lieu.setSecteur(secteur);
+                    lieu.setGarde(garde);
 
-                        Grepo.save(garde);
-
-                        Lieu lieu = new Lieu();
-                        lieu.setSecteur(secteur);
-                        lieu.setGarde(garde);
-
-                        Lrepo.save(lieu);
-                    }
+                    Lrepo.save(lieu);
                 }
             }
             dateCourante = dateCourante.plusDays(1);
         }
     }
 
-    private List<Employe> getEmployesDisponibles(List<Employe> employes, LocalDate date) {
-        List<Employe> disponibles = new ArrayList<>();
-        for (Employe employe : employes) {
-            if (!Grepo.existsByEmployeAndDate(employe, date)) {
-                disponibles.add(employe);
-            }
-        }
-        return disponibles;
-    }
 
-    private int getNbGardesSemaine(Employe employe, LocalDate date) {
-        LocalDate debutSemaine = date.minusDays(date.getDayOfWeek().getValue() - 1);
-        LocalDate finSemaine = debutSemaine.plusDays(6);
-        return Grepo.countByEmployeAndDateBetween(employe, debutSemaine, finSemaine);
+
+    private Employe choisirEmploye(List<Employe> employes) {
+        Employe employeChoisi = employes.get(0);
+        employes.add(employeChoisi);
+        employes.remove(0);
+        return employeChoisi;
     }
 
     private LocalTime getHeurePourType(String type) {
@@ -93,4 +80,6 @@ public class GardeService {
             return LocalTime.of(18, 0); // 18:00:00
         }
     }
+
+    
 }
