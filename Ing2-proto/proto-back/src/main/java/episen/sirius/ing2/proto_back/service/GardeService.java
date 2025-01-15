@@ -6,7 +6,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +29,7 @@ public class GardeService {
     @Autowired
     private LieuRepo Lrepo;
 
-
-
-      public void planifierGardes(LocalDate debut, LocalDate fin) {
+    public void planifierGardes(LocalDate debut, LocalDate fin) {
         List<Employe> employes = Erepo.findAll();
         if (employes.isEmpty()) {
             throw new IllegalArgumentException("Aucun employé trouvé pour planifier les gardes.");
@@ -37,13 +38,18 @@ public class GardeService {
         List<String> typesDeGarde = Arrays.asList("MATIN", "SOIR");
         List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C");
 
+        // Initialiser un compteur pour suivre le nombre de gardes par employé
+        Map<Employe, Integer> compteurGardes = new HashMap<>();
+        for (Employe employe : employes) {
+            compteurGardes.put(employe, 0);
+        }
+
         LocalDate dateCourante = debut;
 
         while (!dateCourante.isAfter(fin)) {
             for (String type : typesDeGarde) {
                 for (String secteur : secteurs) {
-                    Employe employe = choisirEmploye(employes);
-                    
+                    Employe employe = choisirEmploye(compteurGardes, employes);
 
                     Garde garde = new Garde();
                     garde.setDate(dateCourante);
@@ -58,28 +64,39 @@ public class GardeService {
                     lieu.setGarde(garde);
 
                     Lrepo.save(lieu);
+
+                    // Augmenter le compteur de gardes pour cet employé
+                    compteurGardes.put(employe, compteurGardes.get(employe) + 1);
                 }
             }
             dateCourante = dateCourante.plusDays(1);
         }
+
+        // Vérifier que chaque employé a au moins 2 gardes par semaine
+        validerGardesParSemaine(compteurGardes);
     }
 
-
-
-    private Employe choisirEmploye(List<Employe> employes) {
-        Employe employeChoisi = employes.get(0);
-        employes.add(employeChoisi);
-        employes.remove(0);
+    private Employe choisirEmploye(Map<Employe, Integer> compteurGardes, List<Employe> employes) {
+        // Choisir l'employé avec le moins de gardes attribuées
+        Employe employeChoisi = employes.stream()
+            .min(Comparator.comparingInt(compteurGardes::get))
+            .orElseThrow(() -> new IllegalArgumentException("Erreur dans la sélection de l'employé."));
         return employeChoisi;
     }
 
     private LocalTime getHeurePourType(String type) {
         if (type.equals("MATIN")) {
-            return LocalTime.of(8, 0); // 08:00:00
+            return LocalTime.of(8, 0); 
         } else {
-            return LocalTime.of(18, 0); // 18:00:00
+            return LocalTime.of(18, 0); 
         }
     }
 
-    
+    private void validerGardesParSemaine(Map<Employe, Integer> compteurGardes) {
+        for (Map.Entry<Employe, Integer> entry : compteurGardes.entrySet()) {
+            if (entry.getValue() < 2) {
+                throw new IllegalStateException("L'employé " + entry.getKey().getNom() + " a moins de 2 gardes par semaine.");
+            }
+        }
+    }
 }
