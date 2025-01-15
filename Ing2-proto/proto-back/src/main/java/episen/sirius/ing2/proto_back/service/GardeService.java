@@ -39,20 +39,18 @@ public class GardeService {
         List<String> typesDeGarde = Arrays.asList("MATIN", "SOIR");
         List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C");
 
-        // Initialiser un compteur des gardes par employé et par semaine
-        Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine = new HashMap<>();
+        // Initialiser un compteur pour suivre le nombre de gardes par employé
+        Map<Employe, Integer> compteurGardes = new HashMap<>();
         for (Employe employe : employes) {
-            compteurGardesParSemaine.put(employe, new HashMap<>());
+            compteurGardes.put(employe, 0);
         }
 
         LocalDate dateCourante = debut;
 
         while (!dateCourante.isAfter(fin)) {
-            int semaineAnnee = dateCourante.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
-
             for (String type : typesDeGarde) {
                 for (String secteur : secteurs) {
-                    Employe employe = choisirEmploye(compteurGardesParSemaine, employes, semaineAnnee);
+                    Employe employe = choisirEmploye(compteurGardes, employes);
 
                     Garde garde = new Garde();
                     garde.setDate(dateCourante);
@@ -68,24 +66,23 @@ public class GardeService {
 
                     Lrepo.save(lieu);
 
-                    // Mettre à jour le compteur pour cet employé
-                    Map<Integer, Integer> gardesSemaine = compteurGardesParSemaine.get(employe);
-                    gardesSemaine.put(semaineAnnee, gardesSemaine.getOrDefault(semaineAnnee, 0) + 1);
+                    // Augmenter le compteur de gardes pour cet employé
+                    compteurGardes.put(employe, compteurGardes.get(employe) + 1);
                 }
             }
             dateCourante = dateCourante.plusDays(1);
         }
 
         // Vérifier que chaque employé a au moins 2 gardes par semaine
-        validerGardesParSemaine(compteurGardesParSemaine);
+        validerGardesParSemaine(compteurGardes);
     }
 
-    private Employe choisirEmploye(Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine,
-                                   List<Employe> employes, int semaineAnnee) {
-        // Sélectionner l'employé avec le moins de gardes dans la semaine en cours
-        return employes.stream()
-            .min(Comparator.comparingInt(e -> compteurGardesParSemaine.get(e).getOrDefault(semaineAnnee, 0)))
-            .orElseThrow(() -> new IllegalArgumentException("Aucun employé disponible pour cette semaine."));
+    private Employe choisirEmploye(Map<Employe, Integer> compteurGardes, List<Employe> employes) {
+        // Choisir l'employé avec le moins de gardes attribuées
+        Employe employeChoisi = employes.stream()
+            .min(Comparator.comparingInt(compteurGardes::get))
+            .orElseThrow(() -> new IllegalArgumentException("Erreur dans la sélection de l'employé."));
+        return employeChoisi;
     }
 
     private LocalTime getHeurePourType(String type) {
@@ -96,16 +93,10 @@ public class GardeService {
         }
     }
 
-    private void validerGardesParSemaine(Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine) {
-        for (Map.Entry<Employe, Map<Integer, Integer>> entry : compteurGardesParSemaine.entrySet()) {
-            Employe employe = entry.getKey();
-            Map<Integer, Integer> gardesSemaine = entry.getValue();
-
-            for (Map.Entry<Integer, Integer> semaineEntry : gardesSemaine.entrySet()) {
-                if (semaineEntry.getValue() < 2) {
-                    throw new IllegalStateException(
-                        "L'employé " + employe.getNom() + " a moins de 2 gardes pour la semaine " + semaineEntry.getKey() + ".");
-                }
+    private void validerGardesParSemaine(Map<Employe, Integer> compteurGardes) {
+        for (Map.Entry<Employe, Integer> entry : compteurGardes.entrySet()) {
+            if (entry.getValue() < 2) {
+                throw new IllegalStateException("L'employé " + entry.getKey().getNom() + " a moins de 2 gardes par semaine.");
             }
         }
     }
