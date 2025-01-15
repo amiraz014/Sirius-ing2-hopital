@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.IsoFields;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -39,21 +38,18 @@ public class GardeService {
         List<String> typesDeGarde = Arrays.asList("MATIN", "SOIR");
         List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C");
 
-        // Initialiser un compteur pour suivre les gardes attribuées par employé par semaine
-        Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine = new HashMap<>();
+        // Initialiser un compteur pour suivre le nombre de gardes par employé
+        Map<Employe, Integer> compteurGardes = new HashMap<>();
         for (Employe employe : employes) {
-            compteurGardesParSemaine.put(employe, new HashMap<>());
+            compteurGardes.put(employe, 0);
         }
 
         LocalDate dateCourante = debut;
 
         while (!dateCourante.isAfter(fin)) {
-            int semaineAnnee = dateCourante.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
-
             for (String type : typesDeGarde) {
                 for (String secteur : secteurs) {
-                    // Sélectionner un employé en rotation
-                    Employe employe = choisirEmployeAvecRepetition(compteurGardesParSemaine, employes, semaineAnnee);
+                    Employe employe = choisirEmploye(compteurGardes, employes);
 
                     Garde garde = new Garde();
                     garde.setDate(dateCourante);
@@ -69,44 +65,37 @@ public class GardeService {
 
                     Lrepo.save(lieu);
 
-                    // Mettre à jour le compteur pour cet employé
-                    Map<Integer, Integer> gardesSemaine = compteurGardesParSemaine.get(employe);
-                    gardesSemaine.put(semaineAnnee, gardesSemaine.getOrDefault(semaineAnnee, 0) + 1);
+                   
+                    compteurGardes.put(employe, compteurGardes.get(employe) + 1);
                 }
             }
             dateCourante = dateCourante.plusDays(1);
         }
 
-        // Validation finale pour s'assurer qu'aucun employé n'a moins de 2 gardes par semaine
-        validerGardesParSemaine(compteurGardesParSemaine);
+        // Vérifier que chaque employé a au moins 2 gardes par semaine
+        validerGardesParSemaine(compteurGardes);
     }
 
-    private Employe choisirEmployeAvecRepetition(Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine,
-                                                 List<Employe> employes, int semaineAnnee) {
-        // Sélectionner l'employé ayant le moins de gardes pour équilibrer
-        return employes.stream()
-            .min(Comparator.comparingInt(e -> compteurGardesParSemaine.get(e).getOrDefault(semaineAnnee, 0)))
+    private Employe choisirEmploye(Map<Employe, Integer> compteurGardes, List<Employe> employes) {
+        // Choisir l'employé avec le moins de gardes attribuées
+        Employe employeChoisi = employes.stream()
+            .min(Comparator.comparingInt(compteurGardes::get))
             .orElseThrow(() -> new IllegalArgumentException("Erreur dans la sélection de l'employé."));
+        return employeChoisi;
     }
 
     private LocalTime getHeurePourType(String type) {
         if (type.equals("MATIN")) {
-            return LocalTime.of(8, 0); // 08:00:00
+            return LocalTime.of(8, 0); 
         } else {
-            return LocalTime.of(18, 0); // 18:00:00
+            return LocalTime.of(18, 0); 
         }
     }
 
-    private void validerGardesParSemaine(Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine) {
-        for (Map.Entry<Employe, Map<Integer, Integer>> entry : compteurGardesParSemaine.entrySet()) {
-            Employe employe = entry.getKey();
-            Map<Integer, Integer> gardesSemaine = entry.getValue();
-
-            for (Map.Entry<Integer, Integer> semaineEntry : gardesSemaine.entrySet()) {
-                if (semaineEntry.getValue() < 2) {
-                    throw new IllegalStateException(
-                        "L'employé " + employe.getNom() + " a moins de 2 gardes pour la semaine " + semaineEntry.getKey() + ".");
-                }
+    private void validerGardesParSemaine(Map<Employe, Integer> compteurGardes) {
+        for (Map.Entry<Employe, Integer> entry : compteurGardes.entrySet()) {
+            if (entry.getValue() < 2) {
+                throw new IllegalStateException("L'employé " + entry.getKey().getNom() + " a moins de 2 gardes par semaine.");
             }
         }
     }
