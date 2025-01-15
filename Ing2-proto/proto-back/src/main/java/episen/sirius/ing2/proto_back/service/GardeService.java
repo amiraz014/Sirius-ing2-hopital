@@ -39,7 +39,7 @@ public class GardeService {
         List<String> typesDeGarde = Arrays.asList("MATIN", "SOIR");
         List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C");
 
-        // Map pour suivre les gardes par employé et par semaine
+        // Initialiser un compteur pour suivre les gardes attribuées par employé par semaine
         Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine = new HashMap<>();
         for (Employe employe : employes) {
             compteurGardesParSemaine.put(employe, new HashMap<>());
@@ -52,7 +52,8 @@ public class GardeService {
 
             for (String type : typesDeGarde) {
                 for (String secteur : secteurs) {
-                    Employe employe = choisirEmploye(compteurGardesParSemaine, employes, semaineAnnee);
+                    // Sélectionner un employé en rotation
+                    Employe employe = choisirEmployeAvecRepetition(compteurGardesParSemaine, employes, semaineAnnee);
 
                     Garde garde = new Garde();
                     garde.setDate(dateCourante);
@@ -68,7 +69,7 @@ public class GardeService {
 
                     Lrepo.save(lieu);
 
-                    // Mise à jour du compteur de gardes pour l'employé et la semaine
+                    // Mettre à jour le compteur pour cet employé
                     Map<Integer, Integer> gardesSemaine = compteurGardesParSemaine.get(employe);
                     gardesSemaine.put(semaineAnnee, gardesSemaine.getOrDefault(semaineAnnee, 0) + 1);
                 }
@@ -76,17 +77,16 @@ public class GardeService {
             dateCourante = dateCourante.plusDays(1);
         }
 
-        // Validation des gardes par employé et par semaine
+        // Validation finale pour s'assurer qu'aucun employé n'a moins de 2 gardes par semaine
         validerGardesParSemaine(compteurGardesParSemaine);
     }
 
-    private Employe choisirEmploye(Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine,
-                                   List<Employe> employes, int semaineAnnee) {
-        // Filtrer les employés pour éviter une répétition excessive dans la semaine
+    private Employe choisirEmployeAvecRepetition(Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine,
+                                                 List<Employe> employes, int semaineAnnee) {
+        // Sélectionner l'employé ayant le moins de gardes pour équilibrer
         return employes.stream()
-            .filter(e -> compteurGardesParSemaine.get(e).getOrDefault(semaineAnnee, 0) < 2)
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Aucun employé disponible pour cette semaine."));
+            .min(Comparator.comparingInt(e -> compteurGardesParSemaine.get(e).getOrDefault(semaineAnnee, 0)))
+            .orElseThrow(() -> new IllegalArgumentException("Erreur dans la sélection de l'employé."));
     }
 
     private LocalTime getHeurePourType(String type) {
