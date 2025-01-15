@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,9 +85,9 @@ public class GardeService {
 
     private LocalTime getHeurePourType(String type) {
         if (type.equals("MATIN")) {
-            return LocalTime.of(8, 0); 
+            return LocalTime.of(8, 0); // 08:00:00
         } else {
-            return LocalTime.of(18, 0); 
+            return LocalTime.of(18, 0); // 18:00:00
         }
     }
 
