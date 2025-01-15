@@ -65,7 +65,7 @@ public class GardeService {
 
                     Lrepo.save(lieu);
 
-                   
+                    // Augmenter le compteur de gardes pour cet employé
                     compteurGardes.put(employe, compteurGardes.get(employe) + 1);
                 }
             }
