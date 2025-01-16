@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import episen.sirius.ing2.proto_back.model.Employe;
 import episen.sirius.ing2.proto_back.model.Garde;
 import episen.sirius.ing2.proto_back.model.Lieu;
+import episen.sirius.ing2.proto_back.model.Profession;
 import episen.sirius.ing2.proto_back.repository.EmployeRepo;
 import episen.sirius.ing2.proto_back.repository.GardeRepo;
 import episen.sirius.ing2.proto_back.repository.LieuRepo;
@@ -14,6 +15,7 @@ import episen.sirius.ing2.proto_back.repository.ProfessionRepo;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +30,8 @@ public class GardeService {
     @Autowired
     private LieuRepo lieuRepo;
 
+    @Autowired
+    private ProfessionRepo professionRepo;
 
     private static final List<String> GARDE_PROFESSIONS = Arrays.asList(
             "Médecin généraliste", "Radiologue", "Urgentiste", "Pharmacien",
@@ -36,8 +40,9 @@ public class GardeService {
 
     public void planifierGardes(LocalDate dateDebut, LocalDate dateFin) {
         List<Employe> allEmployes = employeRepo.findAll();
+        List<Profession> gardProfessions = professionRepo.findAll().stream().filter(e -> GARDE_PROFESSIONS.contains(e.getNom())).collect(Collectors.toList());
         List<Employe> employesGarde = allEmployes.stream()
-                .filter(e -> GARDE_PROFESSIONS.contains(e.getProfession().getNom()))
+                .filter(e -> gardProfessions.contains(e.getProfession()))
                 .collect(Collectors.toList());
 
         if (employesGarde.isEmpty()) {
