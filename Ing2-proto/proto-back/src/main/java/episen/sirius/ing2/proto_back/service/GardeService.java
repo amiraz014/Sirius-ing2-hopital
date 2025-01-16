@@ -26,142 +26,112 @@ import episen.sirius.ing2.proto_back.repository.GardeRepo;
 import episen.sirius.ing2.proto_back.repository.LieuRepo;
 import episen.sirius.ing2.proto_back.repository.ProfessionRepo;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 @Service
-@Slf4j
+@AllArgsConstructor
 public class GardeService {
 
-    @Autowired
-    private EmployeRepo employeRepo;
-    
-    @Autowired
-    private GardeRepo gardeRepo;
-    
-    @Autowired
-    private LieuRepo lieuRepo;
-    
-    @Autowired
-    private ProfessionRepo professionRepo;
+    private final EmployeRepo employeRepo;
+    private final GardeRepo gardeRepo;
+    private final LieuRepo lieuRepo;
+    private final ProfessionRepo professionRepo;
 
-    // Liste des professions autorisées pour les gardes du soir
-    private final List<String> PROFESSIONS_GARDE_SOIR = Arrays.asList(
-        "Médecin généraliste", "Radiologue", "Urgentiste", "Pharmacien",
-        "Infirmier", "Sage-femme", "Ambulancier", "Chef de service"
-    );
-
-    /**
-     * Planifie les gardes pour une période donnée
-     * @param dateDebut date de début de la période
-     * @param dateFin date de fin de la période
-     */
     @Transactional
     public void planifierGardes(LocalDate dateDebut, LocalDate dateFin) {
-        List<Employe> tousLesEmployes = employeRepo.findAll();
+        List<String> professionsGardeSoir = Arrays.asList(
+            "Médecin généraliste", "Radiologue", "Urgentiste", 
+            "Pharmacien", "Infirmier", "Sage-femme", 
+            "Ambulancier", "Chef de service"
+        );
+
+        // Récupérer tous les employés
+        List<Employe> tousEmployes = employeRepo.findAll();
         
-        for (LocalDate date = dateDebut; !date.isAfter(dateFin); date = date.plusDays(1)) {
-            // Planification des gardes du matin (tous les employés)
-            planifierGardeMatin(date, tousLesEmployes);
+        // Filtrer les employés éligibles pour les gardes du soir
+        List<Employe> employesGardeSoir = tousEmployes.stream()
+            .filter(e -> professionsGardeSoir.contains(e.getProfession().getNom()))
+            .collect(Collectors.toList());
+
+        LocalDate date = dateDebut;
+        while (!date.isAfter(dateFin)) {
+            // Planification des gardes du matin (8h)
+            planifierGardeMatin(date, tousEmployes);
             
-            // Planification des gardes du soir (employés éligibles uniquement)
-            List<Employe> employesEligiblesGardeSoir = tousLesEmployes.stream()
-                .filter(this::estEligibleGardeSoir)
-                .collect(Collectors.toList());
-            planifierGardeSoir(date, employesEligiblesGardeSoir);
+            // Planification des gardes du soir (20h)
+            planifierGardeSoir(date, employesGardeSoir);
+            
+            date = date.plusDays(1);
         }
     }
 
     private void planifierGardeMatin(LocalDate date, List<Employe> employes) {
-        LocalTime heureMatin = LocalTime.of(8, 0);
-        int nombreGardesRequises = 160;
+        // Attribution aléatoire des gardes du matin
+        Collections.shuffle(employes);
+        int gardesNecessaires = 160;
         
-        // Mélanger la liste des employés pour une distribution aléatoire
-        List<Employe> employesMelanges = new ArrayList<>(employes);
-        Collections.shuffle(employesMelanges);
-        
-        // Créer les gardes du matin
-        for (int i = 0; i < nombreGardesRequises && i < employesMelanges.size(); i++) {
+        for (int i = 0; i < gardesNecessaires && i < employes.size(); i++) {
             Garde garde = new Garde();
             garde.setDate(date);
             garde.setType("Matin");
-            garde.setHeure(heureMatin);
-            garde.setEmploye(employesMelanges.get(i));
+            garde.setHeure(LocalTime.of(8, 0));
+            garde.setEmploye(employes.get(i));
             
-            Garde gardeSauvegardee = gardeRepo.save(garde);
+            garde = gardeRepo.save(garde);
             
-            // Créer un lieu pour la garde
+            // Création du lieu associé
             Lieu lieu = new Lieu();
-            lieu.setSecteur("Secteur " + (i % 10 + 1)); // Répartition en 10 secteurs
-            lieu.setGarde(gardeSauvegardee);
+            lieu.setSecteur("Secteur " + (i % 10 + 1)); // Distribution sur 10 secteurs
+            lieu.setGarde(garde);
             lieuRepo.save(lieu);
         }
     }
 
     private void planifierGardeSoir(LocalDate date, List<Employe> employesEligibles) {
-        LocalTime heureSoir = LocalTime.of(20, 0);
-        int nombreGardesRequises = 160;
+        // Vérification du nombre de gardes par employé sur la semaine précédente
+        Map<Long, Integer> gardesParEmploye = new HashMap<>();
         
-        // Vérifier l'historique des gardes pour équilibrer la charge
-        Map<Long, Integer> nombreGardesParEmploye = calculerNombreGardesParEmploye(date.minusDays(7), date);
+        LocalDate debutSemaine = date.minusDays(7);
+        List<Garde> gardesSemaine = gardeRepo.findAll().stream()
+            .filter(g -> !g.getDate().isBefore(debutSemaine) && g.getDate().isBefore(date))
+            .filter(g -> g.getType().equals("Soir"))
+            .collect(Collectors.toList());
+            
+        for (Garde g : gardesSemaine) {
+            gardesParEmploye.merge(g.getEmploye().getIdE(), 1, Integer::sum);
+        }
         
-        // Trier les employés par nombre de gardes (priorité à ceux qui en ont eu le moins)
-        employesEligibles.sort((e1, e2) -> {
-            int gardesE1 = nombreGardesParEmploye.getOrDefault(e1.getIdE(), 0);
-            int gardesE2 = nombreGardesParEmploye.getOrDefault(e2.getIdE(), 0);
-            return Integer.compare(gardesE1, gardesE2);
-        });
+        // Filtrer les employés qui n'ont pas dépassé 3 gardes
+        List<Employe> employesDisponibles = employesEligibles.stream()
+            .filter(e -> gardesParEmploye.getOrDefault(e.getIdE(), 0) < 3)
+            .collect(Collectors.toList());
+            
+        Collections.shuffle(employesDisponibles);
         
-        // Créer les gardes du soir
-        for (int i = 0; i < nombreGardesRequises && i < employesEligibles.size(); i++) {
+        int gardesNecessaires = 160;
+        for (int i = 0; i < gardesNecessaires && i < employesDisponibles.size(); i++) {
             Garde garde = new Garde();
             garde.setDate(date);
             garde.setType("Soir");
-            garde.setHeure(heureSoir);
-            garde.setEmploye(employesEligibles.get(i));
+            garde.setHeure(LocalTime.of(20, 0));
+            garde.setEmploye(employesDisponibles.get(i));
             
-            Garde gardeSauvegardee = gardeRepo.save(garde);
+            garde = gardeRepo.save(garde);
             
-            // Créer un lieu pour la garde
+            // Création du lieu associé
             Lieu lieu = new Lieu();
             lieu.setSecteur("Secteur " + (i % 10 + 1));
-            lieu.setGarde(gardeSauvegardee);
+            lieu.setGarde(garde);
             lieuRepo.save(lieu);
         }
     }
 
-    private boolean estEligibleGardeSoir(Employe employe) {
-        return PROFESSIONS_GARDE_SOIR.contains(employe.getProfession().getNom());
-    }
-
-    private Map<Long, Integer> calculerNombreGardesParEmploye(LocalDate debut, LocalDate fin) {
-        // Cette méthode devrait être implémentée pour compter le nombre de gardes
-        // par employé sur une période donnée
-        Map<Long, Integer> nombreGardesParEmploye = new HashMap<>();
-        List<Garde> gardes = gardeRepo.findAll(); // Idéalement, ajouter une méthode dans le repo pour filtrer par date
-        
-        for (Garde garde : gardes) {
-            if (!garde.getDate().isBefore(debut) && !garde.getDate().isAfter(fin)) {
-                Long idEmploye = garde.getEmploye().getIdE();
-                nombreGardesParEmploye.merge(idEmploye, 1, Integer::sum);
-            }
-        }
-        
-        return nombreGardesParEmploye;
-    }
-
-    /**
-     * Vérifie si un employé peut prendre une garde supplémentaire
-     * @param employe l'employé à vérifier
-     * @param date la date de la garde
-     * @return true si l'employé peut prendre la garde
-     */
-    private boolean peutPrendreGarde(Employe employe, LocalDate date) {
-        // Vérifier le nombre de gardes dans la semaine
-        Map<Long, Integer> gardesSemaine = calculerNombreGardesParEmploye(
-            date.minusDays(7),
-            date
-        );
-        
-        int nombreGardesSemaine = gardesSemaine.getOrDefault(employe.getIdE(), 0);
-        return nombreGardesSemaine < 3; // Maximum 3 gardes par semaine
+    // Méthode utilitaire pour vérifier la disponibilité d'un employé
+    private boolean isEmployeDisponible(Employe employe, LocalDate date, String type) {
+        // Vérifier si l'employé n'a pas déjà une garde ce jour-là
+        return gardeRepo.findAll().stream()
+            .filter(g -> g.getDate().equals(date))
+            .filter(g -> g.getType().equals(type))
+            .noneMatch(g -> g.getEmploye().getIdE().equals(employe.getIdE()));
     }
 }
