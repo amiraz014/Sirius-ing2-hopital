@@ -9,7 +9,7 @@ import episen.sirius.ing2.proto_back.model.Lieu;
 import episen.sirius.ing2.proto_back.repository.EmployeRepo;
 import episen.sirius.ing2.proto_back.repository.GardeRepo;
 import episen.sirius.ing2.proto_back.repository.LieuRepo;
-
+import episen.sirius.ing2.proto_back.repository.ProfessionRepo;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -28,7 +28,9 @@ public class GardeService {
     @Autowired
     private LieuRepo lieuRepo;
 
-   
+    @Autowired
+    private ProfessionRepo professionRepo;
+
     private static final List<String> GARDE_PROFESSIONS = Arrays.asList(
             "Médecin généraliste", "Radiologue", "Urgentiste", "Pharmacien",
             "Infirmier", "Sage-femme", "Ambulancier", "Chef de service"
@@ -37,7 +39,7 @@ public class GardeService {
     public void planifierGardes(LocalDate dateDebut, LocalDate dateFin) {
         List<Employe> allEmployes = employeRepo.findAll();
         List<Employe> employesGarde = allEmployes.stream()
-                .filter(e -> GARDE_PROFESSIONS.contains(e.getProfession().getNom()))
+                .filter(e -> e.getProfession() != null && GARDE_PROFESSIONS.contains(e.getProfession().getNom()))
                 .collect(Collectors.toList());
 
         if (employesGarde.isEmpty()) {
@@ -71,11 +73,15 @@ public class GardeService {
         }
 
         // Planification des gardes du soir
-        Set<Employe> employesChoisis = new HashSet<>();
-        while (employesChoisis.size() < Math.min(160, employesGarde.size())) {
+        Set<Long> employesChoisis = new HashSet<>();
+        int gardesRestantes = 160;
+
+        while (gardesRestantes > 0 && employesChoisis.size() < employesGarde.size()) {
             Employe employe = employesGarde.get(random.nextInt(employesGarde.size()));
-            if (Collections.frequency(employesChoisis, employe) < 3) {
-                employesChoisis.add(employe);
+
+            if (Collections.frequency(employesChoisis.stream().toList(), employe.getIdE()) < 3) {
+                employesChoisis.add(employe.getIdE());
+
                 Garde gardeSoir = new Garde();
                 gardeSoir.setDate(date);
                 gardeSoir.setType("Soir");
@@ -87,7 +93,13 @@ public class GardeService {
                 lieuSoir.setSecteur("Soir");
                 lieuSoir.setGarde(gardeSoir);
                 lieuRepo.save(lieuSoir);
+
+                gardesRestantes--;
             }
+        }
+
+        if (gardesRestantes > 0) {
+            throw new RuntimeException("Impossible d'assigner toutes les gardes pour le jour " + date);
         }
     }
 }
