@@ -28,9 +28,7 @@ public class GardeService {
     @Autowired
     private LieuRepo lieuRepo;
 
-    @Autowired
-    private ProfessionRepo professionRepo;
-
+   
     private static final List<String> GARDE_PROFESSIONS = Arrays.asList(
             "Médecin généraliste", "Radiologue", "Urgentiste", "Pharmacien",
             "Infirmier", "Sage-femme", "Ambulancier", "Chef de service"
