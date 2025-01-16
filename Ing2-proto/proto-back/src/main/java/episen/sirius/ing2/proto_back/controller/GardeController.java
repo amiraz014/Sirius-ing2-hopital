@@ -23,7 +23,8 @@ public class GardeController {
             LocalDate firstDay = LocalDate.of(2024, 9, 1);
             LocalDate LastDay = LocalDate.of(2025, 9, 1);
 
-            gService.planifierGardes(firstDay,LastDay);
+            gService.planifierGardes(firstDay, LastDay);
+            
         
     }
 
