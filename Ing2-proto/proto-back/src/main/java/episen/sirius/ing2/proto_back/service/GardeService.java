@@ -21,7 +21,6 @@ import episen.sirius.ing2.proto_back.model.Lieu;
 import episen.sirius.ing2.proto_back.repository.EmployeRepo;
 import episen.sirius.ing2.proto_back.repository.GardeRepo;
 import episen.sirius.ing2.proto_back.repository.LieuRepo;
-
 @Service
 public class GardeService {
     @Autowired
@@ -51,7 +50,6 @@ public class GardeService {
         while (!dateCourante.isAfter(fin)) {
             for (String type : typesDeGarde) {
                 for (String secteur : secteurs) {
-                    // Choisir un employé au hasard ou suivant un autre critère
                     Employe employe = choisirEmploye(compteurGardes, employes);
 
                     Garde garde = new Garde();
@@ -80,8 +78,10 @@ public class GardeService {
     }
 
     private Employe choisirEmploye(Map<Employe, Integer> compteurGardes, List<Employe> employes) {
-        // Choisir l'employé avec le moins de gardes attribuées, mais permettre les répétitions
-        Employe employeChoisi = employes.get((int) (Math.random() * employes.size())); // Choisir au hasard
+        // Choisir l'employé avec le moins de gardes attribuées
+        Employe employeChoisi = employes.stream()
+            .min(Comparator.comparingInt(compteurGardes::get))
+            .orElseThrow(() -> new IllegalArgumentException("Erreur dans la sélection de l'employé."));
         return employeChoisi;
     }
 
