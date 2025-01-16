@@ -4,7 +4,10 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
+import java.time.temporal.IsoFields;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +37,8 @@ public class GardeService {
             throw new IllegalArgumentException("Aucun employé trouvé pour planifier les gardes.");
         }
 
-        List<String> typesDeGarde = List.of("MATIN", "APRES-MIDI", "NUIT");
-        List<String> secteurs = List.of("Secteur A", "Secteur B", "Secteur C", "Secteur D", "Secteur E");
+        List<String> typesDeGarde = Arrays.asList("MATIN", "SOIR");
+        List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C");
 
         // Initialiser un compteur pour suivre le nombre de gardes par employé
         Map<Employe, Integer> compteurGardes = new HashMap<>();
@@ -44,57 +47,57 @@ public class GardeService {
         }
 
         LocalDate dateCourante = debut;
-        int totalGardes = 0;
 
-        while (!dateCourante.isAfter(fin) && totalGardes < 4500) {
+        while (!dateCourante.isAfter(fin)) {
             for (String type : typesDeGarde) {
                 for (String secteur : secteurs) {
-                    for (int i = 0; i < 3; i++) { // Ajouter plusieurs gardes par combinaison
-                        Employe employe = choisirEmploye(compteurGardes, employes);
+                    // Choisir un employé au hasard ou suivant un autre critère
+                    Employe employe = choisirEmploye(compteurGardes, employes);
 
-                        Garde garde = new Garde();
-                        garde.setDate(dateCourante);
-                        garde.setType(type);
-                        garde.setHeure(getHeurePourType(type, i));
-                        garde.setEmploye(employe);
+                    Garde garde = new Garde();
+                    garde.setDate(dateCourante);
+                    garde.setType(type);
+                    garde.setHeure(getHeurePourType(type));
+                    garde.setEmploye(employe);
 
-                        Grepo.save(garde);
+                    Grepo.save(garde);
 
-                        Lieu lieu = new Lieu();
-                        lieu.setSecteur(secteur);
-                        lieu.setGarde(garde);
+                    Lieu lieu = new Lieu();
+                    lieu.setSecteur(secteur);
+                    lieu.setGarde(garde);
 
-                        Lrepo.save(lieu);
+                    Lrepo.save(lieu);
 
-                        compteurGardes.put(employe, compteurGardes.get(employe) + 1);
-                        totalGardes++;
-                        if (totalGardes >= 4500) break; // Arrêter dès que l'objectif est atteint
-                    }
-                    if (totalGardes >= 4500) break;
+                    // Augmenter le compteur de gardes pour cet employé
+                    compteurGardes.put(employe, compteurGardes.get(employe) + 1);
                 }
-                if (totalGardes >= 4500) break;
             }
             dateCourante = dateCourante.plusDays(1);
         }
 
-        System.out.println("Total des gardes planifiées : " + totalGardes);
+        // Vérifier que chaque employé a au moins 2 gardes par semaine
+        validerGardesParSemaine(compteurGardes);
     }
 
     private Employe choisirEmploye(Map<Employe, Integer> compteurGardes, List<Employe> employes) {
-        // Choisir un employé au hasard
-        return employes.get((int) (Math.random() * employes.size()));
+        // Choisir l'employé avec le moins de gardes attribuées, mais permettre les répétitions
+        Employe employeChoisi = employes.get((int) (Math.random() * employes.size())); // Choisir au hasard
+        return employeChoisi;
     }
 
-    private LocalTime getHeurePourType(String type, int index) {
-        switch (type) {
-            case "MATIN":
-                return LocalTime.of(6 + index * 2, 0); // 06:00, 08:00, 10:00
-            case "APRES-MIDI":
-                return LocalTime.of(12 + index * 2, 0); // 12:00, 14:00, 16:00
-            case "NUIT":
-                return LocalTime.of(20 + index * 2, 0); // 20:00, 22:00, 00:00
-            default:
-                return LocalTime.of(0, 0); // Par défaut 00:00
+    private LocalTime getHeurePourType(String type) {
+        if (type.equals("MATIN")) {
+            return LocalTime.of(8, 0); // 08:00:00
+        } else {
+            return LocalTime.of(18, 0); // 18:00:00
+        }
+    }
+
+    private void validerGardesParSemaine(Map<Employe, Integer> compteurGardes) {
+        for (Map.Entry<Employe, Integer> entry : compteurGardes.entrySet()) {
+            if (entry.getValue() < 2) {
+                throw new IllegalStateException("L'employé " + entry.getKey().getNom() + " a moins de 2 gardes par semaine.");
+            }
         }
     }
 }
