@@ -44,7 +44,7 @@ public class GardeService {
         
         for(Long id : PROFESSIONS_GARDE_SOIR){
             // On récupere les employés qui ont une id équivalente à ceux de la liste précédente(Professions_garde_soir)
-        List<Employe> employesGardeSoir =  employeRepo.findByProfessionId(id); // notre probleme est ici vu que 
+        List<Employe> employesGardeSoir =  employeRepo.findByProfessionId(id); // notre probleme est ici vu que c'est vide
             // une Vérification si  on a bien récupéré...
         if (employesGardeSoir.isEmpty()) {
             throw new RuntimeException("Aucun employé éligible pour les gardes de soir.");
