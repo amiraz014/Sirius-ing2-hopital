@@ -44,9 +44,7 @@ public class GardeService {
         }
 
         
-        List<Employe> employesGardeSoir = allEmployes.stream()
-                .filter(employe -> PROFESSIONS_GARDE_SOIR.contains(employe.getProfession().getIdP()))
-                .collect(Collectors.toList());
+        List<Employe> employesGardeSoir =  employeRepo.findAllByProfessionIds(PROFESSIONS_GARDE_SOIR);
 
         if (employesGardeSoir.isEmpty()) {
             throw new RuntimeException("Aucun employé éligible pour les gardes de soir.");
