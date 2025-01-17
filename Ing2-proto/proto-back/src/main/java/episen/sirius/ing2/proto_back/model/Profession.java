@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
+@Component
 public class Profession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
