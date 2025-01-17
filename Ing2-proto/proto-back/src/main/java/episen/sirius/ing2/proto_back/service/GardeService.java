@@ -6,11 +6,11 @@ import org.springframework.stereotype.Service;
 import episen.sirius.ing2.proto_back.model.Employe;
 import episen.sirius.ing2.proto_back.model.Garde;
 import episen.sirius.ing2.proto_back.model.Lieu;
-import episen.sirius.ing2.proto_back.model.Profession;
+
 import episen.sirius.ing2.proto_back.repository.EmployeRepo;
 import episen.sirius.ing2.proto_back.repository.GardeRepo;
 import episen.sirius.ing2.proto_back.repository.LieuRepo;
-import episen.sirius.ing2.proto_back.repository.ProfessionRepo;
+
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
