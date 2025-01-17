@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import episen.sirius.ing2.proto_back.model.Employe;
 import episen.sirius.ing2.proto_back.model.Garde;
 import episen.sirius.ing2.proto_back.model.Lieu;
+import episen.sirius.ing2.proto_back.model.Profession;
 import episen.sirius.ing2.proto_back.repository.EmployeRepo;
 import episen.sirius.ing2.proto_back.repository.GardeRepo;
 import episen.sirius.ing2.proto_back.repository.LieuRepo;
@@ -38,11 +39,13 @@ public class GardeService {
 
     public void planifierGardes(LocalDate dateDebut, LocalDate dateFin) {
         List<Employe> allEmployes = employeRepo.findAll();
-        List<Employe> employesGarde = allEmployes.stream()
-                .filter(e -> e.getProfession() != null && GARDE_PROFESSIONS.contains(e.getProfession().getNom()))
-                .collect(Collectors.toList());
-
-        if (employesGarde.isEmpty()) {
+        List<Long> ProfessionsId = Arrays.asList(1L,4L,10L,14L,15L,23L,24L,72L);
+        List<Profession> NightGardProfession = professionRepo.findAllById(ProfessionsId);
+        List<Employe> filteredEmployees = allEmployes.stream()
+        .filter(employe -> NightGardProfession.contains(employe.getProfession()))
+        .collect(Collectors.toList());
+        
+        if(filteredEmployees.isEmpty()){
             throw new RuntimeException("Aucun employé éligible pour les gardes.");
         }
 
@@ -51,38 +54,38 @@ public class GardeService {
 
         while (!currentDate.isAfter(dateFin)) {
             // Planification de la journée
-            planifierJournee(allEmployes, employesGarde, currentDate, random);
+            planifierJournee(allEmployes, filteredEmployees, currentDate, random);
             currentDate = currentDate.plusDays(1);
-        }
+    }
     }
 
-    private void planifierJournee(List<Employe> allEmployes, List<Employe> employesGarde, LocalDate date, Random random) {
-        // Planification du matin
-        for (Employe employe : allEmployes) {
-            Garde gardeMatin = new Garde();
-            gardeMatin.setDate(date);
-            gardeMatin.setType("Matin");
-            gardeMatin.setHeure(LocalTime.of(8, 0));
-            gardeMatin.setEmploye(employe);
-            gardeRepo.save(gardeMatin);
 
-            Lieu lieuMatin = new Lieu();
-            lieuMatin.setSecteur("Matin");
-            lieuMatin.setGarde(gardeMatin);
-            lieuRepo.save(lieuMatin);
-        }
+    private void planifierJournee(List<Employe> allEmployes, List<Employe> employesGarde, LocalDate date, Random random){
+                for(Employe employe : allEmployes){
+                     Garde gardeMatin = new Garde();
+                     gardeMatin.setDate(date);
+                     gardeMatin.setType("Matin");
+                     gardeMatin.setHeure(LocalTime.of(8, 0));
+                     gardeMatin.setEmploye(employe);
+                     gardeRepo.save(gardeMatin);
 
-        // Planification des gardes du soir
-        Set<Long> employesChoisis = new HashSet<>();
-        int gardesRestantes = 160;
+                    Lieu lieuMatin = new Lieu();
+                    lieuMatin.setSecteur("Matin");
+                    lieuMatin.setGarde(gardeMatin);
+                    lieuRepo.save(lieuMatin);
 
-        while (gardesRestantes > 0 && employesChoisis.size() < employesGarde.size()) {
-            Employe employe = employesGarde.get(random.nextInt(employesGarde.size()));
+                }
 
-            if (Collections.frequency(employesChoisis.stream().toList(), employe.getIdE()) < 3) {
+                Set<Long> employesChoisis = new HashSet<>();
+                int gardesRestantes = 160;
+
+                while (gardesRestantes > 0 && employesChoisis.size() < employesGarde.size()) {
+                Employe employe = employesGarde.get(random.nextInt(employesGarde.size()));
+
+                if (Collections.frequency(employesChoisis.stream().toList(), employe.getIdE()) < 3) {
                 employesChoisis.add(employe.getIdE());
 
-                Garde gardeSoir = new Garde();
+                Garde gardeSoir = new Garde();      
                 gardeSoir.setDate(date);
                 gardeSoir.setType("Soir");
                 gardeSoir.setHeure(LocalTime.of(20, 0));
@@ -95,11 +98,10 @@ public class GardeService {
                 lieuRepo.save(lieuSoir);
 
                 gardesRestantes--;
-            }
-        }
 
-        if (gardesRestantes > 0) {
-            throw new RuntimeException("Impossible d'assigner toutes les gardes pour le jour " + date);
-        }
+
+
     }
+}
+}
 }
