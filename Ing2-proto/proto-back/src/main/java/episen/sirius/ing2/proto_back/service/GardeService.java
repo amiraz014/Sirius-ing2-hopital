@@ -43,8 +43,8 @@ public class GardeService {
             throw new RuntimeException("Aucun employé n'est disponible dans la base de données.");
         }
 
-        
-        List<Employe> employesGardeSoir =  employeRepo.findAllByProfessionIds(PROFESSIONS_GARDE_SOIR);
+        for(Long id : PROFESSIONS_GARDE_SOIR){
+        List<Employe> employesGardeSoir =  employeRepo.findByProfessionId(id);
 
         if (employesGardeSoir.isEmpty()) {
             throw new RuntimeException("Aucun employé éligible pour les gardes de soir.");
@@ -55,6 +55,11 @@ public class GardeService {
             planifierJournee(allEmployes, employesGardeSoir, currentDate);
             currentDate = currentDate.plusDays(1);
         }
+        }
+
+        
+
+       
     }
 
     @Transactional
