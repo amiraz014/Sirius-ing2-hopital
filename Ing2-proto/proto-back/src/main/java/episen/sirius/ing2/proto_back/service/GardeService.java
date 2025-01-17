@@ -75,13 +75,14 @@ public class GardeService {
             gardeMatin.setType("Matin");
             gardeMatin.setHeure(LocalTime.of(8, 0));
             gardeMatin.setEmploye(employe);
-            
+            if(!gardeRepo.existsById(employe.getIdE())){
             Garde savedGarde = gardeRepo.save(gardeMatin);
             // On affecte un lieu de travail ici
             Lieu lieu = new Lieu();
             lieu.setSecteur("Secteur " + (new Random().nextInt(10) + 1));
             lieu.setGarde(savedGarde);
             lieuRepo.save(lieu);
+            }
         }
 
         // Gardes du soir 
@@ -101,13 +102,15 @@ public class GardeService {
                 gardeSoir.setHeure(LocalTime.of(20, 0));
                 gardeSoir.setEmploye(employe);
                 
-                Garde savedGarde = gardeRepo.save(gardeSoir);
+                
+                if(!gardeRepo.existsById(employe.getIdE())){
+                    Garde  savedGarde = gardeRepo.save(gardeSoir);
                 
                 Lieu lieu = new Lieu();
                 lieu.setSecteur("Secteur " + (new Random().nextInt(10) + 1));
                 lieu.setGarde(savedGarde);
                 lieuRepo.save(lieu);
-                
+                }
                 gardesNecessaires--;
             }
             index++;
