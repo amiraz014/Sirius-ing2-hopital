@@ -14,6 +14,7 @@ import episen.sirius.ing2.proto_back.model.Employe;
 @Repository
 public interface EmployeRepo extends JpaRepository<Employe, Long> {
 
-    @Query("SELECT * FROM Employe  WHERE profession_id IN (:professionIDs);")
-    List<Employe> findAllByProfessionIds(@Param("professionIDs") List<Long> professionIDs);
+    @Query("SELECT e FROM Employe e WHERE e.profession.id = :professionId")
+    List<Employe> findByProfessionId(@Param("professionId") Long professionId);
+    
 }
