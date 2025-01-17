@@ -3,6 +3,7 @@ package episen.sirius.ing2.proto_back.model;
 
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,5 +26,6 @@ public class Employe {
     private String nom;
     private Integer age;
     @ManyToOne
+    @Column(columnDefinition = "profession_id")
     private Profession profession;
 }
