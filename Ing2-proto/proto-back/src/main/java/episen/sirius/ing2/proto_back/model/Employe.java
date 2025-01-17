@@ -26,6 +26,5 @@ public class Employe {
     private String nom;
     private Integer age;
     @ManyToOne
-    @Column(columnDefinition = "profession_id")
     private Profession profession;
 }

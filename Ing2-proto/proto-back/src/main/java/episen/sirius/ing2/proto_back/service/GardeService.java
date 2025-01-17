@@ -31,26 +31,27 @@ public class GardeService {
     private LieuRepo lieuRepo;
 
     
-    private static final List<Long> PROFESSIONS_GARDE_SOIR = Arrays.asList(
-        1L,4L,10L,14L,15L,23L,24L,72L
-    );
+    private static final List<Long> PROFESSIONS_GARDE_SOIR = Arrays.asList( 1L,4L,10L,14L,15L,23L,24L,72L);
 
     @Transactional
     public void planifierGardes(LocalDate dateDebut, LocalDate dateFin) {
-       
+       // on récupere les données de la table employé :
         List<Employe> allEmployes = employeRepo.findAll();
+        // Vérification si on a bien récupérer les données depuis la table :
         if (allEmployes.isEmpty()) {
             throw new RuntimeException("Aucun employé n'est disponible dans la base de données.");
         }
-
+        
         for(Long id : PROFESSIONS_GARDE_SOIR){
-        List<Employe> employesGardeSoir =  employeRepo.findByProfessionId(id);
-
+            // On récupere les employés qui ont une id équivalente à ceux de la liste précédente(Professions_garde_soir)
+        List<Employe> employesGardeSoir =  employeRepo.findByProfessionId(id); // notre probleme est ici vu que 
+            // une Vérification si  on a bien récupéré...
         if (employesGardeSoir.isEmpty()) {
             throw new RuntimeException("Aucun employé éligible pour les gardes de soir.");
         }
-
+        
         LocalDate currentDate = dateDebut;
+        // si la date courrante est avant la date finale alors on planifie les journées:
         while (!currentDate.isAfter(dateFin)) {
             planifierJournee(allEmployes, employesGardeSoir, currentDate);
             currentDate = currentDate.plusDays(1);
@@ -64,8 +65,11 @@ public class GardeService {
 
     @Transactional
     private void planifierJournee(List<Employe> allEmployes, List<Employe> employesGardeSoir, LocalDate date) {
-        // Gardes du matin 
+        // Gardes du matin :
+
+
         for (Employe employe : allEmployes) {
+            // Dans la matinée, tous les employés seront de service 
             Garde gardeMatin = new Garde();
             gardeMatin.setDate(date);
             gardeMatin.setType("Matin");
@@ -73,7 +77,7 @@ public class GardeService {
             gardeMatin.setEmploye(employe);
             
             Garde savedGarde = gardeRepo.save(gardeMatin);
-            
+            // On affecte un lieu de travail ici
             Lieu lieu = new Lieu();
             lieu.setSecteur("Secteur " + (new Random().nextInt(10) + 1));
             lieu.setGarde(savedGarde);
@@ -81,6 +85,7 @@ public class GardeService {
         }
 
         // Gardes du soir 
+            // réviser un peu le Set et Collections (méthodes et fonctionnalités proposés)
         Set<Long> employesChoisis = new HashSet<>();
         int gardesNecessaires = 160;
         List<Employe> employesDisponibles = new ArrayList<>(employesGardeSoir);
