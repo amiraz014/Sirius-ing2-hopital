@@ -30,20 +30,20 @@ public class GardeService {
     @Autowired
     private LieuRepo lieuRepo;
 
-    // Liste des profession_id pour les gardes du soir
+    
     private static final List<Long> PROFESSIONS_GARDE_SOIR = Arrays.asList(
-        16L, 35L, 44L, 57L, 60L, 83L, 106L, 110L, 111L, 123L, 125L, 133L, 139L
+        1L,4L,10L,14L,15L,23L,24L,72L
     );
 
     @Transactional
     public void planifierGardes(LocalDate dateDebut, LocalDate dateFin) {
-        // Récupération de tous les employés
+       
         List<Employe> allEmployes = employeRepo.findAll();
         if (allEmployes.isEmpty()) {
             throw new RuntimeException("Aucun employé n'est disponible dans la base de données.");
         }
 
-        // Filtrer les employés pour les gardes de soir selon leur profession_id
+        
         List<Employe> employesGardeSoir = allEmployes.stream()
                 .filter(employe -> PROFESSIONS_GARDE_SOIR.contains(employe.getProfession().getIdP()))
                 .collect(Collectors.toList());
@@ -61,7 +61,7 @@ public class GardeService {
 
     @Transactional
     private void planifierJournee(List<Employe> allEmployes, List<Employe> employesGardeSoir, LocalDate date) {
-        // Gardes du matin - tous les employés
+        // Gardes du matin 
         for (Employe employe : allEmployes) {
             Garde gardeMatin = new Garde();
             gardeMatin.setDate(date);
@@ -77,7 +77,7 @@ public class GardeService {
             lieuRepo.save(lieu);
         }
 
-        // Gardes du soir - employés filtrés
+        // Gardes du soir 
         Set<Long> employesChoisis = new HashSet<>();
         int gardesNecessaires = 160;
         List<Employe> employesDisponibles = new ArrayList<>(employesGardeSoir);
@@ -104,9 +104,9 @@ public class GardeService {
             }
             index++;
             
-            // Si on a fait le tour de tous les employés disponibles, on recommence
+           
             if (index >= employesDisponibles.size() * 3) {
-                employesChoisis.clear(); // Réinitialiser pour permettre de réutiliser les employés
+                employesChoisis.clear(); 
                 index = 0;
                 Collections.shuffle(employesDisponibles);
             }
