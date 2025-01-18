@@ -1,16 +1,10 @@
 package episen.sirius.ing2.proto_back.service;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.IsoFields;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +15,7 @@ import episen.sirius.ing2.proto_back.model.Lieu;
 import episen.sirius.ing2.proto_back.repository.EmployeRepo;
 import episen.sirius.ing2.proto_back.repository.GardeRepo;
 import episen.sirius.ing2.proto_back.repository.LieuRepo;
+
 @Service
 public class GardeService {
     @Autowired
@@ -29,47 +24,40 @@ public class GardeService {
     private GardeRepo Grepo;
     @Autowired
     private LieuRepo Lrepo;
-    private static final List<Long> PROFESSIONS_GARDE_SOIR = Arrays.asList( 1L,4L,10L,14L,15L,23L,24L,72L);
+
+    private static final List<Long> PROFESSIONS_GARDE_SOIR = Arrays.asList(1L, 4L, 10L, 14L, 15L, 23L, 24L, 72L);
+    private static final int MINIMUM_GARDES_PAR_JOUR = 160;
+
     public void planifierGardes(LocalDate debut, LocalDate fin) {
-        for(Long NightGardProfession : PROFESSIONS_GARDE_SOIR){
-        // on récupere la table des employées et on l'insere dans une liste
+        for(Long professionID : PROFESSIONS_GARDE_SOIR){
         List<Employe> employes = Erepo.findAll();
-        // on vérifie si on a bien récuperé la table 
         if (employes.isEmpty()) {
             throw new IllegalArgumentException("Aucun employé trouvé pour planifier les gardes.");
         }
 
-        // On filtre les employées qui éligible pour les gardes de soir :
-          List<Employe> NightGardEmployes =  Erepo.findByProfessionId(NightGardProfession);
+        List<Employe> nightGardEmployes = Erepo.findByProfessionId(professionID);
 
-          if (NightGardEmployes.isEmpty()) {
+        if (nightGardEmployes.isEmpty()) {
             throw new RuntimeException("Aucun employé éligible pour les gardes de soir.");
         }
-        
 
-
-
-
-        // On cree une liste de types de garde
         List<String> typesDeGarde = Arrays.asList("MATIN", "SOIR");
-        // on cree une liste de secteurs
-        List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C", "Secteur D", "Secteur E", "Secteur F ", "Secteur G");
+        List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C", "Secteur D", "Secteur E", "Secteur F", "Secteur G");
 
-        //  
         Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine = new HashMap<>();
-            for(Employe employe : NightGardEmployes){
-            compteurGardesParSemaine.put(employe,new HashMap<>());
-            }
+        for (Employe employe : nightGardEmployes) {
+            compteurGardesParSemaine.put(employe, new HashMap<>());
+        }
 
         LocalDate dateCourante = debut;
 
         while (!dateCourante.isAfter(fin)) {
             int semaineAnnee = dateCourante.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+            int totalGardesPourJour = 0;
 
             for (String type : typesDeGarde) {
                 for (String secteur : secteurs) {
-                    // Sélectionner un employé en rotation
-                    Employe employe = choisirEmployeAvecRepetition(compteurGardesParSemaine, NightGardEmployes, semaineAnnee);
+                    Employe employe = choisirEmployeAvecRepetition(compteurGardesParSemaine, nightGardEmployes, semaineAnnee);
 
                     Garde garde = new Garde();
                     garde.setDate(dateCourante);
@@ -85,33 +73,37 @@ public class GardeService {
 
                     Lrepo.save(lieu);
 
-                    // Mettre à jour le compteur pour cet employé
                     Map<Integer, Integer> gardesSemaine = compteurGardesParSemaine.get(employe);
                     gardesSemaine.put(semaineAnnee, gardesSemaine.getOrDefault(semaineAnnee, 0) + 1);
+
+                    totalGardesPourJour++;
+
+                    if (totalGardesPourJour >= MINIMUM_GARDES_PAR_JOUR) {
+                        break;
+                    }
                 }
+                if (totalGardesPourJour >= MINIMUM_GARDES_PAR_JOUR) {
+                    break;
+                }
+            }
+            if (totalGardesPourJour < MINIMUM_GARDES_PAR_JOUR) {
+                throw new IllegalStateException("Le nombre minimum de gardes par jour n'est pas atteint: " + totalGardesPourJour);
             }
             dateCourante = dateCourante.plusDays(1);
         }
 
-        // Validation finale pour s'assurer qu'aucun employé n'a moins de 2 gardes par semaine
         validerGardesParSemaine(compteurGardesParSemaine);
     }
 }
-
     private Employe choisirEmployeAvecRepetition(Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine,
                                                  List<Employe> employes, int semaineAnnee) {
-        // Sélectionner l'employé ayant le moins de gardes pour équilibrer
         return employes.stream()
             .min(Comparator.comparingInt(e -> compteurGardesParSemaine.get(e).getOrDefault(semaineAnnee, 0)))
             .orElseThrow(() -> new IllegalArgumentException("Erreur dans la sélection de l'employé."));
     }
 
     private LocalTime getHeurePourType(String type) {
-        if (type.equals("MATIN")) {
-            return LocalTime.of(8, 0); 
-        } else {
-            return LocalTime.of(20, 0); 
-        }
+        return type.equals("MATIN") ? LocalTime.of(8, 0) : LocalTime.of(20, 0);
     }
 
     private void validerGardesParSemaine(Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine) {
@@ -120,9 +112,9 @@ public class GardeService {
             Map<Integer, Integer> gardesSemaine = entry.getValue();
 
             for (Map.Entry<Integer, Integer> semaineEntry : gardesSemaine.entrySet()) {
-                if (semaineEntry.getValue() < 2) {
+                if (semaineEntry.getValue() < 3) {
                     throw new IllegalStateException(
-                        "L'employé " + employe.getNom() + " a moins de 2 gardes pour la semaine " + semaineEntry.getKey() + ".");
+                        "L'employé " + employe.getNom() + " a moins de 3 gardes pour la semaine " + semaineEntry.getKey() + ".");
                 }
             }
         }
