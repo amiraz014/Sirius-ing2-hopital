@@ -21,7 +21,7 @@ public class GardeController {
         @GetMapping("/GardeAPI")
         public  void GardeAlgo() {
             LocalDate firstDay = LocalDate.of(2024, 9, 1);
-            LocalDate LastDay = LocalDate.of(2025, 9, 1);
+            LocalDate LastDay = LocalDate.of(2024, 10, 1);
 
             gService.planifierGardes(firstDay, LastDay);
             
