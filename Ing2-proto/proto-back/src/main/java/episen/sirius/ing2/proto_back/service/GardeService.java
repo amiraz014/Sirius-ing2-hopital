@@ -29,21 +29,37 @@ public class GardeService {
     private GardeRepo Grepo;
     @Autowired
     private LieuRepo Lrepo;
-
+    private static final List<Long> PROFESSIONS_GARDE_SOIR = Arrays.asList( 1L,4L,10L,14L,15L,23L,24L,72L);
     public void planifierGardes(LocalDate debut, LocalDate fin) {
+        for(Long NightGardProfession : PROFESSIONS_GARDE_SOIR){
+        // on récupere la table des employées et on l'insere dans une liste
         List<Employe> employes = Erepo.findAll();
+        // on vérifie si on a bien récuperé la table 
         if (employes.isEmpty()) {
             throw new IllegalArgumentException("Aucun employé trouvé pour planifier les gardes.");
         }
 
-        List<String> typesDeGarde = Arrays.asList("MATIN", "SOIR");
-        List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C");
+        // On filtre les employées qui éligible pour les gardes de soir :
+          List<Employe> NightGardEmployes =  Erepo.findByProfessionId(NightGardProfession);
 
-        // Initialiser un compteur pour suivre les gardes attribuées par employé par semaine
-        Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine = new HashMap<>();
-        for (Employe employe : employes) {
-            compteurGardesParSemaine.put(employe, new HashMap<>());
+          if (NightGardEmployes.isEmpty()) {
+            throw new RuntimeException("Aucun employé éligible pour les gardes de soir.");
         }
+        
+
+
+
+
+        // On cree une liste de types de garde
+        List<String> typesDeGarde = Arrays.asList("MATIN", "SOIR");
+        // on cree une liste de secteurs
+        List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C", "Secteur D", "Secteur E", "Secteur F ", "Secteur G");
+
+        //  
+        Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine = new HashMap<>();
+            for(Employe employe : NightGardEmployes){
+            compteurGardesParSemaine.put(employe,new HashMap<>());
+            }
 
         LocalDate dateCourante = debut;
 
@@ -53,7 +69,7 @@ public class GardeService {
             for (String type : typesDeGarde) {
                 for (String secteur : secteurs) {
                     // Sélectionner un employé en rotation
-                    Employe employe = choisirEmployeAvecRepetition(compteurGardesParSemaine, employes, semaineAnnee);
+                    Employe employe = choisirEmployeAvecRepetition(compteurGardesParSemaine, NightGardEmployes, semaineAnnee);
 
                     Garde garde = new Garde();
                     garde.setDate(dateCourante);
@@ -80,6 +96,7 @@ public class GardeService {
         // Validation finale pour s'assurer qu'aucun employé n'a moins de 2 gardes par semaine
         validerGardesParSemaine(compteurGardesParSemaine);
     }
+}
 
     private Employe choisirEmployeAvecRepetition(Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine,
                                                  List<Employe> employes, int semaineAnnee) {
@@ -91,9 +108,9 @@ public class GardeService {
 
     private LocalTime getHeurePourType(String type) {
         if (type.equals("MATIN")) {
-            return LocalTime.of(8, 0); // 08:00:00
+            return LocalTime.of(8, 0); 
         } else {
-            return LocalTime.of(18, 0); // 18:00:00
+            return LocalTime.of(20, 0); 
         }
     }
 
