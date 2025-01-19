@@ -60,9 +60,9 @@ public class GardeService {
 
                         Employe employe = choisirEmploye(compteurGardesParSemaine, gardesEffectuees, NightGardEmployes, semaineAnnee, dateCourante, type);
 
-                        if (employe == null) {
-                            throw new RuntimeException("Aucun employé disponible pour la garde le " + dateCourante); //
-                        }
+                        // if (employe == null) {
+                        //     throw new RuntimeException("Aucun employé disponible pour la garde le " + dateCourante); //
+                        // }
 
                         Garde garde = new Garde();
                         garde.setDate(dateCourante);
