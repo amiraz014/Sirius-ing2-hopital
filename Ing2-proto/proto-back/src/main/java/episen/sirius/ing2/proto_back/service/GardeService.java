@@ -25,13 +25,13 @@ public class GardeService {
     private static final List<Long> PROFESSIONS_GARDE_SOIR = Arrays.asList(1L, 4L, 10L, 14L, 15L, 23L, 24L, 72L);
 
     public void planifierGardes(LocalDate debut, LocalDate fin) {
-        List<Employe> NightGardEmployes = new ArrayList<>();
+        List<Employe> EmployesGardeSoir = new ArrayList<>();
 
         for (Long professionId : PROFESSIONS_GARDE_SOIR) {
-            NightGardEmployes.addAll(Erepo.findByProfessionId(professionId));
+            EmployesGardeSoir.addAll(Erepo.findByProfessionId(professionId));
         }
 
-        if (NightGardEmployes.isEmpty()) {
+        if (EmployesGardeSoir.isEmpty()) {
             throw new RuntimeException("Aucun employé éligible pour les gardes de soir.");
         }
 
@@ -41,7 +41,7 @@ public class GardeService {
         Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine = new HashMap<>();
         Map<Employe, Set<LocalDate>> gardesEffectuees = new HashMap<>();
 
-        for (Employe employe : NightGardEmployes) {
+        for (Employe employe : EmployesGardeSoir) {
             compteurGardesParSemaine.put(employe, new HashMap<>());
             gardesEffectuees.put(employe, new HashSet<>());
         }
@@ -53,11 +53,11 @@ public class GardeService {
 
             int gardesAttribuees = 0;
 
-            while (gardesAttribuees < 20) { // Limite de 20 gardes par jour
+            while (gardesAttribuees < 20) { 
                 for (String type : typesDeGarde) {
                     for (String secteur : secteurs) {
 
-                        Employe employe = choisirEmploye(compteurGardesParSemaine, gardesEffectuees, NightGardEmployes, semaineAnnee, dateCourante, type);
+                        Employe employe = choisirEmploye(compteurGardesParSemaine, gardesEffectuees, EmployesGardeSoir, semaineAnnee, dateCourante, type);
 
                         if (employe == null) {
                             throw new RuntimeException("Aucun employé disponible pour la garde le " + dateCourante);
@@ -96,10 +96,10 @@ public class GardeService {
                 throw new IllegalStateException("Le nombre minimum de gardes par jour n'est pas atteint: " + gardesAttribuees);
             }
 
-            dateCourante = dateCourante.plusDays(1); // Correction de l'incrément de date
+            dateCourante = dateCourante.plusDays(1); 
         }
 
-        validerGardesParSemaine(compteurGardesParSemaine);
+       
     }
 
     private Employe choisirEmploye(Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine,
@@ -119,17 +119,4 @@ public class GardeService {
         return type.equals("MATIN") ? LocalTime.of(8, 0) : LocalTime.of(20, 0);
     }
 
-    private void validerGardesParSemaine(Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine) {
-        for (Map.Entry<Employe, Map<Integer, Integer>> entry : compteurGardesParSemaine.entrySet()) {
-            Employe employe = entry.getKey();
-            Map<Integer, Integer> gardesSemaine = entry.getValue();
-
-            for (Map.Entry<Integer, Integer> semaineEntry : gardesSemaine.entrySet()) {
-                if (semaineEntry.getValue() < 2) {
-                    throw new IllegalStateException(
-                            "L'employé " + employe.getNom() + " a moins de 2 gardes pour la semaine " + semaineEntry.getKey() + ".");
-                }
-            }
-        }
-    }
 }
