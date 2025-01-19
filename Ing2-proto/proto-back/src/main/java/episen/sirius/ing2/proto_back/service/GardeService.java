@@ -54,6 +54,8 @@ public class GardeService {
             int gardesAttribuees = 0;
 
             while (gardesAttribuees < 160) {
+                boolean gardeAttribuee = false;
+
                 for (String type : typesDeGarde) {
                     for (String secteur : secteurs) {
                         if (gardesAttribuees >= 160) break;
@@ -61,7 +63,7 @@ public class GardeService {
                         Employe employe = choisirEmploye(compteurGardesParSemaine, gardesEffectuees, NightGardEmployes, semaineAnnee, dateCourante, type);
 
                         if (employe == null) {
-                            throw new RuntimeException("Aucun employé disponible pour la garde le " + dateCourante);
+                            continue; // Passe au secteur suivant
                         }
 
                         Garde garde = new Garde();
@@ -81,7 +83,29 @@ public class GardeService {
                                 compteurGardesParSemaine.get(employe).getOrDefault(semaineAnnee, 0) + 1);
 
                         gardesAttribuees++;
+                        gardeAttribuee = true;
                     }
+                }
+
+                // Si aucune garde n'a pu être attribuée, relâcher les contraintes pour ce jour
+                if (!gardeAttribuee) {
+                    Employe employeFallback = NightGardEmployes.stream()
+                            .filter(e -> !gardesEffectuees.get(e).contains(dateCourante))
+                            .findFirst()
+                            .orElseThrow(() -> new RuntimeException("Aucun employé disponible pour la garde le " + dateCourante));
+
+                    Garde gardeFallback = new Garde();
+                    gardeFallback.setDate(dateCourante);
+                    gardeFallback.setType("SOIR"); // Par défaut
+                    gardeFallback.setHeure(getHeurePourType("SOIR"));
+                    gardeFallback.setEmploye(employeFallback);
+                    Grepo.save(gardeFallback);
+
+                    gardesEffectuees.get(employeFallback).add(dateCourante);
+                    compteurGardesParSemaine.get(employeFallback).put(semaineAnnee,
+                            compteurGardesParSemaine.get(employeFallback).getOrDefault(semaineAnnee, 0) + 1);
+
+                    gardesAttribuees++;
                 }
             }
 
