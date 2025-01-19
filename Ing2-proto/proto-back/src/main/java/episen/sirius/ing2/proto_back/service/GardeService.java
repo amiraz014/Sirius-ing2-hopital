@@ -25,12 +25,8 @@ public class GardeService {
     private static final List<Long> PROFESSIONS_GARDE_SOIR = Arrays.asList(1L, 4L, 10L, 14L, 15L, 23L, 24L, 72L);
 
     public void planifierGardes(LocalDate debut, LocalDate fin) {
-        List<Employe> employes = Erepo.findAll();
-        if (employes.isEmpty()) {
-            throw new IllegalArgumentException("Aucun employé trouvé pour planifier les gardes.");
-        }
-
         List<Employe> NightGardEmployes = new ArrayList<>();
+
         for (Long professionId : PROFESSIONS_GARDE_SOIR) {
             NightGardEmployes.addAll(Erepo.findByProfessionId(professionId));
         }
@@ -55,12 +51,12 @@ public class GardeService {
         while (!dateCourante.isAfter(fin)) {
             int semaineAnnee = dateCourante.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
 
-            int gardesAttribuees = 0; // Suivi du nombre de gardes attribuées pour la journée
+            int gardesAttribuees = 0;
 
             while (gardesAttribuees < 160) {
                 for (String type : typesDeGarde) {
                     for (String secteur : secteurs) {
-                        if (gardesAttribuees >= 160) break; // Arrêtez si le minimum est atteint
+                        if (gardesAttribuees >= 160) break;
 
                         Employe employe = choisirEmploye(compteurGardesParSemaine, gardesEffectuees, NightGardEmployes, semaineAnnee, dateCourante, type);
 
@@ -68,7 +64,6 @@ public class GardeService {
                             throw new RuntimeException("Aucun employé disponible pour la garde le " + dateCourante);
                         }
 
-                        // Créer et sauvegarder la garde
                         Garde garde = new Garde();
                         garde.setDate(dateCourante);
                         garde.setType(type);
@@ -76,13 +71,11 @@ public class GardeService {
                         garde.setEmploye(employe);
                         Grepo.save(garde);
 
-                        // Créer et sauvegarder le lieu
                         Lieu lieu = new Lieu();
                         lieu.setSecteur(secteur);
                         lieu.setGarde(garde);
                         Lrepo.save(lieu);
 
-                        // Mettre à jour les suivis
                         gardesEffectuees.get(employe).add(dateCourante);
                         compteurGardesParSemaine.get(employe).put(semaineAnnee,
                                 compteurGardesParSemaine.get(employe).getOrDefault(semaineAnnee, 0) + 1);
@@ -108,7 +101,7 @@ public class GardeService {
                                    LocalDate dateCourante, String type) {
 
         return employes.stream()
-                .filter(e -> gardesEffectuees.get(e).stream().noneMatch(d -> d.equals(dateCourante)))
+                .filter(e -> !gardesEffectuees.get(e).contains(dateCourante))
                 .filter(e -> compteurGardesParSemaine.get(e).getOrDefault(semaineAnnee, 0) < 3)
                 .filter(e -> gardesEffectuees.get(e).stream().noneMatch(d -> d.equals(dateCourante.minusDays(1)) && type.equals("MATIN")))
                 .min(Comparator.comparingInt(e -> compteurGardesParSemaine.get(e).getOrDefault(semaineAnnee, 0)))
