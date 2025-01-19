@@ -53,7 +53,7 @@ public class GardeService {
 
             int gardesAttribuees = 0;
            
-            while (gardesAttribuees < 160) {
+            while (gardesAttribuees < 30) {
                 for (String type : typesDeGarde) {
                     for (String secteur : secteurs) {
                         
@@ -85,7 +85,7 @@ public class GardeService {
                 }
             }
 
-            if (gardesAttribuees < 160) {
+            if (gardesAttribuees < 30) {
                 throw new IllegalStateException("Le nombre minimum de gardes par jour n'est pas atteint: " + gardesAttribuees);
             }
             System.out.println("date d'aujourdhui : "+dateCourante);
