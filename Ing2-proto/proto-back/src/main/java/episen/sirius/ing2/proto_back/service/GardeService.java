@@ -88,8 +88,9 @@ public class GardeService {
             if (gardesAttribuees < 160) {
                 throw new IllegalStateException("Le nombre minimum de gardes par jour n'est pas atteint: " + gardesAttribuees);
             }
-
+            System.out.println("date d'aujourdhui : "+dateCourante);
              dateCourante.plusDays(1);
+             System.out.println("date de demain : "+dateCourante);
         }
 
         validerGardesParSemaine(compteurGardesParSemaine);
