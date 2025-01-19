@@ -52,7 +52,7 @@ public class GardeService {
             int semaineAnnee = dateCourante.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
 
             int gardesAttribuees = 0;
-
+           
             while (gardesAttribuees < 160) {
                 for (String type : typesDeGarde) {
                     for (String secteur : secteurs) {
@@ -89,7 +89,7 @@ public class GardeService {
                 throw new IllegalStateException("Le nombre minimum de gardes par jour n'est pas atteint: " + gardesAttribuees);
             }
 
-            dateCourante = dateCourante.plusDays(1);
+             dateCourante.plusDays(1);
         }
 
         validerGardesParSemaine(compteurGardesParSemaine);
