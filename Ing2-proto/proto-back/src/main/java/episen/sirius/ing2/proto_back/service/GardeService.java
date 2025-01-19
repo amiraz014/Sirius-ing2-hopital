@@ -52,17 +52,16 @@ public class GardeService {
             int semaineAnnee = dateCourante.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
 
             int gardesAttribuees = 0;
-           
-            while (gardesAttribuees < 30) {
+
+            while (gardesAttribuees < 20) { // Limite de 20 gardes par jour
                 for (String type : typesDeGarde) {
                     for (String secteur : secteurs) {
-                        
 
                         Employe employe = choisirEmploye(compteurGardesParSemaine, gardesEffectuees, NightGardEmployes, semaineAnnee, dateCourante, type);
 
-                        // if (employe == null) {
-                        //     throw new RuntimeException("Aucun employé disponible pour la garde le " + dateCourante); //
-                        // }
+                        if (employe == null) {
+                            throw new RuntimeException("Aucun employé disponible pour la garde le " + dateCourante);
+                        }
 
                         Garde garde = new Garde();
                         garde.setDate(dateCourante);
@@ -81,16 +80,23 @@ public class GardeService {
                                 compteurGardesParSemaine.get(employe).getOrDefault(semaineAnnee, 0) + 1);
 
                         gardesAttribuees++;
+
+                        // Sortir des boucles si on atteint la limite
+                        if (gardesAttribuees >= 20) {
+                            break;
+                        }
+                    }
+                    if (gardesAttribuees >= 20) {
+                        break;
                     }
                 }
             }
 
-            if (gardesAttribuees < 30) {
+            if (gardesAttribuees < 20) {
                 throw new IllegalStateException("Le nombre minimum de gardes par jour n'est pas atteint: " + gardesAttribuees);
             }
-            System.out.println("date d'aujourdhui : "+dateCourante);
-             dateCourante.plusDays(1);
-             System.out.println("date de demain : "+dateCourante);
+
+            dateCourante = dateCourante.plusDays(1); // Correction de l'incrément de date
         }
 
         validerGardesParSemaine(compteurGardesParSemaine);
@@ -100,14 +106,11 @@ public class GardeService {
                                    Map<Employe, Set<LocalDate>> gardesEffectuees,
                                    List<Employe> employes, int semaineAnnee,
                                    LocalDate dateCourante, String type) {
-        // Variable intermédiaire pour capturer dateCourante
         LocalDate currentDate = dateCourante;
 
         return employes.stream()
                 .filter(e -> !gardesEffectuees.get(e).contains(currentDate))
                 .filter(e -> compteurGardesParSemaine.get(e).getOrDefault(semaineAnnee, 0) < 3)
-                // .filter(e -> gardesEffectuees.get(e).stream()
-                //         .noneMatch(d -> d.equals(currentDate.minusDays(1)) && type.equals("MATIN")))
                 .min(Comparator.comparingInt(e -> compteurGardesParSemaine.get(e).getOrDefault(semaineAnnee, 0)))
                 .orElse(null);
     }
