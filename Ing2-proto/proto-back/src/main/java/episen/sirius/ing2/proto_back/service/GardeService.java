@@ -56,12 +56,12 @@ public class GardeService {
             while (gardesAttribuees < 160) {
                 for (String type : typesDeGarde) {
                     for (String secteur : secteurs) {
-                        if (gardesAttribuees >= 160) break;
+                        
 
                         Employe employe = choisirEmploye(compteurGardesParSemaine, gardesEffectuees, NightGardEmployes, semaineAnnee, dateCourante, type);
 
                         if (employe == null) {
-                            throw new RuntimeException("Aucun employé disponible pour la garde le " + dateCourante);
+                            throw new RuntimeException("Aucun employé disponible pour la garde le " + dateCourante); //
                         }
 
                         Garde garde = new Garde();
@@ -105,8 +105,8 @@ public class GardeService {
         return employes.stream()
                 .filter(e -> !gardesEffectuees.get(e).contains(currentDate))
                 .filter(e -> compteurGardesParSemaine.get(e).getOrDefault(semaineAnnee, 0) < 3)
-                .filter(e -> gardesEffectuees.get(e).stream()
-                        .noneMatch(d -> d.equals(currentDate.minusDays(1)) && type.equals("MATIN")))
+                // .filter(e -> gardesEffectuees.get(e).stream()
+                //         .noneMatch(d -> d.equals(currentDate.minusDays(1)) && type.equals("MATIN")))
                 .min(Comparator.comparingInt(e -> compteurGardesParSemaine.get(e).getOrDefault(semaineAnnee, 0)))
                 .orElse(null);
     }
