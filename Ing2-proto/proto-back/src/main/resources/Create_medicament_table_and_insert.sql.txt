@@ -1,0 +1,84 @@
+-- 1. Création de la table Medicament
+CREATE TABLE IF NOT EXISTS Medicament (
+    idM SERIAL PRIMARY KEY,  -- Identifiant unique pour chaque médicament
+    nom VARCHAR(100) NOT NULL,  -- Nom du médicament (obligatoire)
+    description TEXT NOT NULL  -- Description du médicament (obligatoire)
+);
+
+-- 2. Fonction pour générer des noms de médicaments plausibles
+CREATE OR REPLACE FUNCTION generate_medicament_name() RETURNS VARCHAR AS $$
+DECLARE
+    -- Définition des préfixes pour les noms des médicaments
+    prefixes VARCHAR[] := ARRAY['Acet', 'Amox', 'Azith', 'Benz', 'Cefix', 'Chlor', 'Dex', 'Diclo', 'Erith', 'Fluc',
+                                'Gaba', 'Hydro', 'Ibup', 'Keto', 'Levo', 'Metf', 'Nap', 'Omep', 'Para', 'Rami'];
+
+    -- Définition des suffixes pour les noms des médicaments
+    suffixes VARCHAR[] := ARRAY['ol', 'in', 'ax', 'ex', 'ix', 'on', 'um', 'al', 'en', 'il', 'an', 'ox', 'id', 'am', 'or', 'ex', 'yl', 'ac', 'ix', 'op'];
+
+    -- Définition des milieux pour les noms des médicaments
+    milieux VARCHAR[] := ARRAY['pro', 'meta', 'cycl', 'dox', 'zol', 'cor', 'fer', 'cal', 'phen', 'trop'];
+BEGIN
+    -- Construction du nom du médicament en combinant un préfixe, un milieu et un suffixe au hasard
+    RETURN prefixes[1 + floor(random() * array_length(prefixes, 1))] ||
+           milieux[1 + floor(random() * array_length(milieux, 1))] ||
+           suffixes[1 + floor(random() * array_length(suffixes, 1))];
+END;
+$$ LANGUAGE plpgsql;
+
+-- 3. Fonction pour générer des descriptions de médicaments plausibles
+CREATE OR REPLACE FUNCTION generate_medicament_description() RETURNS TEXT AS $$
+DECLARE
+    -- Liste des indications pour les médicaments
+    indications VARCHAR[] := ARRAY['traitement de la douleur', 'réduction de la fièvre', 'soulagement des allergies',
+                                  'contrôle de l''hypertension', 'gestion du diabète', 'traitement des infections',
+                                  'soulagement des inflammations', 'amélioration du sommeil', 'régulation cardiaque',
+                                  'troubles digestifs'];
+
+    -- Liste des formes pharmaceutiques
+    formes VARCHAR[] := ARRAY['comprimés', 'gélules', 'solution buvable', 'sirop', 'suspension', 'poudre soluble',
+                              'capsules', 'sachets', 'comprimés effervescents'];
+
+    -- Liste des dosages possibles
+    dosages VARCHAR[] := ARRAY['50mg', '100mg', '250mg', '500mg', '1g', '25mg', '75mg', '150mg', '300mg', '750mg'];
+
+    -- Liste des fréquences de prise
+    frequences VARCHAR[] := ARRAY['1 fois par jour', '2 fois par jour', '3 fois par jour', 'toutes les 4 heures',
+                                  'au coucher', 'avant les repas', 'pendant les repas', 'si nécessaire'];
+BEGIN
+    -- Construction de la description du médicament en combinant les informations au hasard
+    RETURN 'Médicament pour le ' || indications[1 + floor(random() * array_length(indications, 1))] ||
+           '. Se présente sous forme de ' || formes[1 + floor(random() * array_length(formes, 1))] ||
+           ' dosé(e)s à ' || dosages[1 + floor(random() * array_length(dosages, 1))] ||
+           '. À prendre ' || frequences[1 + floor(random() * array_length(frequences, 1))] || '.';
+END;
+$$ LANGUAGE plpgsql;
+
+-- 4. Insertion de 1000 médicaments dans la table
+DO $$
+DECLARE
+    v_nom VARCHAR;  -- Variable pour stocker le nom du médicament
+    v_description TEXT;  -- Variable pour stocker la description du médicament
+    v_count INTEGER := 0;  -- Compteur pour suivre le nombre de médicaments insérés
+BEGIN
+    -- Boucle pour insérer 1000 médicaments
+    WHILE v_count < 1000 LOOP
+        -- Générer un nom de médicament
+        v_nom := generate_medicament_name();
+
+        -- Vérifier si le nom n'existe pas déjà pour éviter les doublons
+        IF NOT EXISTS (SELECT 1 FROM Medicament WHERE nom = v_nom) THEN
+            -- Générer la description du médicament
+            v_description := generate_medicament_description();
+
+            -- Insérer le médicament dans la table
+            INSERT INTO Medicament (nom, description)
+            VALUES (v_nom, v_description);
+
+            -- Incrémenter le compteur
+            v_count := v_count + 1;
+        END IF;
+    END LOOP;
+END $$;
+
+-- 5. Création d'un index sur le nom pour améliorer les performances des recherches
+CREATE INDEX IF NOT EXISTS idx_medicament_nom ON Medicament(nom);
