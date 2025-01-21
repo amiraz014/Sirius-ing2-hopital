@@ -9,10 +9,11 @@ import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Component
+
 @Data
 @Entity
 @NoArgsConstructor
+@Component
 public class Profession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Component
 @NoArgsConstructor
 public class Historique {
     @Id
