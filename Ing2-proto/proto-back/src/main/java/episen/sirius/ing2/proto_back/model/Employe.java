@@ -18,16 +18,18 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @AllArgsConstructor
-@Data
 @NoArgsConstructor
+@Data
 @Table(name = "Employe")
 public class Employe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idE ;
     private String nom;
+
     private Integer age;
     @ManyToOne
     @JoinColumn(name = "profession_id", nullable = false)
     private Profession profession;
+
 }
