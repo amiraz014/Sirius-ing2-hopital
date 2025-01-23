@@ -1,6 +1,7 @@
 package episen.sirius.ing2.proto_back.model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,7 @@ public class Historique {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idH;
     private Integer quantite;
-    private Date date_mouvement;
+    private LocalDate date_mouvement;
     private String type;
     @OneToOne
     private Medicament medicament;
