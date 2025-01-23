@@ -4,6 +4,7 @@ import episen.sirius.ing2.proto_back.model.Historique;
 import episen.sirius.ing2.proto_back.model.Stock;
 import episen.sirius.ing2.proto_back.repository.HistoriqueRepo;
 import episen.sirius.ing2.proto_back.repository.StockRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,7 +15,9 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class StockService {
+    @Autowired
     private final StockRepo stockRepo;
+    @Autowired
     private final HistoriqueRepo historiqueRepo;
     private final Random random = new Random();
 
