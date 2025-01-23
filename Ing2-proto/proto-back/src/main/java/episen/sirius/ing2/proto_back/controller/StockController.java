@@ -17,7 +17,7 @@ public class StockController {
     @GetMapping("/simulate")
     public String simulateStock() {
         try {
-            stockService.effectuerSortiesAleatoires();
+            stockService.effectuerSortiesNonStop();
             return "Simulation de sorties effectuée avec succès.";
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
