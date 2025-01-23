@@ -15,7 +15,7 @@ export default function GardFormular() {
         const formData = new FormData();
         formData.append('startDate', startDate);
         formData.append('endDate', endDate);
-        const data = Object.fromEntries(formData.entries());
+        
 
         try {
             const response = await fetch('http://172.31.253.194:8089/epital-api/frontData', {
@@ -23,7 +23,7 @@ export default function GardFormular() {
                 mode:'cors',
                 headers: {'Content-Type':'application/json'},
                 credentials: 'same-origin',
-                body : JSON.stringify(data)
+                body : formData
             });
 
             if (!response.ok) {
