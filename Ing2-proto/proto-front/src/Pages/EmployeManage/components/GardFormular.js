@@ -11,19 +11,14 @@ export default function GardFormular() {
         setLoading(true);
         setError(null);
 
-       
-        const formData = new FormData();
-        formData.append('startDate', startDate);
-        formData.append('endDate', endDate);
-        
-
         try {
             const response = await fetch('http://172.31.253.194:8089/epital-api/frontData', {
                 method: 'POST',
-                mode:'cors',
-                headers: {'Content-Type':'application/json'},
-                credentials: 'same-origin',
-                body : formData
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `startDate=${startDate}&endDate=${endDate}`
             });
 
             if (!response.ok) {
@@ -33,7 +28,6 @@ export default function GardFormular() {
             const result = await response.text();
             console.log('Réponse de l\'API:', result);
 
-            // Réinitialiser le formulaire après un envoi réussi
             setStartDate('');
             setEndDate('');
 
@@ -45,12 +39,6 @@ export default function GardFormular() {
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleReset = () => {
-        setStartDate('');
-        setEndDate('');
-        setError(null);
     };
 
     return (
