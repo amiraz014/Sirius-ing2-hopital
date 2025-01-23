@@ -1,45 +1,51 @@
 package episen.sirius.ing2.proto_back.service;
 
-import episen.sirius.ing2.proto_back.model.Historique;
 import episen.sirius.ing2.proto_back.model.Stock;
-import episen.sirius.ing2.proto_back.repository.HistoriqueRepo;
 import episen.sirius.ing2.proto_back.repository.StockRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class StockService {
-
     @Autowired
-    private StockRepo stockRepo;
+    private final StockRepo stockRepo;
+    private final Random random = new Random();
 
-    @Autowired
-    private HistoriqueRepo historiqueRepo;
+    public StockService(StockRepo stockRepo) {
+        this.stockRepo = stockRepo;
+    }
 
-    public void effectuerSortie(Long medicamentId, Integer quantite) {
-        Optional<Stock> stockOptional = stockRepo.findById(medicamentId);
+    public void effectuerSortiesAleatoires() throws InterruptedException {
+        List<Stock> stocks = stockRepo.findAll();
+        if (stocks.isEmpty()) {
+            System.out.println("Aucun stock disponible.");
+            return;
+        }
 
-        if (stockOptional.isPresent()) {
-            Stock stock = stockOptional.get();
-            if (stock.getQuantite_disponible() >= quantite) {
-                stock.setQuantite_disponible(stock.getQuantite_disponible() - quantite);
+        for (int i = 0; i < random.nextInt(10) + 1; i++) { // Effectuer entre 1 et 10 sorties aléatoires
+            Stock stock = stocks.get(random.nextInt(stocks.size()));
 
-                // Enregistrer l'historique de la sortie
-                Historique historique = new Historique();
-                historique.setQuantite(quantite);
-                historique.setDate_mouvement(new java.sql.Date(System.currentTimeMillis()));
-                historique.setType("sortie");
-                historique.setMedicament(stock.getMedicament()); // Assure-toi d'avoir la bonne relation
-                historiqueRepo.save(historique);
+            if (stock.getQuantite_disponible() > 0) {
+                int quantiteSortie = random.nextInt(stock.getQuantite_disponible()) + 1;
 
-                stockRepo.save(stock); // Sauvegarder les modifications dans le stock
-            } else {
-                throw new RuntimeException("Stock insuffisant pour effectuer la sortie.");
+                // Affichage avant la sortie
+                System.out.println("Avant sortie: " + stock.getMedicament().getNom() + " (ID: " + stock.getMedicament().getIdM() +
+                        "), Quantité disponible: " + stock.getQuantite_disponible());
+
+                stock.setQuantite_disponible(stock.getQuantite_disponible() - quantiteSortie);
+                stockRepo.save(stock);
+
+                // Affichage après la sortie
+                System.out.println("Sortie de " + quantiteSortie + " unités de médicament: " + stock.getMedicament().getNom() +
+                        " (ID: " + stock.getMedicament().getIdM() + "), Quantité disponible après sortie: " + stock.getQuantite_disponible());
+
+                // Délai aléatoire entre 5 et 15 secondes
+                TimeUnit.SECONDS.sleep(random.nextInt(11) + 5);
             }
-        } else {
-            throw new RuntimeException("Médicament non trouvé.");
         }
     }
 }
