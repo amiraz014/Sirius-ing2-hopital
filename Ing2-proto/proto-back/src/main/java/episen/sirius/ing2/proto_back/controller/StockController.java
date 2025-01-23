@@ -14,14 +14,14 @@ public class StockController {
         this.stockService = stockService;
     }
 
-    // @GetMapping("/simulate")
-    // public String simulateStock() {
-    //     try {
-    //        stockService.effectuerSortiesAleatoires();
-    //         return "Simulation de sorties effectuée avec succès.";
-    //     } catch (InterruptedException e) {
-    //         Thread.currentThread().interrupt();
-    //         return "Erreur lors de la simulation.";
-    //     }
-    // }
+    @GetMapping("/simulate")
+    public String simulateStock() {
+        try {
+            stockService.effectuerSortiesNonStop();
+            return "Simulation de sorties effectuée avec succès.";
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return "Erreur lors de la simulation.";
+        }
+    }
 }
