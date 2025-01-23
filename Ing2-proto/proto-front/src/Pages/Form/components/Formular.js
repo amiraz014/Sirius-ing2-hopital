@@ -25,6 +25,7 @@ export default function Formular(){
 
     } catch (error){
       console.log('Your error is :', error);
+      
 
     }
 

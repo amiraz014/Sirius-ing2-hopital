@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
-import { FaAddressCard } from "react-icons/fa";
+import { RiMedicineBottleFill } from "react-icons/ri";
 import { FaUsersLine } from "react-icons/fa6";
+import { ImStatsBars } from "react-icons/im";
 
 
 export default function Header(props){
@@ -23,13 +24,17 @@ export default function Header(props){
             <FaHome/>
             <span className="font-serif text-black flex items-center ">{props.finame}</span>
             </Link>
-            <Link to='/form' className="flex items-center space-x-0.5 border-collapse">
-            <FaAddressCard/>
+            <Link to='/Manage' className="flex items-center space-x-0.5 border-collapse">
+            <FaUsersLine/>
             <span className="font-serif text-black flex items-center ">{props.siname}</span>
             </Link>
             <Link to='/list' className="flex items-center space-x-0.5 border-collapse" >
-            <FaUsersLine/>
+            <RiMedicineBottleFill />
             <span className="font-serif text-black flex items-center ">{props.tiname}</span>
+            </Link>
+            <Link to='/list' className="flex items-center space-x-0.5 border-collapse" >
+            <ImStatsBars />
+            <span className="font-serif text-black flex items-center ">{props.frname}</span>
             </Link>
 
             </div>

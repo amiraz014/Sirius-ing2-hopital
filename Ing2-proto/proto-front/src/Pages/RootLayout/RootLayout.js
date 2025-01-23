@@ -7,7 +7,7 @@ export default function RootLayout(){
     return (
         <>
 
-        <Header logo ={logo} logotitle='EPITAL' finame='Home' siname='Add' tiname='Show'/>
+        <Header logo ={logo} logotitle='EPITAL' finame='Acceuil' siname='Gestion' tiname='Stockage' frname='Statistiques'/>
         <Outlet/>
         <Footer/> 
         </>
