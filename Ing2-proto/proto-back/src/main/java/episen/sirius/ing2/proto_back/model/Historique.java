@@ -25,7 +25,6 @@ public class Historique {
     private String type;
     @OneToOne
     private Medicament medicament;
-    @OneToOne
-    private Employe employe;
+
 
 }
