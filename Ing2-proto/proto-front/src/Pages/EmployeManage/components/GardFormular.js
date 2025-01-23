@@ -11,15 +11,19 @@ export default function GardFormular() {
         setLoading(true);
         setError(null);
 
-        // Création d'un FormData pour envoyer les paramètres
+       
         const formData = new FormData();
         formData.append('startDate', startDate);
         formData.append('endDate', endDate);
+        const data = Object.fromEntries(formData.entries());
 
         try {
             const response = await fetch('http://172.31.253.194:8089/epital-api/frontData', {
                 method: 'POST',
-                body: formData
+                mode:'cors',
+                headers: {'Content-Type':'application/json'},
+                credentials: 'same-origin',
+                body : JSON.stringify(data)
             });
 
             if (!response.ok) {
