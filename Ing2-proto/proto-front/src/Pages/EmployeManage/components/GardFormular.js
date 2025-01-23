@@ -41,6 +41,12 @@ export default function GardFormular() {
         }
     };
 
+    const handleReset = () => {
+        setStartDate('');
+        setEndDate('');
+        setError(null);
+    };
+
     return (
         <div className="flex flex-row space-x-6 items-center justify-center min-h-screen bg-gray-900 text-white">
             <form
