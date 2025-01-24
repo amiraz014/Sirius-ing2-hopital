@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/stock")
 public class StockController {
+    @Autowired
     private final StockService stockService;
 
     public StockController(StockService stockService) {
