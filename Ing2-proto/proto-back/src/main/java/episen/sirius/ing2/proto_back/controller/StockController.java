@@ -13,20 +13,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @CrossOrigin(origins = "http://172.31.253.209:3000")
 public class StockController {
     @Autowired
-    private final StockService stockService;
-
-    public StockController(StockService stockService) {
-        this.stockService = stockService;
-    }
-
-    @GetMapping("/simulate")
-    public String simulateStock() {
-        try {
-            stockService.effectuerSortiesNonStop();
-            return "Simulation de sorties effectuée avec succès.";
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return "Erreur lors de la simulation.";
-        }
-    }
+    private StockService stockService;    
+    @GetMapping("/simulate/once")
+    public String simulateStockOnce() { 
+                return stockService.effectuerSortieUnique(); 
+            }
 }
