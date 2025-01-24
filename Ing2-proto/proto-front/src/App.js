@@ -5,6 +5,7 @@ import FormPage from './Pages/Form/FormPage';
 import UserPage from './Pages/User/UserPage';
 import ManagePage from './Pages/EmployeManage/ManagePage';
 import GardFormular from './Pages/EmployeManage/components/GardFormular';
+import StockSimulation from "./Pages/Stock/StockSimulation";
 function App() {
 
   const router = createBrowserRouter([
@@ -15,7 +16,7 @@ function App() {
         {path : '/Manage', element : <ManagePage/>},
         {path : '/list', element: <UserPage/>},
         {path : '/form', element : <GardFormular/>},
-        {path : '/form', element : <GardFormular/>}
+        {path : '/stock', element : <StockSimulation/>}
   ]}
   ]);
   return (

@@ -28,7 +28,7 @@ export default function Header(props){
             <FaUsersLine/>
             <span className="font-serif text-black flex items-center ">{props.siname}</span>
             </Link>
-            <Link to='/list' className="flex items-center space-x-0.5 border-collapse" >
+            <Link to='/stock' className="flex items-center space-x-0.5 border-collapse" >
             <RiMedicineBottleFill />
             <span className="font-serif text-black flex items-center ">{props.tiname}</span>
             </Link>
