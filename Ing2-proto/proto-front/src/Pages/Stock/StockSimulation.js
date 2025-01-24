@@ -9,7 +9,7 @@ const StockSimulation = () => {
         setIsSimulating(true);
         try {
             // Appel au backend pour démarrer la simulation de sorties
-            const response = await axios.get("http://localhost:8080/stock/simulate");
+            const response = await axios.get("http://172.31.253.194:8089/stock/simulate");
             setSimulationMessage(response.data);
         } catch (error) {
             setSimulationMessage("Erreur lors de la simulation.");
