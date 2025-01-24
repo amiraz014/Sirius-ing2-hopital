@@ -14,6 +14,7 @@ function App() {
         { path : '/' , element : <HomePage/>},
         {path : '/Manage', element : <ManagePage/>},
         {path : '/list', element: <UserPage/>},
+        {path : '/form', element : <GardFormular/>},
         {path : '/form', element : <GardFormular/>}
   ]}
   ]);
