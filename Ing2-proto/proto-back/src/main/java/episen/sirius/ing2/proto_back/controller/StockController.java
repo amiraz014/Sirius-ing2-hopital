@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/stock")
+@CrossOrigin(origins = "http://172.31.253.209:3000")
 public class StockController {
     @Autowired
     private final StockService stockService;
