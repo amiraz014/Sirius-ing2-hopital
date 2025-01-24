@@ -24,7 +24,7 @@ const StockSimulation = () => {
   }, []);
  
   return (
-<div>
+<div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
 <h1>Suivi des sorties de stock</h1>
 <button onClick={fetchSimulation}>Lancer une sortie</button>
 <ul>
