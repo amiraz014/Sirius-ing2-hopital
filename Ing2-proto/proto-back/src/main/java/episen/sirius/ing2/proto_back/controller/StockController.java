@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @RequestMapping("/stock")
-@CrossOrigin(origins = "http://172.31.253.209:3000")
+@CrossOrigin(origins = "http://172.31.252.117:3000")
 public class StockController {
     @Autowired
     private StockService stockService;    
