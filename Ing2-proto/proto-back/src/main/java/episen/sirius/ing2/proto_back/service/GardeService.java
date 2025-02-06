@@ -1,17 +1,17 @@
 package episen.sirius.ing2.proto_back.service;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.temporal.IsoFields;
-import java.util.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import episen.sirius.ing2.proto_back.model.Employe;
 import episen.sirius.ing2.proto_back.model.Garde;
 import episen.sirius.ing2.proto_back.model.Lieu;
 import episen.sirius.ing2.proto_back.repository.EmployeRepo;
 import episen.sirius.ing2.proto_back.repository.GardeRepo;
 import episen.sirius.ing2.proto_back.repository.LieuRepo;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.IsoFields;
+import java.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GardeService {
@@ -21,8 +21,8 @@ public class GardeService {
     private GardeRepo Grepo;
     @Autowired
     private LieuRepo Lrepo;
-
-    private static final List<Long> PROFESSIONS_GARDE_SOIR = Arrays.asList(1L, 4L, 10L, 14L, 15L, 23L, 24L, 72L);
+    // profession de garde du soir :
+    private static final List<Long> PROFESSIONS_GARDE_SOIR = Arrays.asList(47L);
 
     public void planifierGardes(LocalDate debut, LocalDate fin) {
         List<Employe> EmployesGardeSoir = new ArrayList<>();
@@ -36,7 +36,7 @@ public class GardeService {
         }
 
         List<String> typesDeGarde = Arrays.asList("MATIN", "SOIR");
-        List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C", "Secteur D", "Secteur E", "Secteur F", "Secteur G");
+        List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C", "Secteur D", "Secteur E", "Secteur F", "Secteur G","Secteur H");
 
         Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine = new HashMap<>();
         Map<Employe, Set<LocalDate>> gardesEffectuees = new HashMap<>();
@@ -53,7 +53,7 @@ public class GardeService {
 
             int gardesAttribuees = 0;
 
-            while (gardesAttribuees < 20) { 
+            while (gardesAttribuees < 100) { 
                 for (String type : typesDeGarde) {
                     for (String secteur : secteurs) {
 
