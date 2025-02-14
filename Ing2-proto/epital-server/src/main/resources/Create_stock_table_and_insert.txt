@@ -1,0 +1,30 @@
+ALTER TABLE Medicament
+ADD COLUMN niveau_utilisation VARCHAR(20);
+UPDATE Medicament
+SET niveau_utilisation =
+    CASE
+        WHEN random() < 0.50 THEN 'très utilisé'
+        WHEN random() < 0.80 THEN 'moyennement utilisé'
+        ELSE 'peu utilisé'
+    END;
+
+INSERT INTO Stock (etat, quantite_disponible, quantite_reapprovisionnement, seuil, medicament_idm)
+SELECT
+    'bon',  -- Tous commencent avec un état bon
+    CASE
+        WHEN m.niveau_utilisation = 'très utilisé' THEN floor(random() * 500 + 500)  -- Entre 500 et 1000 unités
+        WHEN m.niveau_utilisation = 'moyennement utilisé' THEN floor(random() * 300 + 200) -- Entre 200 et 500 unités
+        WHEN m.niveau_utilisation = 'peu utilisé' THEN floor(random() * 100 + 50)  -- Entre 50 et 150 unités
+    END AS quantite_disponible,
+    CASE
+        WHEN m.niveau_utilisation = 'très utilisé' THEN floor(random() * 200 + 300)  -- Entre 300 et 500 unités
+        WHEN m.niveau_utilisation = 'moyennement utilisé' THEN floor(random() * 100 + 150) -- Entre 150 et 250 unités
+        WHEN m.niveau_utilisation = 'peu utilisé' THEN floor(random() * 50 + 50)  -- Entre 50 et 100 unités
+    END AS quantite_reapprovisionnement,
+    CASE
+        WHEN m.niveau_utilisation = 'très utilisé' THEN floor(random() * 150 + 200)  -- Entre 200 et 350 unités
+        WHEN m.niveau_utilisation = 'moyennement utilisé' THEN floor(random() * 80 + 100) -- Entre 100 et 180 unités
+        WHEN m.niveau_utilisation = 'peu utilisé' THEN floor(random() * 30 + 50)  -- Entre 50 et 80 unités
+    END AS seuil,
+    m.idm AS medicament_idm
+FROM Medicament m;
