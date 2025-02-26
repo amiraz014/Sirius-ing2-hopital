@@ -1,17 +1,26 @@
 package episen.sirius.ing2.proto_back.service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.IsoFields;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import episen.sirius.ing2.proto_back.model.Employe;
 import episen.sirius.ing2.proto_back.model.Garde;
 import episen.sirius.ing2.proto_back.model.Lieu;
 import episen.sirius.ing2.proto_back.repository.EmployeRepo;
 import episen.sirius.ing2.proto_back.repository.GardeRepo;
 import episen.sirius.ing2.proto_back.repository.LieuRepo;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.temporal.IsoFields;
-import java.util.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class GardeService {
@@ -37,9 +46,9 @@ public class GardeService {
 
         List<String> typesDeGarde = Arrays.asList("MATIN", "SOIR");
         List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C", "Secteur D", "Secteur E", "Secteur F", "Secteur G","Secteur H");
-        // à changer
+        
         Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine = new HashMap<>();
-        // à changer
+        
         Map<Employe, Set<LocalDate>> gardesEffectuees = new HashMap<>();
 
         for (Employe employe : EmployesGardeSoir) {
@@ -102,7 +111,7 @@ public class GardeService {
 
        
     }
-    // à changer
+    
     private Employe choisirEmploye(Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine,
                                    Map<Employe, Set<LocalDate>> gardesEffectuees,
                                    List<Employe> employes, int semaineAnnee,
@@ -110,7 +119,7 @@ public class GardeService {
         LocalDate date = dateCourante;
 
         return employes.stream()
-                .filter(e -> !gardesEffectuees.get(e).contains(date))
+                .filter(e -> !gardesEffectuees.get(e).contains(date)) 
                 .filter(e -> compteurGardesParSemaine.get(e).getOrDefault(semaineAnnee, 0) < 3)
                 .min(Comparator.comparingInt(e -> compteurGardesParSemaine.get(e).getOrDefault(semaineAnnee, 0)))
                 .orElse(null);
