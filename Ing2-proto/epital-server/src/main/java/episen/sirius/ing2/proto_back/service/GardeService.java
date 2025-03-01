@@ -34,18 +34,19 @@ public class GardeService {
     private static final List<Long> PROFESSIONS_GARDE_SOIR = Arrays.asList(47L);
 
     public void planifierGardes(LocalDate debut, LocalDate fin) {
+    
         List<Employe> EmployesGardeSoir = new ArrayList<>();
     
-        
+
             EmployesGardeSoir.addAll(Erepo.findByProfessionId(PROFESSIONS_GARDE_SOIR.get(0)));
         
 
         if (EmployesGardeSoir.isEmpty()) {
             throw new RuntimeException("Aucun employé éligible pour les gardes de soir.");
         }
-
+        
         List<String> typesDeGarde = Arrays.asList("MATIN", "SOIR");
-        List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C", "Secteur D", "Secteur E", "Secteur F", "Secteur G","Secteur H","Secteur I","Secteur J","Secteur K","Secteur L");
+        List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C", "Secteur D", "Secteur E", "Secteur F", "Secteur G", "Secteur H", "Secteur I", "Secteur J", "Secteur K", "Secteur L");
         
         Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine = new HashMap<>();
         
@@ -92,17 +93,17 @@ public class GardeService {
                         gardesAttribuees++;
 
                         // Sortir des boucles si on atteint la limite
-                        if (gardesAttribuees >= 20) {
+                        if (gardesAttribuees >= 100) {
                             break;
                         }
                     }
-                    if (gardesAttribuees >= 20) {
+                    if (gardesAttribuees >= 100) {
                         break;
                     }
                 }
             }
 
-            if (gardesAttribuees < 20) {
+            if (gardesAttribuees < 100) {
                 throw new IllegalStateException("Le nombre minimum de gardes par jour n'est pas atteint: " + gardesAttribuees);
             }
 
