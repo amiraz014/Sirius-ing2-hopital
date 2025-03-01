@@ -35,10 +35,10 @@ public class GardeService {
 
     public void planifierGardes(LocalDate debut, LocalDate fin) {
         List<Employe> EmployesGardeSoir = new ArrayList<>();
-
-        for (Long professionId : PROFESSIONS_GARDE_SOIR) {
-            EmployesGardeSoir.addAll(Erepo.findByProfessionId(professionId));
-        }
+    
+        
+            EmployesGardeSoir.addAll(Erepo.findByProfessionId(PROFESSIONS_GARDE_SOIR.get(0)));
+        
 
         if (EmployesGardeSoir.isEmpty()) {
             throw new RuntimeException("Aucun employé éligible pour les gardes de soir.");
