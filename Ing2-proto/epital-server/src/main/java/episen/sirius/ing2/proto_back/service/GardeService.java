@@ -64,7 +64,7 @@ public class GardeService {
 
             int gardesAttribuees = 0;
 
-            while (gardesAttribuees < 50) { 
+            while (gardesAttribuees < 12) { 
                 for (String type : typesDeGarde) {
                     for (String secteur : secteurs) {
 
@@ -93,17 +93,17 @@ public class GardeService {
                         gardesAttribuees++;
 
                         // Sortir des boucles si on atteint la limite
-                        if (gardesAttribuees >= 50) {
+                        if (gardesAttribuees >= 12) {
                             break;
                         }
                     }
-                    if (gardesAttribuees >= 50) {
+                    if (gardesAttribuees >= 12) {
                         break;
                     }
                 }
             }
 
-            if (gardesAttribuees < 50) {
+            if (gardesAttribuees < 12) {
                 throw new IllegalStateException("Le nombre minimum de gardes par jour n'est pas atteint: " + gardesAttribuees);
             }
 
