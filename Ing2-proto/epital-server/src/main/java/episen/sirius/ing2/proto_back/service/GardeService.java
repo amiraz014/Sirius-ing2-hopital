@@ -46,7 +46,7 @@ public class GardeService {
         }
         
         List<String> typesDeGarde = Arrays.asList("MATIN", "SOIR");
-        List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C", "Secteur D", "Secteur E", "Secteur F", "Secteur G", "Secteur H", "Secteur I", "Secteur J", "Secteur K", "Secteur L");
+        List<String> secteurs = Arrays.asList("Secteur A", "Secteur B", "Secteur C", "Secteur D", "Secteur E", "Secteur F");
         
         Map<Employe, Map<Integer, Integer>> compteurGardesParSemaine = new HashMap<>();
         
