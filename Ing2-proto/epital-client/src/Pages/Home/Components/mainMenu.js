@@ -29,7 +29,7 @@ export default function MainMenu(){
         </ul>
         <ul class="space-y-2 p-4">
         <li class="flex flex-col">
-                <span class="text-center">Nous-contactez !</span>
+                <span class="text-center text-white">Nous-contactez !</span>
                 <div class="mt-2 flex justify-center w-full bg-white text-black mx-auto">
                     <a class="m-1" href="https://www.facebook.com/"><FaFacebookSquare/></a>
                     <a class="m-1" href="https://www.instagram.com/"><FaSquareInstagram/></a>

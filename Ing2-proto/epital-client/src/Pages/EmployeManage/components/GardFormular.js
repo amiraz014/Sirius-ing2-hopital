@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import Epital from "../../Epital";
+import MainMenu from "../../Home/Components/mainMenu";
 
 export default function GardFormular() {
     const [startDate, setStartDate] = useState('');
@@ -47,8 +49,14 @@ export default function GardFormular() {
         setError(null);
     };
 
+    const con = useContext(Epital);
+
     return (
-        <div className="flex flex-row space-x-6 items-center justify-center min-h-screen bg-gray-900 text-white">
+        <div class="flex flex-row justify-between bg-gray-900">
+            <div>
+                {con.showMenu && <MainMenu/>}
+            </div>
+        <div className="flex flex-row space-x-6 items-center justify-center min-h-screen text-white">
             <form
                 className="max-w-md mx-auto px-24 py-20 bg-white shadow-md rounded-lg"
                 onSubmit={handleSubmit}
@@ -118,6 +126,9 @@ export default function GardFormular() {
                     </div>
                 </div>
             </form>
+        </div>
+                <div></div>
+
         </div>
     );
 }

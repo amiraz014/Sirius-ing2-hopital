@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import Epital from "../Epital";
+import MainMenu from "../Home/Components/mainMenu";
  
 const StockSimulation = () => {
   const [stockLogs, setStockLogs] = useState([]);
@@ -22,9 +24,12 @@ const StockSimulation = () => {
  
     return () => clearInterval(interval);
   }, []);
- 
+    const con = useContext(Epital);
   return (
-<div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
+    <>
+    <div class="flex flex-row justify-between bg-gray-900">
+      <div>{con.showMenu && <MainMenu/>}</div>
+    <div className="flex flex-col items-center justify-center min-h-screen  text-white">
 <h1>Suivi des sorties de stock</h1>
 <button onClick={fetchSimulation}>Lancer une sortie</button>
 <ul>
@@ -33,6 +38,10 @@ const StockSimulation = () => {
         ))}
 </ul>
 </div>
+<div></div>
+</div>
+</>
+
   );
 };
  

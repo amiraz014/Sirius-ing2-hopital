@@ -1,6 +1,7 @@
 import logo from './Epitalogo.svg';
 import MainMenu from './Components/mainMenu';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import Epital from '../Epital';
 
 
 
@@ -32,11 +33,11 @@ export default function HomePage(){
     return () => clearTimeout(timeout);
   }, [index, isDeleting]);
   
-
+    const con = useContext(Epital);
     return(
         <>
           <div class="flex flex-row space-x-30 items-start justify-start min-h-screen bg-gray-900">
-                    
+                    {con.showMenu && <MainMenu/>}
             <div class="flex flex-col items-center justify-center w-full h-full mt-48">
             <div class="animate-pulse mb-8">
            
