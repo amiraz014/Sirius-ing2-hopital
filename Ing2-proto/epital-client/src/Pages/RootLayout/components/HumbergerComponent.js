@@ -1,19 +1,21 @@
 import { GiHamburgerMenu} from "react-icons/gi";
 import { IoMdClose} from "react-icons/io";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import MainMenu from "./mainMenu";
+import Epital from "../../../Pages/Epital";
     export default function HumbergerComponent(props){
 
         // Source : https://www.youtube.com/watch?v=1tcFPodwQx4
        
         const [openMenu, setOpenMenu] = useState(false);
+        const con = useContext(Epital);
         
 
         const openMenuHandler = () => {
             setOpenMenu((prevState) => {
               return !prevState;
             });
-            props.setShowMenu((prevState) => {
+            con.setShowMenu((prevState) => {
                 return !prevState;
               });
             };
