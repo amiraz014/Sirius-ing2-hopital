@@ -5,6 +5,8 @@ import UserPage from './Pages/User/UserPage';
 import ManagePage from './Pages/EmployeManage/ManagePage';
 import GardFormular from './Pages/EmployeManage/components/GardFormular';
 import StockSimulation from "./Pages/Stock/StockSimulation";
+import Header from './Pages/RootLayout/components/Header';
+import logo from './Pages/RootLayout/components/Epitalogo.svg';
 function App() {
 
   const router = createBrowserRouter([
@@ -20,6 +22,7 @@ function App() {
   ]);
   return (
    <>
+   
    <RouterProvider router = {router}/>
    </>
   );

@@ -1,46 +1,28 @@
 import { Link } from "react-router-dom";
-import { FaHome } from "react-icons/fa";
-import { RiMedicineBottleFill } from "react-icons/ri";
-import { FaUsersLine } from "react-icons/fa6";
-import { ImStatsBars } from "react-icons/im";
 
-
+import logo from './Epitalogo.svg';
+import HumbergerComponent from "./HumbergerComponent";
 export default function Header(props){
 
 
 
     return (
         <>
-        <div className="flex flex-row h-16 content-start space-x-96 bg-blue-400">
+        <div class="flex flex-row bg-blue-400 justify-between h-14">
+            {/* Burger Menu Button */}
+                <HumbergerComponent/>
+
+
             {/* Logo Part */}
-            <div className="flex flex-row space-x-4">
-                <img src={props.logo} alt="logo" className="h-16 w-auto md:h-16 md:w-auto object-contain"/>
-            <span className="font-cursive text-2xl text-white flex items-center">{props.logotitle}</span>
-            </div>
-
-            {/* Items Part */}
-            <div className="flex flex-row space-x-4">
-            <Link to='/' className="flex items-center space-x-0.5 border-collapse">
-            <FaHome/>
-            <span className="font-serif text-black flex items-center ">{props.finame}</span>
-            </Link>
-            <Link to='/Manage' className="flex items-center space-x-0.5 border-collapse">
-            <FaUsersLine/>
-            <span className="font-serif text-black flex items-center ">{props.siname}</span>
-            </Link>
-            <Link to='/stock' className="flex items-center space-x-0.5 border-collapse" >
-            <RiMedicineBottleFill />
-            <span className="font-serif text-black flex items-center ">{props.tiname}</span>
-            </Link>
-            <Link to='/list' className="flex items-center space-x-0.5 border-collapse" >
-            <ImStatsBars />
-            <span className="font-serif text-black flex items-center ">{props.frname}</span>
-            </Link>
-
+            <div className="flex flex-row" tabIndex={-1}> 
+            <img src={logo} alt="logo" className="h-12 my-auto"/>
+            <Link to ="/" className="text-white text-3xl   m-auto   font-cursive">{props.logotitle}</Link>
             </div>
 
 
-
+            <div>
+                {/**/}
+            </div>
         </div>
         </>
     );
