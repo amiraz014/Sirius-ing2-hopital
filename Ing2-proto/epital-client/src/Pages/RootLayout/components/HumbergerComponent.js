@@ -1,7 +1,6 @@
 import { GiHamburgerMenu} from "react-icons/gi";
 import { IoMdClose} from "react-icons/io";
 import { useContext, useState } from "react";
-import MainMenu from "./mainMenu";
 import Epital from "../../../Pages/Epital";
     export default function HumbergerComponent(props){
 

@@ -4,7 +4,6 @@ import { useContext, useEffect, useState } from 'react';
 import Epital from '../Epital';
 
 
-
 export default function HomePage(){
 
   const [displayedText, setDisplayedText] = useState('');
@@ -37,6 +36,7 @@ export default function HomePage(){
         <>
           <div class="flex flex-row space-x-30 items-start justify-start min-h-screen bg-gray-900">
               {con.showMenu && <MainMenu/>}      
+                    
             <div class="flex flex-col items-center justify-center w-full h-full mt-48">
             <div class="animate-pulse mb-8">
            

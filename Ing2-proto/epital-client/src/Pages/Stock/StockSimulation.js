@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import  Epital  from "../Epital";
-import MainMenu from "../../RootLayout/components/mainMenu";
+import MainMenu from "../Home/Components/mainMenu";
  
 const StockSimulation = () => {
   const [stockLogs, setStockLogs] = useState([]);
@@ -26,8 +26,11 @@ const StockSimulation = () => {
   }, []);
     const con = useContext(Epital);
   return (
-<div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
-    {con.showMenu && <MainMenu/>}
+    
+    <>    
+    <div class="flex flex-row justify-between bg-gray-900">
+      <div>{con.showMenu && <MainMenu/>}</div>
+    <div className="flex flex-col items-center justify-center min-h-screen  text-white">
 <h1>Suivi des sorties de stock</h1>
 <button onClick={fetchSimulation}>Lancer une sortie</button>
 <ul>
@@ -36,6 +39,11 @@ const StockSimulation = () => {
         ))}
 </ul>
 </div>
+<div></div>
+</div>
+
+</>
+
   );
 };
  
