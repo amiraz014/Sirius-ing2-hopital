@@ -5,8 +5,7 @@ import UserPage from './Pages/User/UserPage';
 import ManagePage from './Pages/EmployeManage/ManagePage';
 import GardFormular from './Pages/EmployeManage/components/GardFormular';
 import StockSimulation from "./Pages/Stock/StockSimulation";
-import Header from './Pages/RootLayout/components/Header';
-import logo from './Pages/RootLayout/components/Epitalogo.svg';
+import EmployeVIew from './Pages/EmployeManage/EmployeVIew';
 function App() {
 
   const router = createBrowserRouter([
@@ -17,7 +16,8 @@ function App() {
         {path : '/Manage', element : <ManagePage/>},
         {path : '/list', element: <UserPage/>},
         {path : '/form', element : <GardFormular/>},
-        {path : '/stock', element : <StockSimulation/>}
+        {path : '/stock', element : <StockSimulation/>},
+        {path : '/EmployeView', element : <EmployeVIew/>}
   ]}
   ]);
   return (

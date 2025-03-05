@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import Epital from "../../Epital";
 import MainMenu from "../../Home/Components/mainMenu";
+import { Link } from "react-router-dom";
 
 export default function GardFormular() {
     const [startDate, setStartDate] = useState('');
@@ -104,7 +105,7 @@ export default function GardFormular() {
                         required
                     />
                 </div>
-                
+                <div class="flex flex-col space-y-4">
                 <div className="flex flex-row space-x-4">
                     <div className="flex justify-between">
                         <button 
@@ -124,6 +125,12 @@ export default function GardFormular() {
                             Réinitialiser
                         </button>
                     </div>
+                </div>
+                <div>
+                    
+                        <Link to="/EmployeView" className="border-2 border-blue-400 bg-blue-400 text-white rounded-lg h-20 w-20 p-2">Voir</Link>
+                    
+                </div>
                 </div>
             </form>
         </div>
