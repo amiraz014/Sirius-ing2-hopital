@@ -6,7 +6,7 @@ const StockSimulation = () => {
 
     const handleSimulation = async () => {
         try {
-            const response = await axios.get("http://localhost:8089/stock/simulate/once");
+            const response = await axios.get("http://172.31.249.204:8089/stock/simulate/once");
             setMessage(response.data);
         } catch (error) {
             setMessage("❌ Erreur lors de la simulation.");

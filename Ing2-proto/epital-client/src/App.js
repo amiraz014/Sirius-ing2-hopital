@@ -4,8 +4,9 @@ import HomePage from './Pages/Home/HomePage';
 import UserPage from './Pages/User/UserPage';
 import ManagePage from './Pages/EmployeManage/ManagePage';
 import GardFormular from './Pages/EmployeManage/components/GardFormular';
-import StockSimulation from "./Pages/Stock/StockSimulation";
+import StockSimulation from './Pages/Historique/components/StockSimulation';
 import EmployeVIew from './Pages/EmployeManage/EmployeVIew';
+import HistoriqueStock from './Pages/Historique/components/HistoriqueStock';
 function App() {
 
   const router = createBrowserRouter([
@@ -17,8 +18,8 @@ function App() {
         {path : '/list', element: <UserPage/>},
         {path : '/form', element : <GardFormular/>},
         {path : '/stock', element : <StockSimulation/>},
-        {path : '/EmployeView', element : <EmployeVIew/>}
-        {path: '/historique' element: <HistoriqueStock/> }
+        {path : '/EmployeView', element : <EmployeVIew/>},
+        {path: '/historique', element: <HistoriqueStock/> }
   ]}
   ]);
   return (
