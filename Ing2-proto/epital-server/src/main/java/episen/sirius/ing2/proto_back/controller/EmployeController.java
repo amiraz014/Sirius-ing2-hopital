@@ -1,0 +1,32 @@
+package episen.sirius.ing2.proto_back.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import episen.sirius.ing2.proto_back.model.EmployeDTO;
+import episen.sirius.ing2.proto_back.service.ViewService;
+
+@RestController
+@RequestMapping("/epital-api")
+@CrossOrigin(origins = "http://172.31.253.209:3000")
+public class EmployeController {
+
+    @Autowired
+    private ViewService viewService;
+    @GetMapping("/employes")
+    public ResponseEntity<List<EmployeDTO>> getEmployes() {
+        List<EmployeDTO> employes = viewService.getAllEmployes();
+        if (employes != null) {
+            return new ResponseEntity<>(employes, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(employes, HttpStatus.NOT_FOUND);
+        }
+    }
+}
