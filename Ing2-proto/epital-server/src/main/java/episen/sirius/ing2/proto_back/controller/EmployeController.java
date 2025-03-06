@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import episen.sirius.ing2.proto_back.model.EmployeDTO;
+import episen.sirius.ing2.proto_back.model.Employe;
 import episen.sirius.ing2.proto_back.service.ViewService;
 
 @RestController
@@ -21,8 +21,8 @@ public class EmployeController {
     @Autowired
     private ViewService viewService;
     @GetMapping("/employes")
-    public ResponseEntity<List<EmployeDTO>> getEmployes() {
-        List<EmployeDTO> employes = viewService.getAllEmployes();
+    public ResponseEntity<List<Employe>> getEmployes() {
+        List<Employe> employes = viewService.getAllEmployes();
         if (employes != null) {
             return new ResponseEntity<>(employes, HttpStatus.OK);
         } else {

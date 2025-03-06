@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import episen.sirius.ing2.proto_back.model.Employe;
-import episen.sirius.ing2.proto_back.model.EmployeDTO;
 @Repository
 public interface EmployeRepo extends JpaRepository<Employe, Long> {
 
@@ -20,6 +19,6 @@ public interface EmployeRepo extends JpaRepository<Employe, Long> {
        "LEFT JOIN Profession p ON e.profession_id = p.idp " +
        "LEFT JOIN Garde g ON e.ide = g.employe_ide " +
        "LEFT JOIN Lieu l ON g.idg = l.garde_idg")
-    List<EmployeDTO> findEmployes();
+    List<Employe> findEmployes();
     
 }
