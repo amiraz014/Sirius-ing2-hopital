@@ -21,7 +21,8 @@ const HistoriqueStock = () => {
     }, []);
 
     return (
-        <div className="container mt-5">
+        <div className="flex flex-row justify-between bg-gray-900 min-h-screen text-white p-4">
+            <div className="flex flex-col">
             <h2>📋 Historique des sorties de stock</h2>
             {loading ? <p>Chargement...</p> : (
                 Object.keys(historique).length === 0 ? (
@@ -44,6 +45,7 @@ const HistoriqueStock = () => {
                     ))
                 )
             )}
+        </div>
         </div>
     );
 };

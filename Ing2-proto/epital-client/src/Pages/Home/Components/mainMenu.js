@@ -18,7 +18,7 @@ export default function MainMenu(){
                 </ul>
             </li>
             <li>
-            <Link to="/" class="block px-4 py-2 text-white hover:bg-blue-500 hover:text-white">Historique</Link>
+            <Link to="/historique" class="block px-4 py-2 text-white hover:bg-blue-500 hover:text-white">Historique</Link>
             </li>
             <li>
             <Link to="/" class="block px-4 py-2 text-white hover:bg-blue-500 hover:text-white">Alerte</Link>

@@ -18,6 +18,7 @@ function App() {
         {path : '/form', element : <GardFormular/>},
         {path : '/stock', element : <StockSimulation/>},
         {path : '/EmployeView', element : <EmployeVIew/>}
+        {path: '/historique' element: <HistoriqueStock/> }
   ]}
   ]);
   return (
