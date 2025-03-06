@@ -14,7 +14,7 @@ public interface EmployeRepo extends JpaRepository<Employe, Long> {
     @Query("SELECT e FROM Employe e WHERE e.profession.id = :professionId")
     List<Employe> findByProfessionId(@Param("professionId") Long professionId);
     
-    @Query("SELECT e.nom, p.nom AS profession, g.date, g.heure, g.type, l.secteur " +
+    @Query("SELECT Employe" +
        "FROM Employe e " +
        "LEFT JOIN Profession p ON e.profession_id = p.idp " +
        "LEFT JOIN Garde g ON e.ide = g.employe_ide " +

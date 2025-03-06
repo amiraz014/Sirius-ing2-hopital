@@ -83,7 +83,7 @@ public class GardeService {
 
                         Lieu lieu = new Lieu();
                         lieu.setSecteur(secteur);
-                        lieu.setGarde(garde);
+                       // lieu.setGarde(garde);
                         Lrepo.save(lieu);
 
                         gardesEffectuees.get(employe).add(dateCourante);

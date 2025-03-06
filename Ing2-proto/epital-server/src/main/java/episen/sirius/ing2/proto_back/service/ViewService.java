@@ -7,17 +7,22 @@ import org.springframework.stereotype.Service;
 
 import episen.sirius.ing2.proto_back.model.Employe;
 import episen.sirius.ing2.proto_back.repository.EmployeRepo;
+import episen.sirius.ing2.proto_back.repository.GardeRepo;
 
 
 @Service
 public class  ViewService {
     @Autowired
     private EmployeRepo repo;
+    @Autowired
+    private GardeRepo gardeRepo;
 
     public List<Employe> getAllEmployes() {
         return repo.findEmployes();
     }
-   
+   public List<Employe> getEmployes(){
+    return repo.findEmployes();
+   }
 
 
 }
