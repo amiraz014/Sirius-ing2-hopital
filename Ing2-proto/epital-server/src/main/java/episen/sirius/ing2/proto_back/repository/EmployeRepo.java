@@ -1,5 +1,3 @@
-
-
 package episen.sirius.ing2.proto_back.repository;
 
 import java.util.List;
@@ -10,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import episen.sirius.ing2.proto_back.model.Employe;
-import main.java.episen.sirius.ing2.proto_back.model.EmployeDTO;
+import episen.sirius.ing2.proto_back.model.EmployeDTO;
 @Repository
 public interface EmployeRepo extends JpaRepository<Employe, Long> {
 
