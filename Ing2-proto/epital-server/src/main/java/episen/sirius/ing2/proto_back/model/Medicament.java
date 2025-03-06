@@ -1,22 +1,23 @@
 package episen.sirius.ing2.proto_back.model;
 
-import org.springframework.stereotype.Component;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+@Data
 @Entity
 @NoArgsConstructor
-@Data
-public class Medicament {
+public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idM;
-    private String nom;
-    private String description;
+    private Long idS;
+
+    private Integer quantite_disponible;
+    private Integer seuil;
+    private Integer quantite_reapprovisionnement;
+    private String etat;
+
+    @ManyToOne
+    @JoinColumn(name = "medicament_id")
+    private Medicament medicament;
 }

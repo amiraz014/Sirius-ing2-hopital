@@ -8,11 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 public class StockService {
@@ -23,63 +19,63 @@ public class StockService {
     private HistoriqueRepo historiqueRepo;
 
     private final Random random = new Random();
-    private final Set<Long> medicamentsEpuises = new HashSet<>();
 
-    public void effectuerSortiesNonStop() throws InterruptedException {
-        System.out.println("\n📢 Début de la simulation des sorties de stock...\n");
+    // Fonction pour une sortie unique de stock
 
-        while (true) {
-            // je dois charger les stocks disponibles
-            List<Stock> stockDisponible = stockRepo.findAll().stream()
-                    .filter(stock -> stock.getQuantite_disponible() > 0 && !medicamentsEpuises.contains(stock.getMedicament().getIdM()))
-                    .collect(Collectors.toList());
-
-            // Si aucun médicament disponible, j'arrete la boucle
-            if (stockDisponible.isEmpty()) {
-                System.out.println("\n✅ Tous les stocks sont épuisés. Arrêt de la simulation.");
-                break;
+    public String effectuerSortieUnique() {
+        List<Stock> stockDisponible = stockRepo.findAll();
+        List<Stock> filteredStock = new ArrayList<>();
+        for (Stock stock : stockDisponible) {
+            if (stock.getQuantite_disponible() > 0) {
+                filteredStock.add(stock);
             }
-
-            // Je sélectionnes un médicament aléatoire
-            Stock stock = stockDisponible.get(random.nextInt(stockDisponible.size()));
-
-            // je determine une quantité de sortie raisonnable dans mon stock
-            int quantiteSortie = Math.min(random.nextInt(10) + 1, stock.getQuantite_disponible());
-
-            // je mets à jour la quantité disponible
-            stock.setQuantite_disponible(stock.getQuantite_disponible() - quantiteSortie);
-            stockRepo.save(stock);
-
-            // J'enregistre dans l'historique ( il va m'aider apres pour calculer la moyenne de consommation )
-            Historique historique = new Historique();
-            historique.setMedicament(stock.getMedicament());
-            historique.setQuantite(quantiteSortie);
-            historique.setType("SORTIE");
-            historique.setDate_mouvement(LocalDate.now());
-            historiqueRepo.save(historique);
-
-            //  J'affiche les résultats
-            System.out.println("✅ Sortie de " + quantiteSortie + " unités de " + stock.getMedicament().getNom() +
-                    " (ID: " + stock.getMedicament().getIdM() + "), Quantité restante: " + stock.getQuantite_disponible());
-
-            // 🔹Je verifie les seuils et l'épuisement
-            if (stock.getQuantite_disponible() < stock.getSeuil() && stock.getQuantite_disponible() > 0) {
-                System.out.println("⚠️ Alerte: Stock de " + stock.getMedicament().getNom() +
-                        " sous le seuil ! Quantité: " + stock.getQuantite_disponible() +
-                        ", Seuil: " + stock.getSeuil());
-            }
-
-            if (stock.getQuantite_disponible() <= 0) {
-                if (!medicamentsEpuises.contains(stock.getMedicament().getIdM())) {
-                    System.out.println("❌ Stock épuisé pour le médicament: " + stock.getMedicament().getNom());
-                    medicamentsEpuises.add(stock.getMedicament().getIdM());
-                }
-            }
-
-            // Faire une pause pour simuler un délai entre les sorties
-            Thread.sleep(2000);
         }
 
-        System.out.println("\n📢 Fin de la simulation des sorties de stock.\n");
+        if (filteredStock.isEmpty()) {
+            return "🚨 Aucun stock disponible.";
+        }
+
+        // Je sélectionne un médicament aléatoire
+        Stock stock = filteredStock.get(random.nextInt(filteredStock.size()));
+
+        // Je retire une quantité aléatoire mais raisonnable
+        int quantiteSortie = Math.min(random.nextInt(10) + 1, stock.getQuantite_disponible());
+
+        // Mise à jour du stock
+        stock.setQuantite_disponible(stock.getQuantite_disponible() - quantiteSortie);
+        stockRepo.save(stock);
+
+        // Enregistrement dans l'historique
+        Historique historique = new Historique();
+        historique.setMedicament(stock.getMedicament());
+        historique.setQuantite(quantiteSortie);
+        historique.setType("SORTIE");
+        historique.setDate_mouvement(LocalDate.now());
+        historiqueRepo.save(historique);
+
+        return "✅ " + quantiteSortie + " unités de " + stock.getMedicament().getNom() +
+                " retirées. Stock restant : " + stock.getQuantite_disponible();
     }
-}
+
+    // Fonction pour récupérer l'historique groupé par médicament
+    public List<HistoriqueGroup> getHistoriqueRegroupe() {
+        List<Historique> historiqueList = historiqueRepo.findAllOrderedByMedicament();
+        List<HistoriqueGroup> groupedHistorique = new ArrayList<>();
+
+        for (Historique historique : historiqueList) {
+            boolean found = false;
+            for (HistoriqueGroup group : groupedHistorique) {
+                if (group.getMedicament().equals(historique.getMedicament().getNom())) {
+                    group.getHistoriques().add(historique);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                HistoriqueGroup newGroup = new HistoriqueGroup();
+                newGroup.setMedicament(historique.getMedicament().getNom());
+                newGroup.setHistoriques(new ArrayList<>(Collections.singletonList(historique)));
+                groupedHistorique.add(newGroup);
+            }
+        }
+        return groupedHistorique;
