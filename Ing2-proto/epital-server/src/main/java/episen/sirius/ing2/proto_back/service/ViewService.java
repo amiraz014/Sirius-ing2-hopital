@@ -18,8 +18,8 @@ public class  ViewService {
     private GardeRepo gardeRepo;
 
     public List<Employe> getAllEmployes() {
-        System.out.println("Employes : " + repo.findEmployeDetailsByProfessionId(47L));
-        return repo.findEmployeDetailsByProfessionId(47L);
+        System.out.println("Employes : " + repo.findEmployeDetailsByProfessionId(40L));
+        return repo.findEmployeDetailsByProfessionId(40L);
        
     }
 

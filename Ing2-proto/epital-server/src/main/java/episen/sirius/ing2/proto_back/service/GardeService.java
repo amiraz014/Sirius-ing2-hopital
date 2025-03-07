@@ -30,7 +30,7 @@ public class GardeService {
     @Autowired
     private LieuRepo Lrepo;
 
-    private static final List<Long> PROFESSIONS_GARDE_SOIR = Arrays.asList(47L);
+    private static final List<Long> PROFESSIONS_GARDE_SOIR = Arrays.asList(40L);
 
     public void planifierGardes(LocalDate debut, LocalDate fin) {
         List<Employe> EmployesGardeSoir = Erepo.findByProfessionId(PROFESSIONS_GARDE_SOIR.get(0));
