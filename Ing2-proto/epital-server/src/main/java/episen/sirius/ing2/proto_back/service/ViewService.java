@@ -18,11 +18,11 @@ public class  ViewService {
     private GardeRepo gardeRepo;
 
     public List<Employe> getAllEmployes() {
-        return repo.findEmployes();
+        System.out.println("Employes : " + repo.findEmployeDetailsByProfessionId(47L));
+        return repo.findEmployeDetailsByProfessionId(47L);
+       
     }
-   public List<Employe> getEmployes(){
-    return repo.findEmployes();
-   }
+
 
 
 }

@@ -15,29 +15,29 @@ import episen.sirius.ing2.proto_back.service.ViewService;
 
 @RestController
 @RequestMapping("/epital-api")
-@CrossOrigin(origins = "http://172.31.253.209:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 public class EmployeController {
 
      @Autowired
      private ViewService viewService;
-    // @GetMapping("/employes")
-    // public ResponseEntity<List<Employe>> getEmployes() {
-    //     List<Employe> employes = viewService.getAllEmployes();
-    //     if (employes != null) {
-    //         return new ResponseEntity<>(employes, HttpStatus.OK);
-    //     } else {
-    //         return new ResponseEntity<>(employes, HttpStatus.NOT_FOUND);
-    //     }
-    // }
-
-
     @GetMapping("/employes")
     public ResponseEntity<List<Employe>> getEmployes() {
-        List<Employe> employes = viewService.getEmployes();
+        List<Employe> employes = viewService.getAllEmployes();
         if (employes != null) {
             return new ResponseEntity<>(employes, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(employes, HttpStatus.NOT_FOUND);
         }
     }
+
+
+    // @GetMapping("/employes")
+    // public ResponseEntity<List<Employe>> getEmployes() {
+    //     List<Employe> employes = viewService.getEmployes();
+    //     if (employes != null) {
+    //         return new ResponseEntity<>(employes, HttpStatus.OK);
+    //     } else {
+    //         return new ResponseEntity<>(employes, HttpStatus.NOT_FOUND);
+    //     }
+    // }
 }
