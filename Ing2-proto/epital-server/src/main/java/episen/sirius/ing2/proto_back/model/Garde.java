@@ -4,6 +4,7 @@ package episen.sirius.ing2.proto_back.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,6 +17,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Garde {
 
     @Id
@@ -25,6 +28,7 @@ public class Garde {
     private String type;
     private LocalTime heure;
     @ManyToOne
+    @JsonBackReference
     private Employe employe;
     @ManyToOne
     private Lieu lieu;

@@ -5,6 +5,10 @@ package episen.sirius.ing2.proto_back.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +25,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name = "Employe")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Employe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +34,11 @@ public class Employe {
     private String nom;
     private Integer age;
     @ManyToOne
+    @JsonBackReference
     private Profession profession;
     @OneToMany(mappedBy = "employe")
-    List<Garde> gardes;
+    private List<Garde> gardes;
+    @OneToMany(mappedBy = "employe")
+    private List<Absence> absences;
 
 }
