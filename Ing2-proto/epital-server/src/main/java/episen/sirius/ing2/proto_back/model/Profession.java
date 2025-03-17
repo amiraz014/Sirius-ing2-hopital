@@ -1,12 +1,10 @@
 package episen.sirius.ing2.proto_back.model;
 
 import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.stereotype.Component;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +26,6 @@ public class Profession {
     private Long idP;
     private String nom;
     @OneToMany(mappedBy = "profession")
-
+    @JsonBackReference
     private List<Employe> employes;
 }
