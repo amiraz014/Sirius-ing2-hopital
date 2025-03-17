@@ -1,4 +1,4 @@
-package episen.sirius.ing2.proto_back.repository;
+ package episen.sirius.ing2.proto_back.repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,8 +10,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import episen.sirius.ing2.proto_back.model.Employe;
-import episen.sirius.ing2.proto_back.model.Profession;
-import episen.sirius.ing2.proto_back.model.Garde;
 
 
 @Repository

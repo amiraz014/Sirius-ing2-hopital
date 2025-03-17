@@ -13,7 +13,7 @@ export default function AbsenceForm() {
             setError(null);
 
             try {
-                const response = await fetch('http://172.31.249.204:8089/epital-api/addAbsence', {
+                const response = await fetch('http://172.31.252.28:8089/epital-api/addAbsence', {
                     method: 'POST',
                     mode: 'cors',
                     headers: {

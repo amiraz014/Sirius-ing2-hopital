@@ -15,7 +15,7 @@ export default function GardFormular() {
         setError(null);
 
         try {
-            const response = await fetch('http://172.31.249.204:8089/epital-api/frontData', {
+            const response = await fetch('http://172.31.252.28:8089/epital-api/frontData', {
                 method: 'POST',
                 mode: 'cors',
                 headers: {

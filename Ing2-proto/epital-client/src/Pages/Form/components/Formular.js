@@ -12,7 +12,7 @@ export default function Formular(){
     console.log(data);
 
     try{
-        const res = await fetch('http://172.31.249.204:8089/epital-api/add',{
+        const res = await fetch('http://172.31.252.28:8089/epital-api/add',{
           method: 'POST',
           mode:'cors',
           headers: {'Content-Type':'application/json'},
