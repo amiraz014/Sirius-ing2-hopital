@@ -7,6 +7,7 @@ import GardFormular from './Pages/EmployeManage/components/GardFormular';
 import StockSimulation from './Pages/Historique/components/StockSimulation';
 import EmployeVIew from './Pages/EmployeManage/EmployeVIew';
 import HistoriqueStock from './Pages/Historique/components/HistoriqueStock';
+import AbsenceInterface from './Pages/EmployeManage/components/AbsenceInterface';
 function App() {
 
   const router = createBrowserRouter([
@@ -19,7 +20,8 @@ function App() {
         {path : '/form', element : <GardFormular/>},
         {path : '/stock', element : <StockSimulation/>},
         {path : '/EmployeView', element : <EmployeVIew/>},
-        {path: '/historique', element: <HistoriqueStock/> }
+        {path: '/historique', element: <HistoriqueStock/> },
+        {path: '/absence', element: <AbsenceInterface/>}
   ]}
   ]);
   return (

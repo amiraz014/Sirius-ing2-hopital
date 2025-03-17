@@ -1,6 +1,7 @@
 package episen.sirius.ing2.proto_back.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class Absence {
     private LocalDate date_absence;
     private LocalTime time_absence;
     @ManyToOne
+    @JsonBackReference
     private Employe employe;
 
 
