@@ -2,6 +2,7 @@ package episen.sirius.ing2.proto_back.controller;
 
 import java.util.List;
 
+import episen.sirius.ing2.proto_back.model.Lieu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import episen.sirius.ing2.proto_back.service.ViewService;
 
 @RestController
 @RequestMapping("/epital-api")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://172.31.252.117:3000")
 public class EmployeController {
 
      @Autowired
@@ -29,6 +30,7 @@ public class EmployeController {
             return new ResponseEntity<>(employes, HttpStatus.NOT_FOUND);
         }
     }
+
 
 
     // @GetMapping("/employes")

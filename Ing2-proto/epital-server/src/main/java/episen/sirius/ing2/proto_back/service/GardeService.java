@@ -30,10 +30,11 @@ public class GardeService {
     @Autowired
     private LieuRepo Lrepo;
 
-    private static final List<Long> PROFESSIONS_GARDE_SOIR = Arrays.asList(40L);
+
 
     public void planifierGardes(LocalDate debut, LocalDate fin) {
-        List<Employe> EmployesGardeSoir = Erepo.findByProfessionId(PROFESSIONS_GARDE_SOIR.get(0));
+        List<Employe> EmployesGardeSoir = Erepo.findByProfessionId(40L);
+        System.out.println(EmployesGardeSoir);
 
         if (EmployesGardeSoir.isEmpty()) {
             throw new RuntimeException("Aucun employé éligible pour les gardes de soir.");
@@ -77,6 +78,7 @@ public class GardeService {
                         garde.setLieu(lieu);
 
                         Grepo.save(garde);
+
 
                         gardesEffectuees.get(employe).add(dateCourante);
                         compteurGardesParSemaine.get(employe).put(semaineAnnee,
