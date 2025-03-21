@@ -18,21 +18,21 @@ export default function EmployeCard(props){
               </div>
               <div class="flex flex-col pt-2 pr-2">
                 <span class="font-bold text-sm px-2  rounded-t-lg  border-blue-400 bg-blue-400 text-white">
-                  <span>{item.profession}</span>
-                </span>
-                <span class="flex text-sm border-2 border-blue-400  justify-center font-semibold p-0.5 ">
-                  {item.secteur}
+                  <span> Garde de sécurité</span>
                 </span>
               </div>
-              <div class="flex flex-col border-2 pt-3">
+              {item.gardes.map((garde, index) => (
+              <div key={index} class="flex flex-col border-2 space-y-1 pt-3">
                 <span class="mx-auto text-center bg-blue-400 text-white w-auto rounded-t-lg px-2 text-xs"> 
-                  {item.type}
+                {garde.type}
                 </span>
                 <span class="rounded-lg text-center bg-blue-400 text-white px-2 text-sm ">
-                  {item.date}
+                 {garde.date}
                 </span>
-                <span class="rounded-lg text-center bg-blue-400 text-white px-2 text-sm ">{item.heure}</span>
+                <span class="rounded-lg text-center bg-blue-400 text-white px-2 text-sm ">{garde.heure}</span>
+                <span class="rounded-lg text-center bg-blue-400 text-white px-2 text-sm ">{garde.lieu}</span>
               </div>
+              ))}
             </div>
           </div>
       </div>
