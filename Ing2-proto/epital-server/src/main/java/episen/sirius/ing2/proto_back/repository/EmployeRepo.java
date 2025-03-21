@@ -24,6 +24,8 @@ public interface EmployeRepo extends JpaRepository<Employe, Long> {
             @Param("timeAbsence") LocalTime timeAbsence
     );
 
-    @Query("SELECT e FROM Employe e WHERE e.profession.idP = :professionId ORDER BY RANDOM() LIMIT 1")
-    Employe findRandomly(@Param(("professionId")) Long professionId);
+    @Query("SELECT e FROM Employe e JOIN e.gardes g WHERE e.profession.idP = :professionId AND g.date <> :date ORDER BY RANDOM() LIMIT 1")
+    Employe findRandomly(@Param(("professionId")) Long professionId,
+                        @Param(("date")) LocalDate date
+    );
 }

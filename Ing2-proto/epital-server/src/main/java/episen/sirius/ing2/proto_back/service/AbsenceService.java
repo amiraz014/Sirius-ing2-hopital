@@ -41,7 +41,7 @@ public class AbsenceService {
 
     @Transactional
     public Boolean UpdateGarde(LocalDate dateAbsence, LocalTime timeAbsence) {
-        Employe employe = employeRepo.findRandomly(40L);
+        Employe employe = employeRepo.findRandomly(40L, dateAbsence);
         if (isEligibleForGarde(employe, dateAbsence, timeAbsence)) {
             for(Absence absence : absenceRepo.findAll()) {
                 for(Garde g : absence.getEmploye().getGardes()) {
