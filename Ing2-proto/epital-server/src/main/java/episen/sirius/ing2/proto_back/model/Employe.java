@@ -8,25 +8,22 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Employe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +32,13 @@ public class Employe {
     private Integer age;
     @ManyToOne
     @JsonBackReference
+    @ToString.Exclude
     private Profession profession;
     @OneToMany(mappedBy = "employe")
+    @ToString.Exclude
     private List<Garde> gardes;
     @OneToMany(mappedBy = "employe")
+    @ToString.Exclude
     private List<Absence> absences;
 
 }

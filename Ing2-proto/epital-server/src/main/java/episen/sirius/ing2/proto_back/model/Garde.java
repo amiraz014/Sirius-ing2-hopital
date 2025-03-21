@@ -12,13 +12,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Entity
 @Data
 @NoArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Garde {
 
     @Id
@@ -29,8 +28,10 @@ public class Garde {
     private LocalTime heure;
     @ManyToOne
     @JsonBackReference
+    @ToString.Exclude
     private Employe employe;
     @ManyToOne
+    @ToString.Exclude
     private Lieu lieu;
 
 }

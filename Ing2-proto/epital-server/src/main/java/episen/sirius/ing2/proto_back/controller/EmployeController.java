@@ -31,15 +31,6 @@ public class EmployeController {
         }
     }
 
-    @GetMapping("/zones")
-    public ResponseEntity<List<String>> getLieux(){
-        List<String> lieux = viewService.getSectors();
-        if(lieux != null){
-            return new ResponseEntity<>(lieux,HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(lieux,HttpStatus.NOT_FOUND);
-        }
-    }
 
 
     // @GetMapping("/employes")
