@@ -1,5 +1,5 @@
 import logo from './Epitalogo.svg';
-import MainMenu from './Components/mainMenu';
+import MainMenu from './Components/MainMenu';
 import { useContext, useEffect, useState } from 'react';
 import Epital from '../Epital';
 
@@ -34,18 +34,18 @@ export default function HomePage(){
     const con = useContext(Epital);
     return(
         <>
-          <div class="flex flex-row space-x-30 items-start justify-start min-h-screen bg-gray-900">
+          <div className="flex flex-row space-x-30 items-start justify-start min-h-screen bg-gray-900">
               {con.showMenu && <MainMenu/>}      
                     
-            <div class="flex flex-col items-center justify-center w-full h-full mt-48">
-            <div class="animate-pulse mb-8">
+            <div className="flex flex-col items-center justify-center w-full h-full mt-48">
+            <div className="animate-pulse mb-8">
            
            
             <img src={logo} alt="logo" className="w-60 h-60 flex items-center ml-15 animate-pulse"/>
               
               
               </div>
-              <h1 class="text-4xl text-white font-bold italic  typing-text">{displayedText}</h1>
+              <h1 className="text-4xl text-white font-bold italic  typing-text">{displayedText}</h1>
             </div>
             </div>  
         </>

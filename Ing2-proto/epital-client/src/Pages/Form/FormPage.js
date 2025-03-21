@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import Formular from "./components/Formular";
 import Epital from "../Epital";
-import MainMenu from "../Home/Components/mainMenu";
+import MainMenu from "../Home/Components/MainMenu";
 
 export default function FormPage(){
         const con = useContext(Epital);
