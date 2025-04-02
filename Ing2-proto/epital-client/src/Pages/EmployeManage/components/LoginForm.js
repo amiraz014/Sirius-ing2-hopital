@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import Epital from '../../Epital';
-import MainMenu from "../../Home/Components/mainMenu";
+import MainMenu from "../../Home/Components/MainMenu";
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm() {

@@ -1,8 +1,9 @@
 import { useContext, useEffect } from "react";
 import Epital from "../Epital";
-import MainMenu from "../../Home/Components/mainMenu";
+import MainMenu from "../../Home/Components/MainMenu";
 import GardCard from "./components/GardCard";
 import { useState } from "react";
+
 
 
 export default function EmployeVIew(){

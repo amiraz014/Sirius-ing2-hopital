@@ -1,5 +1,5 @@
 import logo from './Epitalogo.svg';
-import MainMenu from "./Components/mainMenu";
+import MainMenu from "./Components/MainMenu";
 import { useContext, useEffect, useState } from 'react';
 import Epital from '../Epital';
 
