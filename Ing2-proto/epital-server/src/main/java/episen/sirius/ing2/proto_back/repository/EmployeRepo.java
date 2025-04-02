@@ -28,4 +28,7 @@ public interface EmployeRepo extends JpaRepository<Employe, Long> {
     Employe findRandomly(@Param(("professionId")) Long professionId,
                         @Param(("date")) LocalDate date
     );
+
+    @Query("SELECT e FROM Employe e WHERE e.nomUtilisateur = :username")
+    Employe findByNomUtilisateur(@Param("username") String username);
 }

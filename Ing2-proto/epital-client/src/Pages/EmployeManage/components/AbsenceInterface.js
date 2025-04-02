@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import Epital from "../../Epital";
-import MainMenu from "../../Home/Components/mainMenu";
+import MainMenu from "./Home/Components/mainMenu";
 import AbsenceForm from "./AbsenceForm";
 
 export default function AbsenceInterface(){  

@@ -26,7 +26,7 @@ import Epital from "../../../Pages/Epital";
         <>
         {/* Burger Menu Button */}
         <div className="flex bg-blue-400 justify-between h-14">
-         <a
+         <a id="burger-menu"
          className={
              "w-20 flex flex-col hover:cursor-pointer hover:bg-blue-500 hover:shadow-md transition " +
              (openMenu ? "bg-blue-500 border-b-4" : "")

@@ -18,12 +18,14 @@ public class AbsenceController {
     public ResponseEntity<?> addAbsence(
             @RequestParam("AbsenceDate") String AbsenceDateStr,
             @RequestParam("AbsenceTime") String AbsenceTimeStr,
-            @RequestParam("AbsenceReason") String motif) {
+            @RequestParam("AbsenceReason") String motif,
+            @RequestParam("username") String username
+    ){
         try {
             LocalDate absenceDate = LocalDate.parse(AbsenceDateStr);
             LocalTime absenceTime = LocalTime.parse(AbsenceTimeStr);
 
-            absenceService.saveAbsence(motif, absenceDate, absenceTime);
+            absenceService.saveAbsence(motif, absenceDate, absenceTime, username);
             absenceService.UpdateGarde(absenceDate,absenceTime);
             return ResponseEntity.ok("Planification réussie");
         } catch (Exception e) {

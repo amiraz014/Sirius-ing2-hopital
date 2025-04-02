@@ -3,7 +3,6 @@ package episen.sirius.ing2.proto_back.controller;
 
 import java.time.LocalDate;
 
-import episen.sirius.ing2.proto_back.repository.AbsenceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,8 +20,7 @@ import episen.sirius.ing2.proto_back.service.GardeService;
 public class GardeController {
     @Autowired
     private  GardeService gService;
-    @Autowired
-    private AbsenceRepo absenceRepo;
+  
     
         @GetMapping("/GardeAPI")
         public  void GardeAlgo() {

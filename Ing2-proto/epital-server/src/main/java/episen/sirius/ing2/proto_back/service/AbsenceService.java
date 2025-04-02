@@ -24,9 +24,9 @@ public class AbsenceService {
     @Autowired
     private GardeRepo gardeRepo;
     //----------------------------------------------------------------------------------------------------
-    public void saveAbsence(String motif, LocalDate dateAbsence, LocalTime timeAbsence) {
+    public void saveAbsence(String motif, LocalDate dateAbsence, LocalTime timeAbsence, String username) {
         Absence absence = new Absence();
-            Employe employe = employeRepo.findRandomEmployeWithGarde(40L, dateAbsence, timeAbsence);
+            Employe employe = employeRepo.findByNomUtilisateur(username);
 
 
             absence.setDate_absence(dateAbsence);

@@ -30,6 +30,8 @@ public class Employe {
     private Long idE ;
     private String nom;
     private Integer age;
+    private String motDePasse;
+    private String nomUtilisateur;
     @ManyToOne
     @JsonBackReference
     @ToString.Exclude

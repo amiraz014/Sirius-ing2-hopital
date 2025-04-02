@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 export default function AbsenceInterfaceButton(){
         const navigate = useNavigate();
         const handleRedirectionButton = () => {
-                navigate('/absence');
+                navigate('/login');
         };
     return(
         <>
