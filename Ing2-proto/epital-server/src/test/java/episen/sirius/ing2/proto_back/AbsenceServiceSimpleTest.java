@@ -17,8 +17,10 @@ import episen.sirius.ing2.proto_back.model.Employe;
 import episen.sirius.ing2.proto_back.repository.AbsenceRepo;
 import episen.sirius.ing2.proto_back.repository.EmployeRepo;
 import episen.sirius.ing2.proto_back.service.AbsenceService;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 
 @SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class AbsenceServiceSimpleTest {
 
     @Autowired
