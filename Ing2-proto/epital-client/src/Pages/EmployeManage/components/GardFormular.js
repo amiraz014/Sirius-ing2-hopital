@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import Epital from "../../Epital";
-import MainMenu from "./Home/Components/MainMenu";
+import MainMenu from "../../Home/Components/mainMenu";
 import { Link } from "react-router-dom";
 
 export default function GardFormular() {
