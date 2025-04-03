@@ -16,7 +16,7 @@ import episen.sirius.ing2.proto_back.service.GardeService;
 
 @RestController
 @RequestMapping("/epital-api")
-@CrossOrigin(origins = "http://172.31.252.117:3000")
+@CrossOrigin(origins = "http://172.31.250.115:3000")
 public class GardeController {
     @Autowired
     private  GardeService gService;

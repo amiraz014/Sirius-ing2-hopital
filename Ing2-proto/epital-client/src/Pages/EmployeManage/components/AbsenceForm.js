@@ -32,7 +32,7 @@ export default function AbsenceForm() {
             formData.append('AbsenceReason', form.AbsenceReason);
             formData.append('username', username);
 
-            const response = await fetch('http://172.31.249.204:8089/epital-api/addAbsence', {
+            const response = await fetch('http://172.31.252.28:8089/epital-api/addAbsence', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'

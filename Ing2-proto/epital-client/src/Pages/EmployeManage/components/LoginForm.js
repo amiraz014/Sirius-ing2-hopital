@@ -26,7 +26,7 @@ export default function LoginForm() {
         setError(null);
 
         try {
-            const response = await fetch('http://172.31.249.204:8089/epital-api/login', {
+            const response = await fetch('http://172.31.252.28:8089/epital-api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',

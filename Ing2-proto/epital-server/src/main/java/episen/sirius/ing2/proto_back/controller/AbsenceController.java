@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @RestController
-@CrossOrigin(origins = "http://172.31.252.117:3000")
+@CrossOrigin(origins = "http://172.31.250.115:3000")
 @RequestMapping("/epital-api")
 public class AbsenceController {
         @Autowired
