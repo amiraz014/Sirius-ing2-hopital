@@ -3,7 +3,10 @@ package episen.sirius.ing2.proto_back.controller;
 import java.util.List;
 import java.util.Map;
 
+<<<<<<< HEAD
 import episen.sirius.ing2.proto_back.service.LoginService;
+=======
+>>>>>>> prod
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,6 +38,7 @@ public class EmployeController {
         }
     }
 
+<<<<<<< HEAD
     @PostMapping("/login")
 public ResponseEntity<?> LogAuth(
         @RequestParam("username") String username,
@@ -60,4 +64,6 @@ public ResponseEntity<?> LogAuth(
 
 
 
+=======
+>>>>>>> prod
 }

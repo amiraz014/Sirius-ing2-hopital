@@ -40,7 +40,11 @@ public class Employe {
     @ToString.Exclude
     private List<Garde> gardes;
     @OneToMany(mappedBy = "employe")
+<<<<<<< HEAD
     @ToString.Exclude
+=======
+    @JsonBackReference
+>>>>>>> prod
     private List<Absence> absences;
 
 }

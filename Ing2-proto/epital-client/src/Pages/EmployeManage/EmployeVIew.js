@@ -8,15 +8,17 @@ import MainMenu from '../Home/Components/MainMenu'
 
 export default function EmployeVIew(){
 
-    const con = useContext(Epital);
+    
     const [employeList, setEmployeList] = useState([]);
     useEffect(()=>{
         const FetchEmployes = async() => {
             const res = await fetch('http://172.31.252.28:8089/epital-api/employes');
             const resData = await res.json();
+            
             setEmployeList(resData);
         };
         FetchEmployes();
+        
      }, []);
      console.table(employeList);
      

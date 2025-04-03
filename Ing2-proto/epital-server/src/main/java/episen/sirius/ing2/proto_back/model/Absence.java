@@ -25,7 +25,10 @@ public class Absence {
     private LocalTime time_absence;
     @ManyToOne
     @JsonBackReference
+<<<<<<< HEAD
     @ToString.Exclude
+=======
+>>>>>>> prod
     private Employe employe;
 
 
