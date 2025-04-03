@@ -64,9 +64,10 @@ export default function GardFormular() {
                 className="max-w-md mx-auto px-24 py-20 bg-white shadow-md rounded-lg"
                 onSubmit={handleSubmit}
             >
-                <div>
-                    <label className="block text-gray-700 font-bold mb-2">PLANNING</label>
-                </div>
+                <div className="flex items-center">
+                        <img src={logo} alt="Logo" className="h-12 mr-4" />
+                        <h2 className="text-2xl font-bold text-gray-800">Planning</h2>
+                        </div>
                 
                 {error && (
                     <div className="mb-4 text-red-500">
