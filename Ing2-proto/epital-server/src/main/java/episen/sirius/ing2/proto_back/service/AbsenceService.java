@@ -43,20 +43,12 @@ public class AbsenceService {
     public void UpdateGarde(LocalDate dateAbsence, LocalTime timeAbsence, String username) {
 
         Employe AbsentEmploye = employeRepo.findByNomUtilisateur(username);
-       gardeRepo.DeleteByIDE(AbsentEmploye.getIdE());
+
 
        for(Garde garde : AbsentEmploye.getGardes()) {
 
          Employe employe =  employeRepo.findRandomly(40L, garde.getDate());
-
-           Garde newgarde = new Garde();
-           newgarde.setEmploye(employe);
-           newgarde.setType(garde.getType());
-           newgarde.setDate(garde.getDate());
-           newgarde.setHeure(garde.getHeure());
-           newgarde.setLieu(garde.getLieu());
-           newgarde.setIdG(garde.getIdG());
-           gardeRepo.save(newgarde);
+         gardeRepo.UpdateGarde(employe.getIdE(), garde.getIdG());
        }
     }
 

@@ -17,11 +17,9 @@ import episen.sirius.ing2.proto_back.model.Garde;
 public interface GardeRepo extends JpaRepository<Garde,Long> {
 
     @Modifying
-    @Query("UPDATE Garde g SET g.employe.idE = :idE WHERE g.date = :dateAbsence AND g.heure = :timeAbsence AND g.idG = :idG")
-    Integer UpdateGarde(
+    @Query("UPDATE Garde g SET g.employe.idE = :idE WHERE g.idG = :idG")
+    void UpdateGarde(
             @Param("idE") Long idE,
-            @Param("dateAbsence") LocalDate date,
-            @Param("timeAbsence") LocalTime time,
             @Param("idG") Long idG
     );
 
