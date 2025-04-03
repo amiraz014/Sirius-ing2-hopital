@@ -55,6 +55,7 @@ public class AbsenceService {
            newgarde.setDate(garde.getDate());
            newgarde.setHeure(garde.getHeure());
            newgarde.setLieu(garde.getLieu());
+           newgarde.setIdG(garde.getIdG());
            gardeRepo.save(newgarde);
        }
     }
