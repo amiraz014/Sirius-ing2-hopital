@@ -35,7 +35,7 @@ export default function LoginForm() {
                     username: username.trim(),
                     password: password.trim()
                 }),
-                credentials: 'include' 
+                
             });
 
             const data = await response.json();

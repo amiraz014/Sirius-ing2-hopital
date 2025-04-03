@@ -24,4 +24,10 @@ public interface GardeRepo extends JpaRepository<Garde,Long> {
             @Param("timeAbsence") LocalTime time,
             @Param("idG") Long idG
     );
+
+
+    @Modifying
+    @Query("DELETE FROM Garde g WHERE g.employe.idE = :idE")
+    void DeleteByIDE(@Param("idE") Long idE);
+
 }

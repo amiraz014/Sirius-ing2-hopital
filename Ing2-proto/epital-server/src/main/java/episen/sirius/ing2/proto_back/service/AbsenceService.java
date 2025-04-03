@@ -40,32 +40,25 @@ public class AbsenceService {
     //----------------------------------------------------------------------------------------------------
 
     @Transactional
-    public Boolean UpdateGarde(LocalDate dateAbsence, LocalTime timeAbsence) {
-        Employe employe = employeRepo.findRandomly(40L, dateAbsence);
-        if (isEligibleForGarde(employe, dateAbsence, timeAbsence)) {
-            for(Absence absence : absenceRepo.findAll()) {
-                for(Garde g : absence.getEmploye().getGardes()) {
-                    Integer rows = gardeRepo.UpdateGarde(employe.getIdE(), dateAbsence, timeAbsence, g.getIdG());
-                    return rows > 0;
-                }
-                }
-        }
-        return false;
+    public void UpdateGarde(LocalDate dateAbsence, LocalTime timeAbsence, String username) {
+
+        Employe AbsentEmploye = employeRepo.findByNomUtilisateur(username);
+       gardeRepo.DeleteByIDE(AbsentEmploye.getIdE());
+
+       for(Garde garde : AbsentEmploye.getGardes()) {
+
+         Employe employe =  employeRepo.findRandomly(40L, garde.getDate());
+
+           Garde newgarde = new Garde();
+           newgarde.setEmploye(employe);
+           newgarde.setType(garde.getType());
+           newgarde.setDate(garde.getDate());
+           newgarde.setHeure(garde.getHeure());
+           newgarde.setLieu(garde.getLieu());
+           gardeRepo.save(newgarde);
+       }
     }
 
-    public boolean isEligibleForGarde(Employe employe,LocalDate dateAbsence, LocalTime timeAbsence) {
-            for (Garde garde : employe.getGardes()) {
-                if(garde.getDate().equals(dateAbsence) && garde.getHeure().equals(timeAbsence)){
-                    return false;
-                }
-            }
-            for (Absence absence : employe.getAbsences()) {
-                if (absence.getDate_absence().equals(dateAbsence) && absence.getTime_absence().equals(timeAbsence)) {
-                    return false;
-                }
-            }
-            return true;
-    }
 
 
 

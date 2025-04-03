@@ -26,7 +26,7 @@ public class AbsenceController {
             LocalTime absenceTime = LocalTime.parse(AbsenceTimeStr);
 
             absenceService.saveAbsence(motif, absenceDate, absenceTime, username);
-            absenceService.UpdateGarde(absenceDate,absenceTime);
+            absenceService.UpdateGarde(absenceDate,absenceTime, username);
             return ResponseEntity.ok("Planification réussie");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erreur de traitement : " + e.getMessage());
