@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import Epital from '../../Epital';
 import MainMenu from "../../Home/Components/MainMenu";
 import { useNavigate } from 'react-router-dom';
+import logo from "./Epitalogo.svg"
 
 export default function LoginForm() {
     const [username, setUsername] = useState('');
@@ -91,9 +92,7 @@ export default function LoginForm() {
                 </div>
             
                 <div className="flex flex-col items-center justify-center h-screen">
-                    <h1 className="text-white text-2xl font-bold uppercase mb-6">
-                        Connexion à Epital
-                    </h1>
+                   
                     <form 
                         className="flex flex-col space-y-4 items-center justify-center border p-6 bg-white shadow-lg rounded-lg w-96"
                         onSubmit={handleSubmit}
@@ -103,6 +102,11 @@ export default function LoginForm() {
                                 {error}
                             </div>
                         )}
+
+                        <div className="flex items-center">
+                        <img src={logo} alt="Logo" className="h-12 mr-4" />
+                        <h2 className="text-2xl font-bold text-gray-800">Connexion</h2>
+                        </div>
 
                         <div className="flex flex-col w-full space-y-2">
                             <label className="text-gray-700 text-sm font-semibold">Nom d'utilisateur</label>
@@ -135,7 +139,7 @@ export default function LoginForm() {
                         <div className="flex flex-row space-x-4 pt-4 w-full">
                             <button 
                                 type="submit" 
-                                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition flex-1 disabled:bg-blue-300 disabled:cursor-not-allowed flex items-center justify-center"
+                                className="bg-blue-400 text-white px-4 py-2 rounded hover:bg-blue-700 transition flex-1 disabled:bg-blue-300 disabled:cursor-not-allowed flex items-center justify-center"
                                 disabled={loading}
                             >
                                 {loading ? (
@@ -151,16 +155,14 @@ export default function LoginForm() {
                             <button
                                 type="button"
                                 onClick={handleReset}
-                                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition flex-1 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                                className="bg-blue-400 text-white px-4 py-2 rounded hover:bg-blue-600 transition flex-1 disabled:bg-gray-300 disabled:cursor-not-allowed"
                                 disabled={loading}
                             >
                                 Réinitialiser
                             </button>
                         </div>
 
-                        <div className="pt-2 text-sm text-gray-600">
-                            <a href="/forgot-password" className="text-blue-600 hover:underline">Mot de passe oublié ?</a>
-                        </div>
+                        
                     </form>
                 </div>
                 <div></div>

@@ -2,7 +2,7 @@ import { useContext } from "react";
 import AbsenceInterfaceButton from "./components/AbsenceInterfaceButton";
 import EmployeInterfaceButton from "./components/EmployeInterfaceButton";
 import Epital from "../Epital";
-import MainMenu from "../../Home/Components/MainMenu";
+import MainMenu from '../Home/Components/MainMenu'
 
 export default function ManagePage () {
     const con = useContext(Epital);
