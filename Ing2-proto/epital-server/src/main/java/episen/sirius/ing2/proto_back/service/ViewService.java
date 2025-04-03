@@ -20,10 +20,4 @@ public class  ViewService {
         return employes;
     }
 
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> prod
 }

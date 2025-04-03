@@ -15,21 +15,21 @@ public class LoginService {
     private EmployeRepo empRepo;
 
     public String authenticateUser(String username, String password) throws AuthenticationException {
-    if (username == null || username.trim().isEmpty()) {
-        throw new AuthenticationException("Username cannot be empty");
-    }
-    if (password == null || password.trim().isEmpty()) {
-        throw new AuthenticationException("Password cannot be empty");
-    }
+        if (username == null || username.trim().isEmpty()) {
+            throw new AuthenticationException("Username cannot be empty");
+        }
+        if (password == null || password.trim().isEmpty()) {
+            throw new AuthenticationException("Password cannot be empty");
+        }
 
-    Employe employe = empRepo.findByNomUtilisateur(username);
-    
-    
-    if (!employe.getMotDePasse().equals(password)) {
-        throw new AuthenticationException("Mot de passe incorrect");
+        Employe employe = empRepo.findByNomUtilisateur(username);
+
+
+        if (!employe.getMotDePasse().equals(password)) {
+            throw new AuthenticationException("Mot de passe incorrect");
+        }
+
+
+        return "dummy-token-" + employe.getIdE();
     }
-    
-    
-    return "dummy-token-" + employe.getIdE();
-}
 }

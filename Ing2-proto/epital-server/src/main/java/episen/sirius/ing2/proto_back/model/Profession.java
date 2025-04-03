@@ -4,10 +4,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-<<<<<<< HEAD
 import lombok.ToString;
-=======
->>>>>>> prod
 import org.springframework.stereotype.Component;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,9 +25,6 @@ public class Profession {
     private String nom;
     @OneToMany(mappedBy = "profession")
     @JsonBackReference
-<<<<<<< HEAD
     @ToString.Exclude
-=======
->>>>>>> prod
     private List<Employe> employes;
 }

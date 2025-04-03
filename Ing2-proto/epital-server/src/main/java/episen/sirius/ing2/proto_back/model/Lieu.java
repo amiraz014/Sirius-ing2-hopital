@@ -28,5 +28,5 @@ public class Lieu {
     @JsonBackReference
     @ToString.Exclude
     private List<Garde> gardes;
-    
+
 }

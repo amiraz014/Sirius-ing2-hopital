@@ -12,8 +12,8 @@ import java.time.LocalTime;
 @CrossOrigin(origins = "http://172.31.250.115:3000")
 @RequestMapping("/epital-api")
 public class AbsenceController {
-        @Autowired
-        AbsenceService absenceService;
+    @Autowired
+    AbsenceService absenceService;
     @PostMapping("/addAbsence")
     public ResponseEntity<?> addAbsence(
             @RequestParam("AbsenceDate") String AbsenceDateStr,

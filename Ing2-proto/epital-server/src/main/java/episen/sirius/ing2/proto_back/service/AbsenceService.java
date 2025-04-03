@@ -24,73 +24,36 @@ public class AbsenceService {
     @Autowired
     private GardeRepo gardeRepo;
     //----------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
     public void saveAbsence(String motif, LocalDate dateAbsence, LocalTime timeAbsence, String username) {
         Absence absence = new Absence();
-            Employe employe = employeRepo.findByNomUtilisateur(username);
-=======
-    public void saveAbsence(String motif, LocalDate dateAbsence, LocalTime timeAbsence) {
-        Absence absence = new Absence();
-            Employe employe = employeRepo.findRandomEmployeWithGarde(40L, dateAbsence, timeAbsence);
->>>>>>> prod
+        Employe employe = employeRepo.findByNomUtilisateur(username);
 
 
-            absence.setDate_absence(dateAbsence);
-            absence.setTime_absence(timeAbsence);
-            absence.setMotif(motif);
-            absence.setEmploye(employe);
-            absenceRepo.save(absence);
+        absence.setDate_absence(dateAbsence);
+        absence.setTime_absence(timeAbsence);
+        absence.setMotif(motif);
+        absence.setEmploye(employe);
+        absenceRepo.save(absence);
 
     }
 
     //----------------------------------------------------------------------------------------------------
 
     @Transactional
-<<<<<<< HEAD
     public void UpdateGarde(LocalDate dateAbsence, LocalTime timeAbsence, String username) {
 
         Employe AbsentEmploye = employeRepo.findByNomUtilisateur(username);
 
 
-       for(Garde garde : AbsentEmploye.getGardes()) {
+        for(Garde garde : AbsentEmploye.getGardes()) {
 
-         Employe employe =  employeRepo.findRandomly(40L, garde.getDate());
-         gardeRepo.UpdateGarde(employe.getIdE(), garde.getIdG());
-       }
-=======
-    public Boolean UpdateGarde(LocalDate dateAbsence, LocalTime timeAbsence) {
-        Employe employe = employeRepo.findRandomly(40L);
-        if (isEligibleForGarde(employe, dateAbsence, timeAbsence)) {
-            for(Absence absence : absenceRepo.findAll()) {
-                for(Garde g : absence.getEmploye().getGardes()) {
-                    Integer rows = gardeRepo.UpdateGarde(employe.getIdE(), dateAbsence, timeAbsence, g.getIdG());
-                    return rows > 0;
-                }
-                }
+            Employe employe =  employeRepo.findRandomly(40L, garde.getDate());
+            gardeRepo.UpdateGarde(employe.getIdE(), garde.getIdG());
         }
-        return false;
-    }
-
-    public boolean isEligibleForGarde(Employe employe,LocalDate dateAbsence, LocalTime timeAbsence) {
-            for (Garde garde : employe.getGardes()) {
-                if(garde.getDate().equals(dateAbsence) && garde.getHeure().equals(timeAbsence)){
-                    return false;
-                }
-            }
-            for (Absence absence : employe.getAbsences()) {
-                if (absence.getDate_absence().equals(dateAbsence) && absence.getTime_absence().equals(timeAbsence)) {
-                    return false;
-                }
-            }
-            return true;
->>>>>>> prod
     }
 
 
 
 
-<<<<<<< HEAD
 
-=======
->>>>>>> prod
 }

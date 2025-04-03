@@ -13,8 +13,8 @@ import org.springframework.context.event.ApplicationContextEvent;
 public class ProtoBackApplication {
 
 	public static void main(String[] args) {
-	 ApplicationContext context = SpringApplication.run(ProtoBackApplication.class, args);
-	
+		ApplicationContext context = SpringApplication.run(ProtoBackApplication.class, args);
+
 	}
 
 }

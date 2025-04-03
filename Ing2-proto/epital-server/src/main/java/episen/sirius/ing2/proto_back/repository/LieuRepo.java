@@ -10,4 +10,7 @@ import java.util.List;
 
 @Repository
 public interface LieuRepo  extends JpaRepository<Lieu,Long>{
-} 
+
+    @Query("SELECT l.secteur FROM Lieu l")
+    List<String> findSectors();
+}

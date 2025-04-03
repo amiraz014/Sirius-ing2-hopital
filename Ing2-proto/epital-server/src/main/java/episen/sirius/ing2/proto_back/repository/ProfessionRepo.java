@@ -7,5 +7,5 @@ import episen.sirius.ing2.proto_back.model.Profession;
 
 @Repository
 public interface ProfessionRepo extends JpaRepository<Profession,Long>{
-    
+
 }

@@ -3,10 +3,7 @@ package episen.sirius.ing2.proto_back.controller;
 import java.util.List;
 import java.util.Map;
 
-<<<<<<< HEAD
 import episen.sirius.ing2.proto_back.service.LoginService;
-=======
->>>>>>> prod
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,10 +20,10 @@ import javax.naming.AuthenticationException;
 @CrossOrigin(origins = "http://172.31.250.115:3000")
 public class EmployeController {
 
-     @Autowired
-     private ViewService viewService;
-     @Autowired
-     private LoginService loginService;
+    @Autowired
+    private ViewService viewService;
+    @Autowired
+    private LoginService loginService;
 
     @GetMapping("/employes")
     public ResponseEntity<List<Employe>> getEmployes() {
@@ -38,32 +35,26 @@ public class EmployeController {
         }
     }
 
-<<<<<<< HEAD
     @PostMapping("/login")
-public ResponseEntity<?> LogAuth(
-        @RequestParam("username") String username,
-        @RequestParam("password") String password
-) {
-    try {
-        String token = loginService.authenticateUser(username, password);
-        return ResponseEntity.ok()
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-            .body(Map.of(
-                "token", token,
-                "message", "Authentification réussie"
-            ));
-    } catch (AuthenticationException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-            .body(Map.of("error", e.getMessage()));
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(Map.of("error", "Erreur interne du serveur"));
+    public ResponseEntity<?> LogAuth(
+            @RequestParam("username") String username,
+            @RequestParam("password") String password
+    ) {
+        try {
+            String token = loginService.authenticateUser(username, password);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                    .body(Map.of(
+                            "token", token,
+                            "message", "Authentification réussie"
+                    ));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Erreur interne du serveur"));
+        }
     }
-}
 
-
-
-
-=======
->>>>>>> prod
 }

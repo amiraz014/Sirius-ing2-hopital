@@ -1,4 +1,4 @@
- package episen.sirius.ing2.proto_back.repository;
+package episen.sirius.ing2.proto_back.repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,7 +15,7 @@ import episen.sirius.ing2.proto_back.model.Employe;
 @Repository
 public interface EmployeRepo extends JpaRepository<Employe, Long> {
 
-    @Query("SELECT e FROM Employe e JOIN e.gardes g WHERE e.profession.idP = :professionId")
+    @Query("SELECT e FROM Employe e WHERE e.profession.idP = :professionId")
     List<Employe> findByProfessionId(@Param("professionId") Long professionId);
     @Query("SELECT e FROM Employe e JOIN e.gardes g WHERE e.profession.idP = :professionId AND g.date = :dateAbsence AND g.heure = :timeAbsence ORDER BY RANDOM() LIMIT 1")
     Employe findRandomEmployeWithGarde(
@@ -24,16 +24,11 @@ public interface EmployeRepo extends JpaRepository<Employe, Long> {
             @Param("timeAbsence") LocalTime timeAbsence
     );
 
-<<<<<<< HEAD
     @Query("SELECT e FROM Employe e JOIN e.gardes g WHERE e.profession.idP = :professionId AND g.date <> :date ORDER BY RANDOM() LIMIT 1")
     Employe findRandomly(@Param(("professionId")) Long professionId,
-                        @Param(("date")) LocalDate date
+                         @Param(("date")) LocalDate date
     );
 
     @Query("SELECT e FROM Employe e WHERE e.nomUtilisateur = :username")
     Employe findByNomUtilisateur(@Param("username") String username);
-=======
-    @Query("SELECT e FROM Employe e WHERE e.profession.idP = :professionId ORDER BY RANDOM() LIMIT 1")
-    Employe findRandomly(@Param(("professionId")) Long professionId);
->>>>>>> prod
 }
