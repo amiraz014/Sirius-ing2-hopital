@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Epital from '../Epital';
+import MainMenu from '../Home/Components/MainMenu';
 
 const StockHistoryByMedicament = () => {
     const [medicaments, setMedicaments] = useState([]);
-
+    const con = useContext(Epital);
     useEffect(() => {
         const fetchHistoriqueParMedicament = async () => {
             try {
@@ -19,7 +21,11 @@ const StockHistoryByMedicament = () => {
     }, []);
 
     return (
-        <div className="p-8 bg-gray-900 text-white min-h-screen">
+        <div className="flex flex-row justify-between bg-gray-900 text-white min-h-screen">
+            <div>
+                {con.showMenu && <MainMenu />}
+            </div>
+            <div>
             <h2 className="text-2xl font-bold mb-6">Historique des Sorties par Médicament</h2>
             <div className="overflow-x-auto">
                 <table className="w-full bg-gray-800 rounded-lg overflow-hidden">
@@ -52,6 +58,8 @@ const StockHistoryByMedicament = () => {
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div></div>
         </div>
     );
 };

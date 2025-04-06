@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import Epital from '../Epital';
+import MainMenu from '../Home/Components/MainMenu';
 
 const StockHistory = () => {
     const [historique, setHistorique] = useState([]);
+    const con = useContext(Epital);
 
     useEffect(() => {
         const fetchHistorique = async () => {
@@ -18,7 +21,11 @@ const StockHistory = () => {
     }, []);
 
     return (
-        <div className="p-8 bg-gray-900 text-white min-h-screen">
+        <div className="flex flex-row justify-between bg-gray-900 text-white min-h-screen">
+            <div>
+                {con.showMenu && <MainMenu />}
+            </div>
+            <div>
             <h2 className="text-2xl font-bold mb-6">Historique des Mouvements de Stock</h2>
             <div className="overflow-x-auto">
                 <table className="w-full bg-gray-800 rounded-lg overflow-hidden">
@@ -54,6 +61,8 @@ const StockHistory = () => {
                     </tbody>
                 </table>
             </div>
+        </div>
+            <div></div>
         </div>
     );
 };

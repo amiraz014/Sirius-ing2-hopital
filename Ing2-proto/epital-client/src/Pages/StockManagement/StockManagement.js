@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import Epital from '../Epital';
+import MainMenu from '../Home/Components/MainMenu';
+
 
 const StockManagement = () => {
     const [sorties, setSorties] = useState([]);
     const [isRunning, setIsRunning] = useState(false); 
     const [error, setError] = useState(null); 
+    const con = useContext(Epital);
 
 
     const fetchSorties = async () => {
@@ -44,7 +48,9 @@ const StockManagement = () => {
     }, [isRunning]);
 
     return (
-        <div className="p-8 bg-gray-900 text-white min-h-screen">
+        <div className="flex flex-row justify-between bg-gray-900 text-white min-h-screen">
+            <div>{con.showMenu && <MainMenu/>}</div>
+            <div>
             <h2 className="text-2xl font-bold mb-6">Sortie Automatique de Stock</h2>
             <div className="space-y-4 max-w-md mx-auto">
                 {/* Boutons pour démarrer et arreter les sorties */}
@@ -89,6 +95,8 @@ const StockManagement = () => {
                     </ul>
                 </div>
             </div>
+            </div>
+            <div></div>
         </div>
     );
 };

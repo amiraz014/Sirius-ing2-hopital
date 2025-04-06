@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import Epital from '../Epital';
+import MainMenu from '../Home/Components/MainMenu';
 
 const MedicamentDetails = () => {
     const { id } = useParams();
     const [medicament, setMedicament] = useState(null);
     const [sorties, setSorties] = useState([]);
+    const con = useContext(Epital);
 
     useEffect(() => {
         const fetchMedicamentDetails = async () => {
@@ -31,7 +34,11 @@ const MedicamentDetails = () => {
     }
 
     return (
-        <div className="p-8 bg-gray-900 text-white min-h-screen">
+        <div className="flex flex-row justify-between bg-gray-900  text-white min-h-screen">
+            <div>
+                {con.showMenu && <MainMenu />}
+            </div>
+            <div>
             <h2 className="text-2xl font-bold mb-6">Détails du Médicament</h2>
             <div className="space-y-4">
                 <p><strong>Nom du médicament :</strong> {medicament.nomMedicament}</p>
@@ -48,6 +55,8 @@ const MedicamentDetails = () => {
                     </li>
                 ))}
             </ul>
+            </div>
+            <div></div>
         </div>
     );
 };
