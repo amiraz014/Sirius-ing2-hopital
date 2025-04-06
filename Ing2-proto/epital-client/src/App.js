@@ -16,7 +16,11 @@ function App() {
         {path : '/form', element : <GardFormular/>},
         {path : '/EmployeView', element : <EmployeVIew/>},
         {path: '/absence', element: <AbsenceInterface/>},
-        {path: '/login', element: <LoginForm/>}
+        {path: '/login', element: <LoginForm/>},
+        { path: '/stock-management', element: <StockManagement /> },
+        { path: '/stock-history', element: <StockHistory /> },
+        { path: '/stock-history/medicament', element: <StockHistoryByMedicament /> },
+        { path: '/stock-history/medicament/:id', element: <MedicamentDetails /> }
   ]}
   ]);
 
