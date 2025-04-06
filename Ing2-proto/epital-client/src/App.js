@@ -7,9 +7,9 @@ import EmployeVIew from './Pages/EmployeManage/EmployeVIew';
 import AbsenceInterface from './Pages/EmployeManage/components/AbsenceInterface';
 import LoginForm from './Pages/EmployeManage/components/LoginForm';
 import StockManagement from './Pages/StockManagement/StockManagement';
-import StockHistory from './Pages/StockManagement/StockHistory';
-import StockHistoryByMedicament from './Pages/StockManagement/StockHistoryByMedicament';
-import MedicamentDetails from './Pages/StockManagement/MedicamentDetails';
+import StockHistory from './Pages/StockHistory/StockHistory';
+import StockHistoryByMedicament from './Pages/StockHistory/StockHistoryByMedicament';
+import MedicamentDetails from './Pages/StockHistory/MedicamentDetails';
 function App() {
   const router = createBrowserRouter([
     {path : '/',

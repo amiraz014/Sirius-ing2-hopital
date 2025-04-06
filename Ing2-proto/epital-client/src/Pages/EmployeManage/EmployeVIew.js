@@ -21,6 +21,7 @@ export default function EmployeVIew(){
         
      }, []);
      console.table(employeList);
+        const con = useContext(Epital);
      
     return(
         <>

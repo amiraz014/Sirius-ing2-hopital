@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import Epital from "../../Epital";
 import MainMenu from "../../Home/Components/MainMenu";
 import { Link } from "react-router-dom";
+import logo from "./Epitalogo.svg"
 
 export default function GardFormular() {
     const [startDate, setStartDate] = useState('');
