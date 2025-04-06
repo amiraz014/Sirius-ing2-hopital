@@ -6,6 +6,10 @@ import GardFormular from './Pages/EmployeManage/components/GardFormular';
 import EmployeVIew from './Pages/EmployeManage/EmployeVIew';
 import AbsenceInterface from './Pages/EmployeManage/components/AbsenceInterface';
 import LoginForm from './Pages/EmployeManage/components/LoginForm';
+import StockManagement from './Pages/StockManagement/StockManagement';
+import StockHistory from './Pages/StockManagement/StockHistory';
+import StockHistoryByMedicament from './Pages/StockManagement/StockHistoryByMedicament';
+import MedicamentDetails from './Pages/StockManagement/MedicamentDetails';
 function App() {
   const router = createBrowserRouter([
     {path : '/',
