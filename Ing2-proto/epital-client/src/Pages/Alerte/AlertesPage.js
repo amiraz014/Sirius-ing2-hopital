@@ -71,9 +71,9 @@ const AlertesPage = () => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {alertes.map(alerte => (
+                    {alertes.map((alerte, index) => (
                         <AlerteCard
-                            key={alerte.medicamentId}
+                            key={index}
                             alerte={alerte}
                             onConfirmerCommande={confirmOrder}
                         />
