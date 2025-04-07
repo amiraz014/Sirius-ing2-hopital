@@ -2,14 +2,13 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import Epital from '../Epital';
 import MainMenu from '../Home/Components/MainMenu';
-
+import logo from '../EmployeManage/components/Epitalogo.svg'; // Logo Epital
 
 const StockManagement = () => {
     const [sorties, setSorties] = useState([]);
     const [isRunning, setIsRunning] = useState(false); 
     const [error, setError] = useState(null); 
     const con = useContext(Epital);
-
 
     const fetchSorties = async () => {
         try {
@@ -33,11 +32,9 @@ const StockManagement = () => {
         }
     };
 
-
     const handleStopSorties = () => {
         setIsRunning(false);
     };
-
 
     useEffect(() => {
         let interval;
@@ -48,55 +45,59 @@ const StockManagement = () => {
     }, [isRunning]);
 
     return (
-        <div className="flex flex-row justify-between bg-gray-900 text-white min-h-screen">
-            <div>{con.showMenu && <MainMenu/>}</div>
-            <div>
-            <h2 className="text-2xl font-bold mb-6">Sortie Automatique de Stock</h2>
-            <div className="space-y-4 max-w-md mx-auto">
-                {/* Boutons pour démarrer et arreter les sorties */}
-                <div className="flex space-x-4">
-                    <button
-                        onClick={handleStartSorties}
-                        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300"
-                        disabled={isRunning}
-                    >
-                        Démarrer les Sorties Automatiques
-                    </button>
-                    <button
-                        onClick={handleStopSorties}
-                        className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300"
-                        disabled={!isRunning}
-                    >
-                        Arrêter les Sorties Automatiques
-                    </button>
-                </div>
+        <div className="flex bg-gray-900 text-white min-h-screen">
+            {con.showMenu && <MainMenu />}
+            <div className="flex-1 flex justify-center p-8">
+                <div className="w-full max-w-3xl bg-white text-gray-900 rounded-2xl shadow-lg p-6 space-y-6">
+                    
+                   
+                    <div className="flex items-center gap-4">
+                        <img src={logo} alt="Logo" className="h-10 w-auto" />
+                        <h2 className="text-2xl font-bold">Sortie Automatique de Stock</h2>
+                    </div>
 
-                {/* Afficher les erreurs */}
-                {error && (
-                    <p className="mt-4 text-center text-red-500">{error}</p>
-                )}
+                  
+                    <div className="flex space-x-4">
+                        <button
+                            onClick={handleStartSorties}
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-300"
+                            disabled={isRunning}
+                        >
+                            Démarrer les Sorties 
+                        </button>
+                        <button
+                            onClick={handleStopSorties}
+                            className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition duration-300"
+                            disabled={!isRunning}
+                        >
+                            Arrêter les Sorties 
+                        </button>
+                    </div>
 
-                {/* Afficher les sorties */}
-                <div className="mt-6">
-                    <h3 className="text-xl font-semibold mb-4">Sorties effectuées :</h3>
-                    <ul className="space-y-2">
-                        {sorties.map((sortie, index) => (
-                            <li
-                                key={index}
-                                className={`p-3 rounded-lg ${
-                                    sortie.startsWith("🔴") ? "bg-red-900" :
-                                        sortie.startsWith("⚠️") ? "bg-yellow-800" :
-                                            "bg-gray-800"
-                                }`}
-                            >
-                                {sortie}
-                            </li>
-                        ))}
-                    </ul>
+               
+                    {error && (
+                        <p className="text-red-600 text-center">{error}</p>
+                    )}
+
+                    <div>
+                        <h3 className="text-xl font-semibold mb-3">Sorties effectuées :</h3>
+                        <ul className="space-y-2 max-h-[300px] overflow-y-auto pr-2">
+                            {sorties.map((sortie, index) => (
+                                <li
+                                    key={index}
+                                    className={`p-3 rounded-lg shadow-sm ${
+                                        sortie.startsWith("🔴") ? "bg-red-100 text-red-900" :
+                                        sortie.startsWith("⚠️") ? "bg-yellow-100 text-yellow-900" :
+                                        "bg-gray-100 text-gray-800"
+                                    }`}
+                                >
+                                    {sortie}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             </div>
-            </div>
-            <div></div>
         </div>
     );
 };
