@@ -24,7 +24,7 @@ public interface HistoriqueRepo extends JpaRepository<Historique, Long> {
 
     List<Historique> findByMedicament(Medicament medicament);
 
-    // Version alternative avec l'ID du médicament
+
     @Query("SELECT h FROM Historique h WHERE h.medicament.idm = :medicamentId ORDER BY h.date_mouvement DESC")
     List<Historique> findByMedicamentId(Long medicamentId);
 
