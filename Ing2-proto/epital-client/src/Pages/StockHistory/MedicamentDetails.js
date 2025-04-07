@@ -38,7 +38,7 @@ const MedicamentDetails = () => {
             <div>
                 {con.showMenu && <MainMenu />}
             </div>
-            <div>
+            <div class="flex flex-wrap flex-col gap-4 overflow-x-auto overflow-y-auto max-h-[80vh] p-2">
             <h2 className="text-2xl font-bold mb-6">Détails du Médicament</h2>
             <div className="space-y-4">
                 <p><strong>Nom du médicament :</strong> {medicament.nomMedicament}</p>

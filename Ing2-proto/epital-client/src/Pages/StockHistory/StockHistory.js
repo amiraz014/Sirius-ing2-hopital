@@ -25,7 +25,7 @@ const StockHistory = () => {
             <div>
                 {con.showMenu && <MainMenu />}
             </div>
-            <div>
+            <div class="flex flex-wrap flex-col gap-4 overflow-x-auto overflow-y-auto max-h-[80vh] p-2">
             <h2 className="text-2xl font-bold mb-6">Historique des Mouvements de Stock</h2>
             <div className="overflow-x-auto">
                 <table className="w-full bg-gray-800 rounded-lg overflow-hidden">
