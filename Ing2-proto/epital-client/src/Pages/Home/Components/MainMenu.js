@@ -64,7 +64,7 @@ export default function MainMenu() {
                    
                     <li>
                         <Link
-                            to="/"
+                            to="/alertes"
                             className="block px-4 py-2 text-white hover:bg-blue-500 hover:text-white"
                         >
                             Alerte

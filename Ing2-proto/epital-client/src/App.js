@@ -10,6 +10,7 @@ import StockManagement from './Pages/StockManagement/StockManagement';
 import StockHistory from './Pages/StockHistory/StockHistory';
 import StockHistoryByMedicament from './Pages/StockHistory/StockHistoryByMedicament';
 import MedicamentDetails from './Pages/StockHistory/MedicamentDetails';
+import AlertesPage from './Pages/Alerte/AlertesPage';
 function App() {
   const router = createBrowserRouter([
     {path : '/',
@@ -24,7 +25,8 @@ function App() {
         { path: '/stock-management', element: <StockManagement /> },
         { path: '/stock-history', element: <StockHistory /> },
         { path: '/stock-history/medicament', element: <StockHistoryByMedicament /> },
-        { path: '/stock-history/medicament/:id', element: <MedicamentDetails /> }
+        { path: '/stock-history/medicament/:id', element: <MedicamentDetails /> },
+        {path:"/alertes", element: <AlertesPage />},
   ]}
   ]);
 
