@@ -115,7 +115,7 @@ public class GardeService {
                 .orElse(null);
     }
 
-    private LocalTime getHeurePourType(String type) {
+    public LocalTime getHeurePourType(String type) {
         return type.equals("MATIN") ? LocalTime.of(8, 0) : LocalTime.of(20, 0);
     }
 }
