@@ -22,7 +22,7 @@ const AlertesPage = () => {
 
     const confirmOrder = async (id) => {
         try {
-            const { data } = await axios.post('http://172.31.252.28:8089/stock/confirmer-commande/${id}');
+            const { data } = await axios.post(`http://172.31.252.28:8089/stock/confirmer-commande/${id}`);
             setSuccess(data);
             fetchAlertes();
             setTimeout(() => setSuccess(null), 5000);
