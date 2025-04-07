@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import Epital from '../Epital';
 import MainMenu from '../Home/Components/MainMenu';
+import logo from '../EmployeManage/components/Epitalogo.svg';
 
 const StockHistory = () => {
     const [historique, setHistorique] = useState([]);
@@ -21,50 +22,55 @@ const StockHistory = () => {
     }, []);
 
     return (
-        <div className="flex flex-row justify-between bg-gray-900 text-white min-h-screen">
-            <div>
-                {con.showMenu && <MainMenu />}
+        <div className="flex bg-gray-900 text-white min-h-screen">
+            {con.showMenu && <MainMenu />}
+            <div className="flex-1 p-8 flex justify-center">
+                <div className="w-full max-w-6xl bg-white text-gray-800 rounded-2xl shadow-lg p-6">
+                    
+                   
+                    <div className="flex items-center gap-4 mb-6">
+                        <img src={logo} alt="Epital Logo" className="h-10 w-auto" />
+                        <h2 className="text-2xl font-bold">Historique des Mouvements de Stock</h2>
+                    </div>
+
+                    {/* Tableau */}
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-300">
+                            <thead className="bg-gray-100 text-gray-700">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">ID Médicament</th>
+                                    <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Date</th>
+                                    <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Nom</th>
+                                    <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Quantité Sortie</th>
+                                    <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Type</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200">
+                                {historique.map((mouvement) => (
+                                    <tr key={mouvement.idh} className="hover:bg-gray-50 transition duration-200">
+                                        <td className="px-6 py-4">{mouvement.medicament.idm}</td>
+                                        <td className="px-6 py-4">{new Date(mouvement.date_mouvement).toLocaleDateString()}</td>
+                                        <td className="px-6 py-4 font-medium">{mouvement.medicament.nom}</td>
+                                        <td className="px-6 py-4">{mouvement.quantite}</td>
+                                        <td className="px-6 py-4">
+                                            <span
+                                                className={`inline-block px-3 py-1 text-xs font-bold rounded-full ${
+                                                    mouvement.type === 'SORTIE'
+                                                        ? 'bg-red-500 text-white'
+                                                        : 'bg-green-500 text-white'
+                                                }`}
+                                            >
+                                                {mouvement.type}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
             </div>
-            <div class="flex flex-wrap gap-4 overflow-x-auto overflow-y-auto max-h-[80vh] p-2">
-                <div class="flex flex-row space-y-2">
-            <h2 className="text-2xl font-bold mb-6">Historique des Mouvements de Stock</h2>
-            <div className="overflow-x-auto">
-                <table className="w-full bg-gray-800 rounded-lg overflow-hidden">
-                    <thead className="bg-gray-700">
-                    <tr>
-                        <th className="p-3 text-left">ID Médicament</th>
-                        <th className="p-3 text-left">Date</th>
-                        <th className="p-3 text-left">Médicament</th>
-                        <th className="p-3 text-left">Quantité Totale Sortie</th>
-                        <th className="p-3 text-left">Type</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {historique.map((mouvement) => (
-                        <tr key={mouvement.idh} className="border-b border-gray-700 hover:bg-gray-750 transition duration-200">
-                            <td className="p-3">{mouvement.medicament.idm}</td>
-                            <td className="p-3">{new Date(mouvement.date_mouvement).toLocaleDateString()}</td>
-                            <td className="p-3">{mouvement.medicament.nom}</td>
-                            <td className="p-3">{mouvement.quantite}</td>
-                            <td className="p-3">
-                                    <span
-                                        className={`px-2 py-1 rounded ${
-                                            mouvement.type === 'SORTIE'
-                                                ? 'bg-red-500 text-white'
-                                                : 'bg-green-500 text-white'
-                                        }`}
-                                    >
-                                        {mouvement.type}
-                                    </span>
-                            </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            </div>
-            </div>
-        </div>
-            <div></div>
         </div>
     );
 };
